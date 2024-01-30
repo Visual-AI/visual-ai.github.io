@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description"
+          content="FROSTER: Frozen CLIP is a Strong Teacher for Open-vocabulary Action Recognition">
+    <meta name="author"
+          content="Xiaohu Huang, Hao Zhou, Kun Yao, Kai Han">
+
+    <title>FROSTER: Frozen CLIP is a Strong Teacher for Open-vocabulary Action Recognition</title>
+    <!-- Bootstrap core CSS -->
+    <!--link href="bootstrap.min.css" rel="stylesheet"-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Custom styles for this template -->
+    <link href="offcanvas.css" rel="stylesheet">
+    <!--    <link rel="icon" href="img/favicon.gif" type="image/gif">-->
+</head>
+
+<body>
+<div class="jumbotron jumbotron-fluid">
+    <div class="container"></div>
+    <h2>AIM: Adapting Image Models for Efficient Video Action Recognition</h2>
+    <hr>
+    <p class="authors">
+        <a href="https://scholar.google.com/citations?user=sBjFwuQAAAAJ&hl=en">Xiaohu Huang<sup>&#9824,&#9827</sup></a>,
+        <a href="https://scholar.google.com/citations?user=xZ-0R3cAAAAJ&hl=zh-CN">Hao Zhou<sup>&#9824</sup></a>,
+        <a href="https://dblp.org/pid/03/6550.html">Kun Yao<sup>&#9824</sup></a>,
+        <a href="https://www.kaihan.org/">Kai Han<sup>&#9824</sup></a>
+    </p>
+    <p class="authors">
+        <sup>&#9824</sup>Visual AI Lab, The University of Hong Kong
+        <sup>&#9827</sup>Department of Computer Vision Technology (VIS), Baidu Inc., China
+    </p>
+    <div class="btn-group" role="group" aria-label="Top menu">
+        <a class="btn btn-primary" href="https://openreview.net/pdf?id=zYXFMeHRtO">Paper</a>
+        <a class="btn btn-primary" href="https://openreview.net/pdf?id=zYXFMeHRtO">Code</a>
+    </div>
+</div>
+
+<div class="container">
+
+    <div class="section">
+        <h2>Introduction</h2>
+        <hr>
+        <div class="col justify-content-center text-center">
+            <div class="col-sm-12">
+                <img src="teaser_gif.gif" style="width:90%">
+            </div>
+        </div>
+        <p>
+            In this paper, we introduce FROSTER, an effective framework for open-vocabulary action recognition. The CLIP model has achieved remarkable success in a range of image-based tasks, benefiting from its strong generalization capability stemming from pretaining on massive image-text pairs. However, applying CLIP directly to the open-vocabulary action recognition task is challenging due to the absence of temporal information in CLIP's pretraining. Further, fine-tuning CLIP on action recognition datasets may lead to overfitting and hinder its generalizability, resulting in unsatisfactory results when dealing with unseen actions.
+            To address these issues, FROSTER employs a residual feature distillation approach to ensure that CLIP retains its generalization capability while effectively adapting to the action recognition task. Specifically, the residual feature distillation treats the frozen CLIP model as a teacher to maintain the generalizability exhibited by the original CLIP and supervises the feature learning for the extraction of video-specific features to bridge the gap between images and videos. Meanwhile, it uses a residual sub-network for feature distillation to reach a balance between the two distinct objectives of learning generalizable and video-specific features.
+        </p>
+    </div>
+
+    <br>
+
+    <div class="section">
+        <h2>General Pipeline</h2>
+        <hr>
+        <div class="col justify-content-center text-center">
+            <div class="col-sm-12">
+                <img src="method.png" style="width:100%">
+            </div>
+        </div>
+        <p>
+            The overall pipeline of FROSTER consists of two key components, namely, model finetuning to bridge the gap between image and video tasks, and knowledge distillation to maintain the generalizability of the pretrained CLIP. 
+            As shown above, "video-specific" is achieved through common classification-based finetuning, while `generalizable' is achieved by using frozen CLIP as a teacher to impart pretrained knowledge to the tuned model, inspired by knowledge distillation techniques, which involves using frozen CLIP as a teacher to impart pretrained knowledge to the tuned model. 
+            The distillation process is akin to a regularization term that ensures the tuned features do not diverge too far from the frozen ones. To balance the feature learning between the two distinct goals, we propose a modified residual network for conducting distillation. The intuition behind the design is to allow the tuned features to effectively receive supervision from generalized ones while also being video-specific.
+        </p>
+    </div>
+
+    <br>
+
+    <div class="section">
+        <h2>Experimental Results</h2>
+        <hr>
+        <p>
+            Though being simple, FROSTER achieve better performance than state-of-the-art video models on both base-to-novel and cross-dataset evaluation settings. The results are shown below.
+        </p>
+        <div class="col justify-content-center text-center">
+            <div class="col-sm-12">
+                <img src="base-to-novel.png" style="width:95%">
+            </div>
+        </div>
+        <br>
+        <div class="col justify-content-center text-center">
+            <div class="col-sm-12">
+                <img src="cross-dataset.png" style="width:95%">
+            </div>
+        </div>
+        <p>
+            Meanwhile, our framework consistently achieves higher performance when equipped with different video models as shown below.
+        </p>
+        <br>
+        <div class="col justify-content-center text-center">
+            <div class="col-sm-12">
+                <img src="combined_netwoks.png" style="width:95%">
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Visualization</h2>
+        <hr>
+        <p>
+            In the figure below, we show the attention map of FROSTER and other baselines. Overall, our model attends to informative regions related to the action for more reliable recognition
+        </p>
+        <div class="col justify-content-center text-center">
+            <div class="col-sm-12">
+                <img src="visual1.png" style="width:95%">
+            </div>
+        </div>
+        <div class="col justify-content-center text-center">
+            <div class="col-sm-12">
+                <img src="visual2.png" style="width:95%">
+            </div>
+        </div>
+        <div class="col justify-content-center text-center">
+            <div class="col-sm-12">
+                <img src="visual3.png" style="width:95%">
+            </div>
+        </div>
+    </div>
+
+
+    <div class="section">
+        <h2>Bibtex</h2>
+        <hr>
+        <div class="bibtexsection">
+            @inproceedings{
+                huang2023froster,
+                title={FROSTER: Frozen CLIP is a Strong Teacher for Open-Vocabulary Action Recognition},
+                author={Xiaohu Huang and Hao Zhou and Kun Yao and Kai Han},
+                booktitle={International Conference on Learning Representations},
+                year={2024},
+                url={https://openreview.net/pdf?id=zYXFMeHRtO}
+            }
+        </div>
+    </div>
+
+    <hr>
+
+    <footer>
+        <p>
+            Acknowledgement: This page is modified from this <a href="https://mmrobustness.github.io/">project webpage</a>.
+        </p>
+    </footer>
+
+
+
+
+    
+
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>
