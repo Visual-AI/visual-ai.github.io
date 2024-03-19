@@ -37,6 +37,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script defer src="./static/js/fontawesome.all.min.js"></script>
   <script src="./static/js/bulma-carousel.min.js"></script>
+  <script type="text/javascript" src="./static/js/copy.js"></script>
   <script src="./static/js/bulma-slider.min.js"></script>
   <script src="./static/js/index.js"></script>
 </head>
@@ -106,33 +107,18 @@
                   </a>
               </span>
               <!-- Dataset Link. -->
-              <!-- <span class="link-block">
-                <a href="https://github.com/google/nerfies/releases/tag/0.1"
+              <span class="link-block">
+                <a href="#Bib"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="far fa-images"></i>
                   </span>
-                  <span>Data</span>
-                  </a> -->
+                  <span>Citation</span>
+                  </a>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
-
-<section class="hero teaser">
-  <div class="container is-max-desktop">
-    <div class="hero-body">
-        <video id="teaser" autoplay muted loop playsinline height="90%">
-          <source src="static/images/teaser.mp4"
-                  type="video/mp4">
-        </video>
-        <!-- <img src="static/images/teaser.gif" alt="this slowpoke moves"/> -->
-      <h2 class="subtitle has-text-centered">
-        <p>SPTNet introduces a two-stage adaptation approach termed SPTNet, which iteratively optimizes model parameters (i.e., model-finetuning) and data parameters (i.e., prompt learning).</p> 
-      </h2>
     </div>
   </div>
 </section>
@@ -165,11 +151,25 @@
       <div class="columns is-centered has-text-centered">
         <div class="column is-four-fifths">
           <h2 class="title is-3">Framework</h2>
-          <div class="col justify-content-center text-center">
+          <section class="hero teaser">
+            <div class="container is-max-desktop">
+              <div class="hero-body">
+                  <video id="teaser" autoplay muted loop playsinline height="90%">
+                    <source src="static/images/teaser.mp4"
+                            type="video/mp4">
+                  </video>
+                  <!-- <img src="static/images/teaser.gif" alt="this slowpoke moves"/> -->
+                <h2 class="subtitle has-text-centered">
+                  <p>SPTNet introduces a two-stage adaptation approach termed SPTNet, which iteratively optimizes model parameters (i.e., model-finetuning) and data parameters (i.e., prompt learning).</p> 
+                </h2>
+              </div>
+            </div>
+          </section>
+  <!--         <div class="col justify-content-center text-center">
             <div class="col-sm-12">
                 <img src="static/images/method.png" style="width:100%">
             </div>
-          </div>
+          </div> -->
           <div class="content has-text-justified">
             <br>
             <p>
@@ -262,17 +262,19 @@
     </div>
   </section>
 
-  <section class="section" id="BibTeX">
+  <section class="section" id="Bib">
     <div class="container is-max-desktop content">
       <h2 class="title">BibTeX</h2>
-      <pre><code>@inproceedings{wang2024sptnet,
+<pre><code id="BibTeX">@inproceedings{wang2024sptnet,
     author    = {Wang, Hongjun and Vaze, Sagar and Han, Kai},
-    title     = {Parametric Classification for Generalized Category Discovery: A Baseline Study},
+    title     = {SPTNet: An Efficient Alternative Framework for Generalized Category Discovery with Spatial Prompt Tuning},
     booktitle = {International Conference on Learning Representations (ICLR)},
     year      = {2024}
-}</code></pre>
+}
+</code><button class="copy-button" style="--button-hover-background: var(--example-color-alt); --button-color: var(--white); --button-background: var(--example-color-alt); --button-margin-bottom: 0;" class="copyButton btn" onclick="copyToClipboard('BibTeX','BibTeX_cop')"><i class="fa fa-copy"></i></button><p id="BibTeX_cop" style="display:none;color: #a0a0a0">Copied!</p></pre>
     </div>
   </section>
+
 
 <section class="section" id="Acknowledgement">
   <div class="container is-max-desktop content">
