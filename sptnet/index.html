@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="SPTNet: An Efficient Alternative Framework for Generalized Category Discovery with Spatial Prompt Tuning">
+  <meta name="keywords" content="Generalized Category Discovery, Visual Prompt">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SPTNet: An Efficient Alternative Framework for Generalized Category Discovery with Spatial Prompt Tuning</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/visailab.jpeg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script type="text/javascript" src="./static/js/copy.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">SPTNet: An Efficient Alternative Framework for Generalized Category Discovery with Spatial Prompt Tuning</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://whj363636.github.io/">Hongjun Wang</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://sgvaze.github.io/">Sagar Vaze</a><sup>2</sup>,</span>
+            <span class="author-block">
+              <a href="https://www.kaihan.org/">Kai Han</a><sup>1</sup>
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>Visual AI Lab, The University of Hong Kong</span>
+            <br>
+            <span class="author-block"><sup>2</sup>Visual Geometry Group, University of Oxford</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://openreview.net/forum?id=3QLkwU40EE&referrer=%5BAuthor%20Console%5D(%2Fgroup%3Fid%3DICLR.cc%2F2024%2FConference%2FAuthors%23your-submissions)"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2403.13684"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Video Link.
+              <span class="link-block">
+                <a href="https://www.youtube.com/watch?v=MrKrnHhk8IA"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span> -->
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/Visual-AI/SPTNet"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+              <!-- Dataset Link. -->
+              <span class="link-block">
+                <a href="#Bib"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="far fa-images"></i>
+                  </span>
+                  <span>Citation</span>
+                  </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+            <p>
+                Generalized Category Discovery (GCD) aims to classify unlabelled images from both `seen' and `unseen' classes by transferring knowledge from a set of labelled `seen' class images. A key theme in existing GCD approaches is adapting large-scale pre-trained models for the GCD task.
+            </p>
+            <p>
+                An alternate perspective, however, is to adapt the data representation itself for better alignment with the pre-trained model. As such, in this paper, we introduce a two-stage adaptation approach termed SPTNet, which iteratively optimizes model parameters (i.e., model-finetuning) and data parameters (i.e., prompt learning). Furthermore, we propose a novel spatial prompt tuning method (SPT) which considers the spatial property of image data, enabling the method to better focus on object parts, which can transfer between seen and unseen classes.
+            </p>            
+            <p>
+                We thoroughly evaluate our SPTNet on standard benchmarks and demonstrate that our method outperforms existing GCD methods. Notably, we find our method achieves an average accuracy of 61.4% on the SSB, surpassing prior state-of-the-art methods by approximately 10%. The improvement is particularly remarkable as our method yields extra parameters amounting to only 0.042% of those in the backbone architecture.
+            </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+    <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Framework</h2>
+          <section class="hero teaser">
+            <div class="container is-max-desktop">
+              <div class="hero-body">
+                  <video id="teaser" autoplay muted loop playsinline height="90%">
+                    <source src="static/images/teaser.mp4"
+                            type="video/mp4">
+                  </video>
+                  <!-- <img src="static/images/teaser.gif" alt="this slowpoke moves"/> -->
+                  <p>SPTNet introduces a two-stage adaptation approach termed SPTNet, which iteratively optimizes model parameters (i.e., model-finetuning) and data parameters (i.e., prompt learning).</p> 
+              </div>
+            </div>
+          </section>
+  <!--         <div class="col justify-content-center text-center">
+            <div class="col-sm-12">
+                <img src="static/images/method.png" style="width:100%">
+            </div>
+          </div> -->
+          <div class="content has-text-justified">
+            <br>
+            <p>
+                In the first stage, we attach the same set of spatial prompts to the input images. During training, we freeze the parameters of models and only update the prompt parameters. 
+            </p>
+            <p>
+                In the second stage, we freeze prompt parameters and learn the parameters of models.With our spatial prompt learning as a strong augmentation, we aim to obtain a representation that can better distinguish samples from different classes, as the core mechanism of contrastive learning involves implicitly clustering samples from the same class together. 
+            </p>
+            <p>
+                Different from prior works that apply only hand-crafted augmentations, we propose to consider prompting the input with learnable prompts as a new type of augmentation. The `prompted' version of the input can be adopted by all loss terms. In this way, our framework can enjoy a learned augmentation that varies throughout the training process, enabling the backbone to learn discriminative representations. Each stage optimizes the parameters for k iterations.
+            </p>
+          </div>
+          <div class="col justify-content-center text-center">
+            <div class="col-sm-12">
+                <img src="static/images/spt.png" style="width:60%">
+            </div>
+          </div>
+          <div class="content has-text-justified">
+            <br>
+            <p>
+                A key insight in GCD is that object parts are effective in transferring knowledge between old and new categorie. Therefore, we propose Spatial Prompt Tuning (SPT) to serve as a learned data augmentation that enables the model to focus on local image object regions, while adapting the data representation from the pre-trained ViT model and maintaining the alignment with it.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Performance</h2>
+          <div class="col justify-content-center text-center">
+          </div>
+          <div class="content has-text-justified">
+            <p>
+                We evaluate SPTNet on three generic datasets, CIFAR-10, CIFAR-100 and ImageNet-100. We compare SPTNet with previous state-of-the-art methods and two concurrent methods. The results are shown below. We can see that our method consistently outperforms previous state-of-the-art methods. 
+            </p>
+            <div class="col justify-content-center text-center">
+                <div class="col-sm-12">
+                    <center>
+                    <img src="static/images/generic.png" style="width:95%">
+                    </center>
+                </div>
+            </div>
+            <p>
+                The results on the four fine-grained benchmarks (CUB, Stanford Cars, FGVC-Aircraft, and Herbarium19) are shown below.
+            </p>
+            <div class="col justify-content-center text-center">
+                <div class="col-sm-12">
+                    <center>
+                    <img src="static/images/finegrain.png" style="width:95%">
+                    </center>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Visualization</h2>
+          <div class="content has-text-justified">
+            <p>
+                Comparing the representations of SimGCD and SimGCD+VPT, VPT appears to have a negative impact on the representation, leading to clutter between seen and unseen classes (e.g., bird and dog) in the GCD setting. Both SPTNet-P and SPTNet produce more discriminative features and more compact clusters than SimGCD.
+            </p>
+            <div class="col justify-content-center text-center">
+                <div class="col-sm-12">
+                    <center>
+                    <img src="static/images/tsne.png" style="width:50%">
+                    </center>
+                </div>
+            </div>
+            <p>
+                Besides, SPTNet explores diverse regions in different heads and meanwhile covers the object across almost all heads.
+            </p>
+            <div class="col justify-content-center text-center">
+                <div class="col-sm-12">
+                    <center>
+                    <img src="static/images/vis.png" style="width:80%">
+                    </center>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="Bib">
+    <div class="container is-max-desktop content">
+      <h2 class="title">BibTeX</h2>
+<pre><code id="BibTeX">@inproceedings{wang2024sptnet,
+    author    = {Wang, Hongjun and Vaze, Sagar and Han, Kai},
+    title     = {SPTNet: An Efficient Alternative Framework for Generalized Category Discovery with Spatial Prompt Tuning},
+    booktitle = {International Conference on Learning Representations (ICLR)},
+    year      = {2024}
+}
+</code><button class="copy-button" style="--button-hover-background: var(--example-color-alt); --button-color: var(--white); --button-background: var(--example-color-alt); --button-margin-bottom: 0;" class="copyButton btn" onclick="copyToClipboard('BibTeX','BibTeX_cop')"><i class="fa fa-copy"></i></button><p id="BibTeX_cop" style="display:none;color: #a0a0a0">Copied!</p></pre>
+    </div>
+  </section>
+
+
+<section class="section" id="Acknowledgement">
+  <div class="container is-max-desktop content">
+    <h2 class="title">Acknowledgement</h2>
+    This web page is modified based on the template from <a href="https://nerfies.github.io/">nerfies</a>. Thanks for their great work.
+  </div>
+</section>
+
+
+</body>
+</html>

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="PromptCCD: Learning Gaussian Mixture Prompt Pool for Continual Category Discovery. In ECCV, 2024.">
+  <meta name="keywords" content="PromptCCD, Continual Category Discovery, CCD, Continual Learning, 
+                                 Prompting, Category Discovery, GCD, NCD, Self-supervised learning,
+                                 Foundation models">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PromptCCD: Learning Gaussian Mixture Prompt Pool for Continual Category Discovery</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <link rel="icon" href="./static/files/visailab.jpeg">
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    function restartVideo(videoID) {
+      var video = document.getElementById(videoID);
+      video.currentTime = 0;
+      video.play();
+    }
+
+    function playPauseVideo(videoID) {
+      var video = document.getElementById(videoID);
+      if (video.currentTime > video.duration - 0.1) {
+        video.currentTime = 0;
+        video.play();
+      } else if (video.paused) {
+        video.play();
+      } else {
+        video.pause();
+      }
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+
+  <script>
+    function video_time_update(video) {
+        if (video.currentTime > 40.3) {
+            video.load();  /* parks the video back to its poster */
+        }
+    }
+
+    //grabs video element by id
+    var video1 = document.getElementById('video1');
+
+    //functions called on events mouseover and mouseout
+    function videoPausePlayHandler(e) {
+        if (e.type == 'mouseover') {
+            //adds the controls
+            video1.setAttribute("controls","controls");
+        } else if (e.type == 'mouseout') {
+            //removes the controls
+            video1.removeAttribute("controls");
+        }
+    }
+  </script>
+
+</head>
+<body>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">
+            PromptCCD: 
+            Learning Gaussian Mixture Prompt Pool for 
+            Continual Category Discovery
+          </h1>
+          
+          <div class="venue">
+            <strong>
+              <font size="5" color="#6d94c6">
+              ECCV 2024
+              </font>
+              <br><br>
+            </strong>
+          </div>
+          
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=cnChUoEAAAAJ&hl=en/">Fernando Julio Cendra</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://bzhao.me/">Bingchen Zhao</a><sup>2</sup>,</span>
+            <span class="author-block">
+              <a href="https://www.kaihan.org/">Kai Han</a><sup>1</sup>
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup><a href="https://visailab.github.io/">Visual AI Lab</a>, The University of Hong Kong</span>
+            <br>
+            <span class="author-block"><sup>2</sup>The University of Edinburgh</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://arxiv.org/pdf/2407.19001"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <!-- Abstract Link. -->
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2407.19001"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/Visual-AI/PromptCCD"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+
+              <span class="link-block">
+                <a href="#BibTeX"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="far fa-images"></i>
+                  </span>
+                  <span>Citation</span>
+                </a>
+              </span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <center>
+        <img class="rounded" src = "./static/files/promptccd_task-light.png" width="800px"></img>
+      </center>
+      <h4 class="subtitle has-text-justified">
+        In <b>Continual Category Discovery (CCD)</b>, the model receives the labelled set at the initial stage and is tasked to discover categories from the unlabelled data in the subsequent stages.
+        There are two major challenges in CCD: (1) <i>catastrophic forgetting</i>, a well-known issue in continual learning, and
+        (2) <i>discovering novel visual concepts</i> for both known and novel categories in the unlabelled data. 
+      </h4>
+    </div>
+    <div class="columns is-centered">
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            We tackle the problem of Continual Category Discovery (CCD), which aims to automatically discover novel categories in a continuous stream of unlabeled data while mitigating the challenge of catastrophic forgetting 
+            – an open problem that persists even in conventional, fully supervised continual learning.
+          </p>
+          <p>
+            To address this challenge, we propose PromptCCD, a simple yet effective framework that utilizes a Gaussian Mixture Model (GMM) as a prompting method for CCD. 
+            At the core of PromptCCD lies the Gaussian Mixture Prompting (GMP) module, which acts as a dynamic pool that updates over time to facilitate representation learning and prevent forgetting during category discovery. 
+            Moreover, GMP enables on-the-fly estimation of category numbers, allowing PromptCCD to discover categories in unlabeled data without prior knowledge of the category numbers. 
+            We extend the standard evaluation metric for Generalized Category Discovery (GCD) to CCD and benchmark state-of-the-art methods on diverse public datasets. 
+            PromptCCD significantly outperforms existing methods, demonstrating its effectiveness.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+</section>
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Framework. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Framework</h2>
+        <div class="content has-text-justified">
+
+          <div class="field has-addons is-pulled-right" id="play-controls"
+               title="Hint: Right click the video and choose 'Show All Controls' to enable more fine-grained video controls.">
+            <p class="control">
+              <button class="button is-small is-rounded" onclick="playPauseVideo('pullFigVideo')">
+                <span class="icon is-small">
+                  &nbsp;<i class="fa fa-play"></i>&nbsp;<i class="fa fa-pause"></i>&nbsp;
+                </span>
+              </button>
+            </p>
+            <p class="control">
+              <button class="button is-small is-rounded" onclick="restartVideo('pullFigVideo')">
+                <span class="icon is-small">
+                  <i class="fas fa-redo"></i>
+                </span>
+                <span>Restart animation</span>
+              </button>
+            </p>
+          </div>
+
+          <tr>
+            <td width=800px>
+              <center>
+                  <video id="pullFigVideo" height="100%" width="100%" preload="metadata" ontimeupdate="video_time_update(this)"
+                    poster="./static/files/promptccd_framework-light.png" height="90%" style="width:900px" muted controls>
+                    <source src="./static/files/promptccd_teaser-light.mp4" type="video/mp4">
+                  </video>
+                  <br>
+              </center>
+          </td>
+        </tr>
+        <p style="text-align:justify;">
+            Overview of our proposed PromptCCD framework and Gaussian Mixture Prompting (GMP) module. 
+            PromptCCD continually discovers new categories while retaining previously discovered ones by learning a dynamic GMP pool to adapt the vision foundation model for CCD. 
+            Specifically, we address CCD by making use of GMP modules to estimate the probability of input class token's features by calculating the log-likelihood and use the top-k mean of GMM components as prompts to guide the foundation model. 
+            Lastly, to retain previously learned prompts, we generate prototype samples from the fitted GMM at time step t − 1 and fit the current GMM with these samples at time step t.
+        </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Framework. -->
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Performance. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Performance</h2>
+        <div class="content has-text-justified">
+          <p style="text-align:justify;">
+            We evaluate PromptCCD w/ GMP on various benchmark datasets, i.e., CIFAR100, ImageNet-100, TinyImageNet, and Caltech-101 for generic datasets and Aircraft, Stanford Cars, and CUB for fine-grained datasets. 
+            We also compare our method with representative CCD methods and re-implement SoTA GCD and supervised continual learning methods to fit into our task. 
+            The results are shown below. We can see that our method consistently outperforms all methods.
+    
+            <td width=800px>
+                <center>
+                    <img class="rounded" src = "./static/files/promptccd_results.png" height="700px"></img>
+                    <br>
+                </center>
+            </td>
+        </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Performance. -->
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <center>
+    <h2 class="title">BibTeX</h2>
+    </center>
+    <pre><code>
+    @inproceedings{cendra2024promptccd,
+      author    = {Fernando Julio Cendra and Bingchen Zhao and Kai Han},
+      title     = {PromptCCD: Learning Gaussian Mixture Prompt Pool for Continual Category Discovery},
+      booktitle = {European Conference on Computer Vision},
+      year      = {2024}
+    }
+    </code></pre>
+  </div>
+</section>
+
+
+<!-- <footer class="footer"> -->
+  <section class="section" id="footer">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+          <center>
+            This website is based on <a href="https://nerfies.github.io/">Nerfies</a>.
+          </center>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- </footer> -->
+ </section>
+
+</body>
+</html>
