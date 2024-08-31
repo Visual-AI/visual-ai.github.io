@@ -293,7 +293,7 @@
       <!-- Abstract. -->
       <div class="columns is-centered has-text-centered">
         <div class="column is-four-fifths">
-          <h2 class="title is-3">Metrics</h2>
+          <h2 class="title is-3">A New Metric: Outlier-Aware Accuracy (OAA)</h2>
           <div class="content has-text-justified">
             <p>
             Finally, we introduce a new metric to reconcile the problems of <i>detecting</i> covariate shift and being <i>robust</i> to it. AUROC does not capture the model's ability to reliably classify testing samples in the presence of distribution shifts. To analyze the relationship of performance between covariate shift and robustness, we introduce a novel measure, which we term <i>Outlier-Aware Accuracy</i> (OAA). OAA measures the frequency of `correct' predictions made by the model at a given threshold. The `correct' predictions are defined as: (1) Among the testing samples predicted as ID, those whose semantic class labels are \textit{correctly} predicted; (2) True OOD samples that have <i>incorrect</i> semantic class predictions.
