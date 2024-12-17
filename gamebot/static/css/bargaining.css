@@ -1,0 +1,43 @@
+/* bargaining.css */
+#bargaining-game {
+    font-family: Arial, sans-serif;
+}
+
+.title {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.pool-item {
+    fill: #e0e0e0;
+    stroke: #999;
+}
+
+.p1-proposal {
+    fill: #a8d5ff;
+    stroke: #4a90e2;
+}
+
+.p2-proposal {
+    fill: #ffd5a8;
+    stroke: #e29a4a;
+}
+
+.player-label {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.control-button {
+    fill: #f0f0f0;
+    stroke: #999;
+    cursor: pointer;
+}
+
+.control-button:hover {
+    fill: #e0e0e0;
+}
+
+text {
+    font-size: 12px;
+}

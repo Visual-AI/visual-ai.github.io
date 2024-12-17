@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <!-- Meta tags for social media banners, these should be filled in appropriatly as they are your "business card" -->
+    <!-- Replace the content tag with appropriate information -->
+    <meta name="description" content="DESCRIPTION META TAG">
+    <meta property="og:title" content="SOCIAL MEDIA TITLE TAG"/>
+    <meta property="og:description" content="SOCIAL MEDIA DESCRIPTION TAG TAG"/>
+    <meta property="og:url" content="URL OF THE WEBSITE"/>
+    <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X630-->
+    <meta property="og:image" content="static/image/your_banner_image.png"/>
+    <meta property="og:image:width" content="1200"/>
+    <meta property="og:image:height" content="630"/>
+
+
+    <meta name="twitter:title" content="TWITTER BANNER TITLE META TAG">
+    <meta name="twitter:description" content="TWITTER BANNER DESCRIPTION META TAG">
+    <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X600-->
+    <meta name="twitter:image" content="static/images/your_twitter_banner_image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <!-- Keywords for your paper to be indexed by-->
+    <meta name="keywords" content="KEYWORDS SHOULD BE PLACED HERE">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <title>GAMEBOT: Gaming Arena for Model Evaluation - Battle of Tactics</title>
+    <link rel="icon" type="image/x-icon" href="static/images/gamebot.ico">
+    <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+          rel="stylesheet">
+
+    <link rel="stylesheet" href="static/css/bulma.min.css">
+    <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+    <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+    <link rel="stylesheet" href="static/css/index.css">
+    <link rel="stylesheet" href="static/css/bargaining.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
+    <script defer src="static/js/fontawesome.all.min.js"></script>
+    <script src="static/js/bulma-carousel.min.js"></script>
+    <script src="static/js/bulma-slider.min.js"></script>
+    <script src="static/js/index.js"></script>
+    <script src="static/js/sort_panel.js"></script>
+
+</head>
+<body>
+
+
+<section class="hero">
+    <div class="hero-body">
+        <div class="container is-max-desktop">
+            <div class="columns is-centered">
+
+                <div class="column has-text-centered">
+                    <div class="publication-logo">
+                        <img src="static/images/coolerbot_nobg.png" alt="GAMEBOT" style="width: 300px; height: 300px; ">
+                        <h1 class="title is-1 publication-title">Beyond Outcomes: Transparent Assessment of LLM
+                            Reasoning in Games</h1>
+                        <div class="is-size-5 publication-authors">
+                            <!-- Paper authors -->
+                            <span class="author-block">
+                <a href="" target="_blank">Wenye Lin</a><sup>1</sup>,</span>
+                            <span class="author-block">
+                  <a href="https://openreview.net/profile?id=~Jonathan_Roberts1"
+                     target="_blank">Jonathan Roberts</a><sup>2</sup>,</span>
+                            <span class="author-block">
+                    <a href="https://yhyang-myron.github.io/" target="_blank">Yunhan Yang</a><sup>1</sup>,
+                  </span>
+                            <span class="author-block">
+                    <a href="https://samuelalbanie.com/" target="_blank">Samuel Albanie</a>,
+                  </span>
+                            <span class="author-block">
+                    <a href="https://z0ngqing.github.io/" target="_blank">Zongqing Lu</a><sup>3</sup>,
+                  </span>
+                            <span class="author-block">
+                    <a href="https://www.kaihan.org/" target="_blank">Kai Han</a><sup>1</sup>
+                  </span>
+                        </div>
+                        <div class="is-size-5 publication-authors">
+                            <span class="author-block"><sup>1</sup>The University of Hong Kong, <sup>2</sup>University of Cambridge, <sup>3</sup>Peking University</span>
+                            <!--                    <span class="eql-cntrb"><small><br><sup>*</sup>Indicates Equal Contribution</small></span>-->
+                        </div>
+                        <div class="column has-text-centered">
+                            <div class="publication-links">
+                                <!-- Arxiv PDF link -->
+                                <span class="link-block">
+                        <a href="https://arxiv.org/pdf/<ARXIV PAPER ID>.pdf" target="_blank"
+                           class="external-link button is-normal is-rounded is-dark">
+                        <span class="icon">
+                          <i class="fas fa-file-pdf"></i>
+                        </span>
+                        <span>Paper</span>
+                      </a>
+                    </span>
+                                <!--                    &lt;!&ndash; Supplementary PDF link &ndash;&gt;-->
+                                <!--                    <span class="link-block">-->
+                                <!--                      <a href="static/pdfs/supplementary_material.pdf" target="_blank"-->
+                                <!--                      class="external-link button is-normal is-rounded is-dark">-->
+                                <!--                      <span class="icon">-->
+                                <!--                        <i class="fas fa-file-pdf"></i>-->
+                                <!--                      </span>-->
+                                <!--                      <span>Supplementary</span>-->
+                                <!--                    </a>-->
+                                <!--                  </span>-->
+                                <!-- Github link -->
+                                <span class="link-block">
+                    <a href="https://github.com/YOUR REPO HERE" target="_blank"
+                       class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                  </a>
+                </span>
+                                <!-- ArXiv abstract Link -->
+                                <span class="link-block">
+                  <a href="https://arxiv.org/abs/<ARXIV PAPER ID>" target="_blank"
+                     class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    </div>
+</section>
+
+
+<!-- Paper abstract -->
+<section class="section">
+    <div class="container is-max-desktop">
+
+        <div class="columns is-centered has-text-centered">
+
+            <div class="column is-four-fifths is-size-6"><h2 class="title is-2">Introduction</h2>
+                <div class="content has-text-justified"><p class="c18"><span class="c9">Introducing </span><strong>GAMEBOT</strong><span
+                        class="c0">: a benchmark evaluating LLM reasoning in competitive gaming environments. It decomposes complex reasoning in games into modular subproblems, targeting abilities like rule understanding and strategy instruction following. We develop Chain-of-Thought (CoT) prompts that leverage domain knowledge to guide LLMs and automatically validate their intermediate reasoning steps against ground truth. It has the following properties:</span>
+                </p>
+                    <p class="c10"><span class="c0"></span></p>
+                    <ul class="c28 lst-kix_r92srvgun7j-0 start">
+
+                        <li class="c18 c29 li-bullet-0"><span class="c0"><strong>Interpretability:</strong> Our benchmark offers assessments on not only the quality of final decisions but also the intermediate steps, giving insights for improving the training or inference of LLMs.</span>
+                        </li>
+                        <li class="c18 c29 li-bullet-0"><span class="c0"><strong>Difficulty:</strong> The games are challenging enough to differentiate between top-performing models. Even for GPT-4o, the score of intermediate results is only 0.52 (out of 1).</span>
+                        </li>
+                        <li class="c18 c29 li-bullet-0"><span
+                                class="c0"><strong>Alleviate Data Contamination:</strong> Rather than evaluation on a predefined dataset, we evaluate LLMs in interactive gaming environments, whereas game states are across a wide spectrum depending on specific actions received and randomness. </span>
+                        </li>
+                        <li class="c18 c29 li-bullet-0"><span class="c0"><strong>Stronger Baselines:</strong> The prompts presented in this work can serve as valuable CoT baselines for future research exploring advanced prompting techniques like auto-prompting and reflection.</span>
+                    </ul>
+                    <!--                    <p class="c18"><span class="c9"><strong>We will evaluate your model on LiveBench!</strong> Open a <a-->
+                    <!--                            href="https://github.com/LiveBench/LiveBench/issues" target="_blank" rel="noreferrer">github issue</a> or email us at <a-->
+                    <!--                            href="mailto:livebench.ai@gmail.com" target="_blank"-->
+                    <!--                            rel="noreferrer">livebench.ai@gmail.com</a>!</span></p>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="section is-default is-bold">
+    <div class="hero-head">
+        <h2 class="title is-2 has-text-centered">Involved Tasks</h2>
+    </div>
+    <!--  Othello -->
+    <div class="hero-body">
+        <div class="container">
+            <div class="columns is-vcentered">
+                <div class="column is-4 is-offset-2">
+                    <h2 class="title is-3">
+                        Task 1: Othello
+                    </h2>
+                    <h2 class="subtitle is-5 mt-2">
+                        Othello (Reversi) is a board game played on an 8x8 board. Two players take turns placing discs,
+                        attempting to capture their opponent's discs by sandwiching them between
+                        their own. The captured discs would be flipped to the player's color. Who has the majority of
+                        pieces at the end of the game wins. The game
+                        emphasizes strategic placement and tactical maneuvering to control the board.
+                    </h2>
+                    <h2 class="subtitle is-5 mt-2">
+                        <strong>Required Abilities: Spatial Reasoning; Positional Evaluation</strong>
+                    </h2>
+                </div>
+                <div class="column is-6 has-text-centered">
+                    <video id="video1" autoplay controls muted loop width="340" height="340">
+                        <source src="static/videos/othello_game.mp4"
+                                type="video/mp4">
+
+                    </video>
+                    <h2 class="subtitle is-5 mt-1">
+                        gpt-4o (black) vs llama3.1-405b-instruct (white)
+                    </h2>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!--    Pong-->
+    <div class="hero-body">
+        <div class="container">
+            <div class="columns is-vcentered">
+
+                <div class="column is-5 is-offset-1 has-text-centered">
+                    <video poster="" id="video2" autoplay controls muted loop width="300" height="200">
+                        <source src="static/videos/meta-llama3-405b-instruct-maas_vs_gpt-4o-mini-episode-0.mp4"
+                                type="video/mp4">
+                    </video>
+                    <h2 class="subtitle is-5 mt-1">
+                        gpt-4o-mini (left) vs llama3.1-405b (right)
+                    </h2>
+                </div>
+                <div class="column is-4 is-offset-1">
+                    <h2 class="title is-3">
+                        Task 2: Pong
+                    </h2>
+                    <h2 class="subtitle is-5 mt-2">
+                        Pong is a classic two-player arcade game simulating table tennis. Players control paddles to hit
+                        a ball back and forth, aiming to score points by making the opponent miss. It represents a
+                        simplified environment with continuous action spaces.
+                    </h2>
+                    <h2 class="subtitle is-5 mt-2"><strong>Required Abilities: Mathematical Reasoning</strong></h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--    Surround-->
+    <div class="hero-body">
+        <div class="container">
+            <div class="columns is-vcentered">
+                <div class="column is-4 is-offset-2">
+                    <h2 class="title is-3">
+                        Task 3: Surround
+                    </h2>
+                    <h2 class="subtitle is-5 mt-2">
+                        Surround is a two-player game where players control a continuously moving line. The goal is to
+                        force the opponent to collide with the wall, or the growing trail of either player. It
+                        highlights spatial reasoning and strategic blocking.
+                    </h2>
+                    <h2 class="subtitle is-5 mt-2">
+                        <strong>Required Abilities: Information Extraction; Spatial Reasoning; Long-Term Path
+                            Planning</strong>
+                    </h2>
+                </div>
+                <div class="column is-6 has-text-centered">
+                    <video id="video1" autoplay controls muted loop width="300" height="300">
+                        <source src="static/videos/claude-3-5-sonnet@20240620_vs_gpt-4o-episode-0.mp4"
+                                type="video/mp4">
+
+                    </video>
+                    <h2 class="subtitle is-5 mt-1">
+                        gpt-4o (left) vs claude-3-5-sonnet (right)
+                    </h2>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!--    Checkers-->
+    <div class="hero-body">
+        <div class="container">
+            <div class="columns is-vcentered">
+
+                <div class="column is-5 is-offset-1 has-text-centered">
+                    <video poster="" id="video2" autoplay controls muted loop width="340" height="340">
+                        <source src="static/videos/checkers_game.mp4"
+                                type="video/mp4">
+                    </video>
+                    <h2 class="subtitle is-5 mt-1">
+                        gemini-1.5-pro-preview (black) vs jamba-1.5-large (white)
+                    </h2>
+                </div>
+                <div class="column is-4 is-offset-1">
+                    <h2 class="title is-3">
+                        Task 4: Checkers
+                    </h2>
+                    <h2 class="subtitle is-5 mt-2">
+                        Checkers is a board game where players move their pieces diagonally, capturing opponent pieces
+                        by jumping over them. Regular pieces can only move forward, while "kings," earned by reaching
+                        the opponent's back rank, can move and capture both forwards and backward. The game ends when
+                        one player has captured all of their opponent's pieces or has blocked their opponent's pieces.
+                        It involves strategic planning and tactical piece advancement.
+                    </h2>
+                    <h2 class="subtitle is-5 mt-2"><strong>Required Abilities: Spatial Reasoning; Game Board
+                        Understanding</strong></h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--    TicTacToe-->
+    <div class="hero-body">
+        <div class="container">
+            <div class="columns is-vcentered">
+                <div class="column is-4 is-offset-2">
+                    <h2 class="title is-3">
+                        Task 5: TicTacToe
+                    </h2>
+                    <h2 class="subtitle is-5 mt-2">
+                        Tic-Tac-Toe is a simple two-player game played on a 3x3 grid. Players take turns marking a
+                        square with their respective symbol, aiming to create a line of three symbols horizontally,
+                        vertically, or diagonally. Its simplicity makes it useful for a lightweight evaluation for LLMs.
+                    </h2>
+                    <h2 class="subtitle is-5 mt-2">
+                        <strong>Required Abilities: Pattern Recognition; Game Board Understanding</strong>
+                    </h2>
+                </div>
+                <div class="column is-6 has-text-centered">
+                    <video id="video1" autoplay controls muted loop width="300" height="300">
+                        <source src="static/videos/tictactoe_game.mp4"
+                                type="video/mp4">
+
+                    </video>
+                    <h2 class="subtitle is-5 mt-1">
+                        gemini-1.5-pro-preview (X) vs llama3.1-70b-instruct (O)
+                    </h2>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!--Connect4-->
+    <div class="hero-body">
+        <div class="container">
+            <div class="columns is-vcentered">
+
+                <div class="column is-5 is-offset-1 has-text-centered">
+                    <video autoplay controls muted loop width="350">
+                        <source src="static/videos/connect4_game.mp4"
+                                type="video/mp4">
+                    </video>
+                    <h2 class="subtitle is-5 mt-1">
+                        claude-3-5-sonnet (yellow) vs gpt-4o-mini (red)
+                    </h2>
+                </div>
+                <div class="column is-4 is-offset-1">
+                    <h2 class="title is-3">
+                        Task 6: Connect4
+                    </h2>
+                    <h2 class="subtitle is-5 mt-2">
+                        Connect Four is a two-player connection game played on a vertically suspended 6x7 grid. Players
+                        drop colored discs into columns, aiming to connect four of their own discs horizontally,
+                        vertically, or diagonally. It involves strategic thinking and anticipating opponent moves.
+                    </h2>
+                    <h2 class="subtitle is-5 mt-2"><strong>Required Abilities: Pattern Recognition; Game Board
+                        Understanding</strong></h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--  Texas-->
+    <div class="hero-body">
+        <div class="container">
+            <div class="columns is-vcentered">
+                <div class="column is-4 is-offset-2">
+                    <h2 class="title is-3">
+                        Task 7: Texas Hold'em
+                    </h2>
+                    <h2 class="subtitle is-5 mt-2">
+                        Texas Hold'em involves betting, bluffing, and incomplete
+                        information. Players receive two private cards and share five community cards, forming the best
+                        possible five-card hand. Multiple betting rounds occur throughout the hand, allowing players to
+                        bet strategically based on the strength of their hand and their assessment of their opponents'
+                        hands. The player with the best hand at the showdown, or the last remaining player after all
+                        others have folded, wins the pot.
+                    </h2>
+                    <h2 class="subtitle is-5 mt-2">
+                        <strong>Required Abilities: Risk Management; Bluffing; Hand analysis</strong>
+                    </h2>
+                </div>
+                <div class="column is-6 has-text-centered">
+                    <video id="video1" autoplay controls muted loop width="400">
+                        <source src="static/videos/poker_game.mp4"
+                                type="video/mp4">
+
+                    </video>
+                    <h2 class="subtitle is-5 mt-1">
+                        gpt4-1106 vs claude-3-sonnet
+                    </h2>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!--Bargaining-->
+    <div class="hero-body">
+        <div class="container">
+            <div class="columns is-vcentered">
+
+                <div class="column is-5 is-offset-1 has-text-centered">
+
+                    <video autoplay controls muted loop width="450">
+                        <source src="static/videos/bargain-game.mov"
+                                type="video/mp4">
+                        <h2 class="subtitle is-5 mt-1">
+                            gpt-4o (P1) vs gemini-1.5-pro-preview (P2)
+                        </h2>
+                </div>
+                <div class="column is-4 is-offset-1">
+                    <h2 class="title is-3">
+                        Task 8: Negotiation v2
+                    </h2>
+                    <h2 class="subtitle is-5 mt-2">
+                        Negotiation v2 is a game where two players negotiate to divide a set of items, each holding a
+                        private valuation for each item. Players negotiate to maximize their individual total value
+                        acquired. After 8 rounds of Negotiation, the game has a 20% chance of ending in each subsequent
+                        round. If no agreement is reached before the game's forced termination, both players receive a
+                        reward of 0.
+                    </h2>
+                    <h2 class="subtitle is-5 mt-2"><strong>Required Abilities: Collaboration in Competition; Opponent
+                        Modeling; Mathematical Reasoning </strong></h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Video carousel -->
+<!--<section class="hero is-small">-->
+<!--    <div class="hero-body">-->
+<!--        <div class="container">-->
+<!--            <h2 class="title is-3"> Tasks</h2>-->
+<!--            <div id="results-carousel" class="carousel results-carousel">-->
+
+<!--                <div class="item item-video1">-->
+<!--                    <div class="columns">-->
+<!--                        <video poster="" id="video1" autoplay controls muted loop width="300">-->
+<!--                            &lt;!&ndash; Your video file here &ndash;&gt;-->
+<!--                            <source src="static/videos/claude-3-5-sonnet@20240620_vs_gpt-4o-episode-0.mp4"-->
+<!--                                    type="video/mp4">-->
+
+<!--                        </video>-->
+<!--                    </div>-->
+<!--                    <div class="item item-video2">-->
+<!--                        <video poster="" id="video2" autoplay controls muted loop width="300">-->
+<!--                            &lt;!&ndash; Your video file here &ndash;&gt;-->
+<!--                            <source src="static/videos/meta-llama3-405b-instruct-maas_vs_gpt-4o-mini-episode-0.mp4"-->
+<!--                                    type="video/mp4">-->
+<!--                        </video>-->
+<!--                    </div>-->
+<!--                    &lt;!&ndash;        <div class="item item-video3">&ndash;&gt;-->
+<!--                    &lt;!&ndash;          <video poster="" id="video3" autoplay controls muted loop height="100%">\&ndash;&gt;-->
+<!--                    &lt;!&ndash;            &lt;!&ndash; Your video file here &ndash;&gt;&ndash;&gt;-->
+<!--                    &lt;!&ndash;            <source src="static/videos/carousel3.mp4"&ndash;&gt;-->
+<!--                    &lt;!&ndash;            type="video/mp4">&ndash;&gt;-->
+<!--                    &lt;!&ndash;          </video>&ndash;&gt;-->
+<!--                    &lt;!&ndash;        </div>&ndash;&gt;-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--</section>-->
+<!-- End video carousel -->
+
+
+<!--&lt;!&ndash; Paper poster &ndash;&gt;-->
+<!--<section class="hero is-small is-light">-->
+<!--  <div class="hero-body">-->
+<!--    <div class="container">-->
+<!--      <h2 class="title">Poster</h2>-->
+
+<!--      <iframe  src="static/pdfs/sample.pdf" width="100%" height="550">-->
+<!--          </iframe>-->
+<!--        -->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </section>-->
+<!--&lt;!&ndash;End paper poster &ndash;&gt;-->
+
+
+<!--Leaderboard -->
+<section class="section">
+    <div class="column has-text-centered">
+        <h2 class="title is-2 mb-4">Leaderboard</h2>
+        <p class="content">(Note: You can click the button for sorting)</p>
+
+    </div>
+    <div class="container">
+        <table id="leaderboardTable">
+            <thead>
+            <tr>
+                <th>Model</th>
+                <th class="has-text-centered">Rank</th>
+                <th class="has-text-centered">Average Score</th>
+                <th class="has-text-centered">Othello</th>
+                <th class="has-text-centered">Pong</th>
+                <th class="has-text-centered">Surround</th>
+                <th class="has-text-centered">Checkers</th>
+                <th class="has-text-centered">TicTacToe</th>
+                <th class="has-text-centered">Connect4</th>
+                <th class="has-text-centered">Texas hold'em</th>
+                <th class="has-text-centered">Negotiation v2</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="model-name">gpt-4o-2024-05-13</td>
+                <td class="numeric has-text-centered">1</td>
+                <td class="numeric has-text-centered">0.470</td>
+                <td class="numeric has-text-centered">0.395</td>
+                <td class="numeric has-text-centered">0.685</td>
+                <td class="numeric has-text-centered">0.525</td>
+                <td class="numeric has-text-centered">0.270</td>
+                <td class="numeric has-text-centered">0.475</td>
+                <td class="numeric has-text-centered">0.315</td>
+                <td class="numeric has-text-centered">0.675</td>
+                <td class="numeric has-text-centered">0.395</td>
+            </tr>
+            <tr>
+                <td class="model-name">claude-3-5-sonnet@20240620</td>
+                <td class="numeric has-text-centered">2</td>
+                <td class="numeric has-text-centered">0.390</td>
+                <td class="numeric has-text-centered">0.280</td>
+                <td class="numeric has-text-centered">0.545</td>
+                <td class="numeric has-text-centered">0.620</td>
+                <td class="numeric has-text-centered">0.050</td>
+                <td class="numeric has-text-centered">0.395</td>
+                <td class="numeric has-text-centered">0.220</td>
+                <td class="numeric has-text-centered">0.535</td>
+                <td class="numeric has-text-centered">0.475</td>
+            </tr>
+            <tr>
+                <td class="model-name">gpt-4-2024-03-16</td>
+                <td class="numeric has-text-centered">3</td>
+                <td class="numeric has-text-centered">0.355</td>
+                <td class="numeric has-text-centered">0.135</td>
+                <td class="numeric has-text-centered">0.475</td>
+                <td class="numeric has-text-centered">0.545</td>
+                <td class="numeric has-text-centered">0.090</td>
+                <td class="numeric has-text-centered">0.405</td>
+                <td class="numeric has-text-centered">0.275</td>
+                <td class="numeric has-text-centered">0.510</td>
+                <td class="numeric has-text-centered">0.380</td>
+            </tr>
+            <tr>
+                <td class="model-name">llama-3.1-405b-instruct</td>
+                <td class="numeric has-text-centered">4</td>
+                <td class="numeric has-text-centered">0.305</td>
+                <td class="numeric has-text-centered">0.215</td>
+                <td class="numeric has-text-centered">0.640</td>
+                <td class="numeric has-text-centered">0.520</td>
+                <td class="numeric has-text-centered">0.000</td>
+                <td class="numeric has-text-centered">0.325</td>
+                <td class="numeric has-text-centered">0.260</td>
+                <td class="numeric has-text-centered">0.245</td>
+                <td class="numeric has-text-centered">0.255</td>
+            </tr>
+            <tr>
+                <td class="model-name">llama-3.1-70b-instruct</td>
+                <td class="numeric has-text-centered">5</td>
+                <td class="numeric has-text-centered">0.250</td>
+                <td class="numeric has-text-centered">0.135</td>
+                <td class="numeric has-text-centered">0.575</td>
+                <td class="numeric has-text-centered">0.300</td>
+                <td class="numeric has-text-centered">0.050</td>
+                <td class="numeric has-text-centered">0.495</td>
+                <td class="numeric has-text-centered">0.175</td>
+                <td class="numeric has-text-centered">0.120</td>
+                <td class="numeric has-text-centered">0.130</td>
+            </tr>
+            <tr>
+                <td class="model-name">gpt-4o-mini-2024-07-18</td>
+                <td class="numeric has-text-centered">6</td>
+                <td class="numeric has-text-centered">0.205</td>
+                <td class="numeric has-text-centered">-0.175</td>
+                <td class="numeric has-text-centered">0.430</td>
+                <td class="numeric has-text-centered">0.335</td>
+                <td class="numeric has-text-centered">-0.015</td>
+                <td class="numeric has-text-centered">0.170</td>
+                <td class="numeric has-text-centered">-0.045</td>
+                <td class="numeric has-text-centered">0.395</td>
+                <td class="numeric has-text-centered">0.495</td>
+            </tr>
+            <tr>
+                <td class="model-name">gemini-1.5-pro-preview-0514</td>
+                <td class="numeric has-text-centered">7</td>
+                <td class="numeric has-text-centered">0.195</td>
+                <td class="numeric has-text-centered">0.195</td>
+                <td class="numeric has-text-centered">0.585</td>
+                <td class="numeric has-text-centered">-0.060</td>
+                <td class="numeric has-text-centered">0.200</td>
+                <td class="numeric has-text-centered">0.065</td>
+                <td class="numeric has-text-centered">-0.045</td>
+                <td class="numeric has-text-centered">0.385</td>
+                <td class="numeric has-text-centered">0.185</td>
+            </tr>
+            <tr>
+                <td class="model-name">claude-3-sonnet@20240229</td>
+                <td class="numeric has-text-centered">8</td>
+                <td class="numeric has-text-centered">0.155</td>
+                <td class="numeric has-text-centered">0.100</td>
+                <td class="numeric has-text-centered">0.645</td>
+                <td class="numeric has-text-centered">-0.140</td>
+                <td class="numeric has-text-centered">0.010</td>
+                <td class="numeric has-text-centered">0.165</td>
+                <td class="numeric has-text-centered">0.140</td>
+                <td class="numeric has-text-centered">0.305</td>
+                <td class="numeric has-text-centered">0.010</td>
+            </tr>
+            <tr>
+                <td class="model-name">gemini-1.5-flash-preview-0514</td>
+                <td class="numeric has-text-centered">9</td>
+                <td class="numeric has-text-centered">0.125</td>
+                <td class="numeric has-text-centered">-0.060</td>
+                <td class="numeric has-text-centered">0.465</td>
+                <td class="numeric has-text-centered">0.465</td>
+                <td class="numeric has-text-centered">0.070</td>
+                <td class="numeric has-text-centered">-0.120</td>
+                <td class="numeric has-text-centered">0.045</td>
+                <td class="numeric has-text-centered">0.015</td>
+                <td class="numeric has-text-centered">0.115</td>
+            </tr>
+            <tr>
+                <td class="model-name">jamba-1.5-large</td>
+                <td class="numeric has-text-centered">10</td>
+                <td class="numeric has-text-centered">0.090</td>
+                <td class="numeric has-text-centered">0.070</td>
+                <td class="numeric has-text-centered">0.165</td>
+                <td class="numeric has-text-centered">0.035</td>
+                <td class="numeric has-text-centered">0.115</td>
+                <td class="numeric has-text-centered">0.085</td>
+                <td class="numeric has-text-centered">0.020</td>
+                <td class="numeric has-text-centered">0.095</td>
+                <td class="numeric has-text-centered">0.120</td>
+            </tr>
+            <tr>
+                <td class="model-name">claude-3-haiku@20240412</td>
+                <td class="numeric has-text-centered">11</td>
+                <td class="numeric has-text-centered">0.020</td>
+                <td class="numeric has-text-centered">0.080</td>
+                <td class="numeric has-text-centered">0.240</td>
+                <td class="numeric has-text-centered">0.055</td>
+                <td class="numeric has-text-centered">-0.180</td>
+                <td class="numeric has-text-centered">-0.050</td>
+                <td class="numeric has-text-centered">-0.170</td>
+                <td class="numeric has-text-centered">0.155</td>
+                <td class="numeric has-text-centered">0.025</td>
+            </tr>
+            <tr>
+                <td class="model-name">reka-core-20240415</td>
+                <td class="numeric has-text-centered">12</td>
+                <td class="numeric has-text-centered">0.005</td>
+                <td class="numeric has-text-centered">-0.045</td>
+                <td class="numeric has-text-centered">0.325</td>
+                <td class="numeric has-text-centered">-0.200</td>
+                <td class="numeric has-text-centered">-0.250</td>
+                <td class="numeric has-text-centered">-0.045</td>
+                <td class="numeric has-text-centered">0.135</td>
+                <td class="numeric has-text-centered">0.140</td>
+                <td class="numeric has-text-centered">-0.005</td>
+            </tr>
+            <tr>
+                <td class="model-name">mistral-nemo-2407</td>
+                <td class="numeric has-text-centered">13</td>
+                <td class="numeric has-text-centered">0.000</td>
+                <td class="numeric has-text-centered">0.085</td>
+                <td class="numeric has-text-centered">0.195</td>
+                <td class="numeric has-text-centered">-0.255</td>
+                <td class="numeric has-text-centered">-0.025</td>
+                <td class="numeric has-text-centered">-0.055</td>
+                <td class="numeric has-text-centered">-0.105</td>
+                <td class="numeric has-text-centered">0.240</td>
+                <td class="numeric has-text-centered">-0.040</td>
+            </tr>
+            <tr>
+                <td class="model-name">gemini-1.0-pro-002</td>
+                <td class="numeric has-text-centered">14</td>
+                <td class="numeric has-text-centered">-0.030</td>
+                <td class="numeric has-text-centered">-0.010</td>
+                <td class="numeric has-text-centered">0.115</td>
+                <td class="numeric has-text-centered">-0.130</td>
+                <td class="numeric has-text-centered">-0.250</td>
+                <td class="numeric has-text-centered">-0.030</td>
+                <td class="numeric has-text-centered">-0.195</td>
+                <td class="numeric has-text-centered">0.250</td>
+                <td class="numeric has-text-centered">-0.050</td>
+            </tr>
+            <tr>
+                <td class="model-name">llama-3.1-8b-instruct</td>
+                <td class="numeric has-text-centered">15</td>
+                <td class="numeric has-text-centered">-0.045</td>
+                <td class="numeric has-text-centered">0.010</td>
+                <td class="numeric has-text-centered">0.240</td>
+                <td class="numeric has-text-centered">-0.200</td>
+                <td class="numeric has-text-centered">-0.250</td>
+                <td class="numeric has-text-centered">0.025</td>
+                <td class="numeric has-text-centered">-0.045</td>
+                <td class="numeric has-text-centered">-0.065</td>
+                <td class="numeric has-text-centered">-0.100</td>
+            </tr>
+            <tr>
+                <td class="model-name">reka-flash-20240904</td>
+                <td class="numeric has-text-centered">16</td>
+                <td class="numeric has-text-centered">-0.080</td>
+                <td class="numeric has-text-centered">-0.175</td>
+                <td class="numeric has-text-centered">0.225</td>
+                <td class="numeric has-text-centered">-0.170</td>
+                <td class="numeric has-text-centered">-0.250</td>
+                <td class="numeric has-text-centered">-0.115</td>
+                <td class="numeric has-text-centered">-0.060</td>
+                <td class="numeric has-text-centered">-0.070</td>
+                <td class="numeric has-text-centered">-0.010</td>
+            </tr>
+            <tr>
+                <td class="model-name"> jamba-1.5-mini</td>
+                <td class="numeric has-text-centered">17</td>
+                <td class="numeric has-text-centered">-0.100</td>
+                <td class="numeric has-text-centered">0.065</td>
+                <td class="numeric has-text-centered">0.070</td>
+                <td class="numeric has-text-centered">-0.145</td>
+                <td class="numeric has-text-centered">-0.250</td>
+                <td class="numeric has-text-centered">-0.115</td>
+                <td class="numeric has-text-centered">-0.180</td>
+                <td class="numeric has-text-centered">-0.140</td>
+                <td class="numeric has-text-centered">-0.080</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+<!--&lt;!&ndash;BibTex citation &ndash;&gt;-->
+<!--<section class="section" id="BibTeX">-->
+<!--    <div class="container is-max-desktop content">-->
+<!--        <h2 class="title">BibTeX</h2>-->
+<!--        <pre><code>BibTex Code Here</code></pre>-->
+<!--    </div>-->
+<!--</section>-->
+<!--&lt;!&ndash;End BibTex citation &ndash;&gt;-->
+
+
+<footer class="footer">
+    <div class="container">
+        <div class="columns is-centered">
+            <div class="column is-8">
+                <div class="content">
+
+                    <p>
+                        This page was built using the <a
+                            href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic
+                        Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io"
+                                                                                target="_blank">Nerfies</a> project
+                        page.
+                        This website is licensed under a <a rel="license"
+                                                            href="http://creativecommons.org/licenses/by-sa/4.0/"
+                                                            target="_blank">Creative
+                        Commons Attribution-ShareAlike 4.0 International License</a>.
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Load React -->
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="static/js/bargaining-game.js"></script>
+</body>
+</html>
