@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="PruneVid: Visual Token Pruning for Efficient Video Large Language Models">
+  <meta name="keywords" content="Video Understanding, Efficient Video Large Language Models">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PruneVid: Visual Token Pruning for Efficient Video Large Language Models</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/visailab.jpeg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">PruneVid: Visual Token Pruning for Efficient Video Large Language Models</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=sBjFwuQAAAAJ&hl=en">Xiaohu Huang</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=xZ-0R3cAAAAJ&hl=zh-CN">Hao Zhou</a><sup>2</sup>,</span>
+            <span class="author-block">
+              <a href="https://www.kaihan.org/">Kai Han</a><sup>1</sup>
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>Visual AI Lab, The University of Hong Kong</span>
+            <br>
+            <span class="author-block"><sup>2</sup>Baidu VIS</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://arxiv.org/pdf/2412.16117v1"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2412.16117v1"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Video Link.
+              <span class="link-block">
+                <a href="https://www.youtube.com/watch?v=MrKrnHhk8IA"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span> -->
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/Visual-AI/PruneVid"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+              <!-- Dataset Link. -->
+              <!-- <span class="link-block">
+                <a href="https://github.com/google/nerfies/releases/tag/0.1"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="far fa-images"></i>
+                  </span>
+                  <span>Data</span>
+                  </a> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <div class="col-sm-12">
+        <img src="static/images/framework.png" style="width:100%">
+    </div>
+        <!-- <video class="col-sm-12">
+            <img src="teaser_gif.mp4" style="width:90%">
+        </video> -->
+        <!-- <video id="teaser" autoplay muted loop playsinline height="90%">
+          <source src="static/images/teaser.mp4"
+                  type="video/mp4">
+        </video> -->
+      <h2 class="subtitle has-text-centered">
+        <span class="dnerf">PruneVid</span> is a training-free method pruning redundant visual tokens to improve efficiency for video LLMs.
+      </h2>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+            <p>
+              In this paper, we introduce PruneVid, a visual token pruning method designed to enhance the efficiency of multi-modal video understanding. 
+            </p>
+            <p>
+              Large Language Models (LLMs) have shown promising performance in video tasks due to their extended capabilities in comprehending visual modalities. However, the substantial redundancy in video data presents significant computational challenges for LLMs. 
+            </p>            
+            <p>
+              To address this issue, we introduce a training-free method that 1) minimizes video redundancy by merging spatial-temporal tokens, and 2) leverages LLMs’ reasoning capabilities to selectively prune visual features relevant to question tokens, enhancing model efficiency. We validate our method across multiple video benchmarks, which demonstrate that PruneVid can prune over 80\% tokens while maintaining competitive performance combined with different model networks.
+            </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+    <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Method Pipeline</h2>
+          <div class="col justify-content-center text-center">
+            <div class="col-sm-12">
+                <img src="static/images/method.png" style="width:100%">
+            </div>
+          </div>
+          <div class="content has-text-justified">
+            <br>
+            <p>
+              We begin by segmenting the video into different scenes and then decouple the video tokens into static and dynamic ones.
+            </p>
+            <p>
+              Next, we compress the static tokens along the temporal dimension and merge similar tokens in the spatial dimension to further reduce redundancy.
+            </p>
+            <p>
+              Afterward, by using the question-to-video attention weights learned from an intermediate layer, we determine which tokens should be pruned to improve efficiency.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Performance</h2>
+          <div class="col justify-content-center text-center">
+          </div>
+          <div class="content has-text-justified">
+            <p>
+                PruneVid is more efficient and effective than other token pruning methods on PLLaVA, ST-LLM, and LLaVA-OneVision across multiple video benchmarks.
+            </p>
+            <div class="col justify-content-center text-center">
+                <div class="col-sm-12">
+                    <img src="static/images/state-of-the-art.png" style="width:95%">
+                </div>
+            </div>
+            <p>
+                PruneVid achieves the most efficient balance by yielding the fastest TTFT speed up, the largest FLOPs reduction, the smallest memory footprint, and the highest accuracy, clearly underscoring the advantages of our token pruning approach over existing techniques.
+            </p>
+            <div class="col justify-content-center text-center">
+                <div class="col-sm-12">
+                    <img src="static/images/efficiency.png" style="width:95%">
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Visualization</h2>
+          <div class="content has-text-justified">
+            <p>
+                In the figure below, we present a side-by-side comparison demonstrating how our model selects tokens guided by attention scores, highlighting the LLM’s strength in focusing on informative regions related to the questions.
+            </p>
+            <div class="col justify-content-center text-center">
+                <div class="col-sm-12">
+                    <img src="static/images/visualization.png" style="width:95%">
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <h2 class="title">BibTeX</h2>
+    <pre><code>@inproceedings{
+    huang2024prunevid,
+    title={PruneVid: Visual Token Pruning for Efficient Video Large Language Models},
+    author={Xiaohu Huang and Hao Zhou and Kai Han},
+    booktitle={Arxiv},
+    year={2024}
+  }
+    </code></pre>
+    </div>
+  </section>
+
+  <section class="section" id="footer">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+          <center>
+            This website is based on <a href="https://nerfies.github.io/">Nerfies</a>.
+          </center>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+ </section>
+
+
+</body>
+</html>
