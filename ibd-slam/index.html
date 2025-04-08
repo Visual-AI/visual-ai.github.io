@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <!-- Meta tags for social media banners, these should be filled in appropriatly as they are your "business card" -->
+  <!-- Replace the content tag with appropriate information -->
+  <meta name="description" content="DESCRIPTION META TAG">
+  <meta property="og:title" content="SOCIAL MEDIA TITLE TAG"/>
+  <meta property="og:description" content="SOCIAL MEDIA DESCRIPTION TAG TAG"/>
+  <meta property="og:url" content="URL OF THE WEBSITE"/>
+  <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X630-->
+  <meta property="og:image" content="static/image/your_banner_image.png" />
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+
+
+  <meta name="twitter:title" content="TWITTER BANNER TITLE META TAG">
+  <meta name="twitter:description" content="TWITTER BANNER DESCRIPTION META TAG">
+  <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X600-->
+  <meta name="twitter:image" content="static/images/your_twitter_banner_image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <!-- Keywords for your paper to be indexed by-->
+  <meta name="keywords" content="KEYWORDS SHOULD BE PLACED HERE">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <title>IBD-SLAM: Learning Image-Based Depth Fusion for Generalizable SLAM</title>
+  <!--link rel="icon" type="image/x-icon" href="static/images/favicon.ico"-->
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+  rel="stylesheet">
+
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script src="static/js/bulma-carousel.min.js"></script>
+  <script src="static/js/bulma-slider.min.js"></script>
+  <script src="static/js/index.js"></script>
+</head>
+<body>
+
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">IBD-SLAM: Learning Image-Based Depth Fusion for Generalizable SLAM</h1>
+            <div class="is-size-5 publication-authors">
+              <!-- Paper authors -->
+              <span class="author-block">
+                Minghao Yin<sup>1</sup>,</span>
+                <span class="author-block">
+                  <a href="https://elliottwu.com/">Shangzhe Wu</a><sup>2</sup>,</span>
+                  <span class="author-block">
+                    <a href="https://www.kaihan.org/">Kai Han</a><sup>1</sup></span>
+                  </span>
+                  </div>
+
+                  <div class="is-size-5 publication-authors">
+                    <span class="author-block"><sup>1</sup>The University of Hong Kong</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="author-block"><sup>2</sup>University of Oxford</span><br>
+                    <strong><font size="5" color="#6d94c6">CVPR 2024</font></strong></span>
+                  </div>
+
+                  <div class="column has-text-centered">
+                    <div class="publication-links">
+                         <!-- Arxiv PDF link -->
+                      <span class="link-block">
+                        <a href="https://openaccess.thecvf.com/content/CVPR2024/papers/Yin_IBD-SLAM_Learning_Image-Based_Depth_Fusion_for_Generalizable_SLAM_CVPR_2024_paper.pdf" target="_blank"
+                        class="external-link button is-normal is-rounded is-dark">
+                        <span class="icon">
+                          <i class="fas fa-file-pdf"></i>
+                        </span>
+                        <span>Paper</span>
+                      </a>
+                    </span>
+
+                    <!-- Supplementary PDF link -->
+                    <span class="link-block">
+                      <a href="https://openaccess.thecvf.com/content/CVPR2024/supplemental/Yin_IBD-SLAM_Learning_Image-Based_CVPR_2024_supplemental.pdf" target="_blank"
+                      class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon">
+                        <i class="fas fa-file-pdf"></i>
+                      </span>
+                      <span>Supplementary</span>
+                    </a>
+                  </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Paper abstract -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            In this paper, we address the challenging problem of visual SLAM with neural scene representations. Recently, neural scene representations have shown promise for SLAM to produce dense 3D scene reconstruction with high quality. However, existing methods require scene-specific optimization, leading to time-consuming mapping processes for each individual scene. To overcome this limitation, we propose IBD SLAM, an Image-Based Depth fusion framework for generalizable SLAM. In particular, we adopt a Neural Radiance Field (NeRF) for scene representation. Inspired by multi-view image-based rendering, instead of learning a fixed-grid scene representation, we propose to learn an image-based depth fusion model that fuses depth maps of multiple reference views into a xyz-map representation. Once trained, this model can be applied to new, uncalibrated monocular RGBD videos of unseen scenes, without the need for retraining, and reconstructs full 3D scenes efficiently with a light-weight pose optimization procedure. We thoroughly evaluate IBD-SLAM on public visual SLAM benchmarks, outperforming the previous state-of-the-art while being 10×faster in the mapping stage.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End paper abstract -->
+
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Overview</h2>
+          <!-- Your image here -->
+          <img src="static/images/basenet_image.jpg" alt="MY ALT TEXT"/>
+          <div class="content has-text-justified">
+              <p>
+                In this paper, we address the challenging problem of visual SLAM with neural scene representations. Recently, neural scene representations have shown promise for SLAM to produce dense 3D scene reconstruction with high quality. However, existing methods require scene-specific optimization, leading to time-consuming mapping processes for each individual scene. To overcome this limitation, we propose IBD SLAM, an Image-Based Depth fusion framework for generalizable SLAM. In particular, we adopt a Neural Radiance Field (NeRF) for scene representation. Inspired by multi-view image-based rendering, instead of learning a fixed-grid scene representation, we propose to learn an image-based depth fusion model that fuses depth maps of multiple reference views into a xyz-map representation. Once trained, this model can be applied to new, uncalibrated monocular RGBD videos of unseen scenes, without the need for retraining, and reconstructs full 3D scenes efficiently with a light-weight pose optimization procedure. We thoroughly evaluate IBD-SLAM on public visual SLAM benchmarks, outperforming the previous state-of-the-art while being 10×faster in the mapping stage.
+              </p>
+          </div>
+    </div>
+  </div>
+</div>
+</section>
+
+
+<!-- Teaser video-->
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <video poster="" id="tree" autoplay controls muted loop height="100%">
+        <!-- Your video here -->
+        <source src="static/videos/ibdslam_finalversion.mp4"
+        type="video/mp4">
+      </video>
+      <h2 class="subtitle has-text-centered">
+        IBD-SLAM is a feed-forward 3D scene reconstruction approach with robust generalization capabilities.
+      </h2>
+    </div>
+  </div>
+</section>
+<!-- End teaser video -->
+
+<!-- Image carousel -->
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container">
+      <div id="results-carousel" class="carousel results-carousel">
+       <div class="item">
+        <!-- Your image here -->
+        <img src="static/images/reconstruct.jpg" alt="MY ALT TEXT"/>
+        <h2 class="subtitle has-text-centered">
+          Reconstruction results for geometries and colors.
+        </h2>
+      </div>
+      <div class="item">
+        <!-- Your image here -->
+        <img src="static/images/detailed_cut1.jpg" alt="MY ALT TEXT"/>
+        <h2 class="subtitle has-text-centered">
+          Detailed reconstruction results are available for the room (top three rows) and office (bottom three rows).
+        </h2>
+      </div>
+      <div class="item">
+        <!-- Your image here -->
+        <img src="static/images/detailed_cut2.jpg" alt="MY ALT TEXT"/>
+        <h2 class="subtitle has-text-centered">
+          Detailed reconstruction results are available for the room (top three rows) and office (bottom three rows).
+        </h2>
+      </div>
+      <div class="item">
+        <!-- Your image here -->
+        <img src="static/images/reconstruct_scan.jpg" alt="MY ALT TEXT"/>
+        <h2 class="subtitle has-text-centered">
+          Reconstruction results on ScanNet Dataset.
+        </h2>
+      </div>
+      <div class="item">
+        <!-- Your image here -->
+        <img src="static/images/scannet_cut1.jpg" alt="MY ALT TEXT"/>
+        <h2 class="subtitle has-text-centered">
+          Detailed reconstruction results on ScanNet are available.
+        </h2>
+      </div>
+      <div class="item">
+        <!-- Your image here -->
+        <img src="static/images/scannet_cut2.jpg" alt="MY ALT TEXT"/>
+        <h2 class="subtitle has-text-centered">
+          Detailed reconstruction results on ScanNet are available.
+        </h2>
+      </div>
+      <div class="item">
+        <!-- Your image here -->
+        <img src="static/images/traj_image.jpg" alt="MY ALT TEXT"/>
+        <h2 class="subtitle has-text-centered">
+         The ground-truth camera trajectory is shown in red, the predicted trajectory is shown in green.
+       </h2>
+     </div>
+     <!--div class="item">
+
+      <img src="static/images/carousel4.jpg" alt="MY ALT TEXT"/>
+      <h2 class="subtitle has-text-centered">
+        Fourth image description.
+      </h2>
+    </div> -->
+  </div>
+</div>
+</div>
+</section>
+<!-- End image carousel -->
+
+
+
+
+<!-- Youtube video 
+<section class="hero is-small is-light">
+  <div class="hero-body">
+    <div class="container">
+
+      <h2 class="title is-3">Video Presentation</h2>
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          
+          <div class="publication-video">
+
+            <iframe src="https://www.youtube.com/embed/JkaxUblCGz0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End youtube video -->
+
+
+<!-- Video carousel -->
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3">Another Carousel</h2>
+      <div id="results-carousel" class="carousel results-carousel">
+        <div class="item item-video1">
+          <video poster="" id="video1" autoplay controls muted loop height="100%">
+            <!-- Your video file here -->
+            <source src="static/videos/room_compare_video.mp4"
+            type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-video2">
+          <video poster="" id="video2" autoplay controls muted loop height="100%">
+            <!-- Your video file here -->
+            <source src="static/videos/office_compare_video.mp4"
+            type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-video3">
+          <video poster="" id="video3" autoplay controls muted loop height="100%">\
+            <!-- Your video file here -->
+            <source src="static/videos/scannet_compare_video.mp4"
+            type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End video carousel -->
+
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container">
+      <h3 class="title is-4">Reconstruction</h3>
+        <div class="embed-responsive embed-responsive-16by9">
+          <iframe style="clip-path: inset(1px 1px); height: 600px;" src="https://sketchfab.com/playlists/embed?autostart=1&amp;autospin=0.25&amp;collection=3dbbcc908ef54a13b21ce4ff773d9a75" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen" mozallowfullscreen="true" webkitallowfullscreen="true" width="100%" height="100%" frameborder="0"></iframe>
+          <!--iframe
+            src="https://sketchfab.com/models/YOUR_MODEL_ID/embed?autostart=1&amp;autospin=0.25"
+            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+            mozallowfullscreen="true"
+            webkitallowfullscreen="true"
+            width="100%"
+            height="100%"
+            frameborder="0"
+          ></iframe-->
+        </div>
+      </div>
+    </div>
+</section>
+
+
+
+<!-- Paper poster -->
+<section class="hero is-small is-light">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title">Poster</h2>
+
+      <iframe  src="static/pdfs/poster_cvpr24_ibdslam.pdf" width="100%" height="550">
+          </iframe>
+        
+      </div>
+    </div>
+  </section>
+<!--End paper poster -->
+
+
+<!--BibTex citation -->
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <h2 class="title">BibTeX</h2>
+      <pre><code>
+        @InProceedings{Yin_2024_CVPR,
+        author    = {Yin, Minghao and Wu, Shangzhe and Han, Kai},
+        title     = {IBD-SLAM: Learning Image-Based Depth Fusion for Generalizable SLAM},
+        booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+        month     = {June},
+        year      = {2024},
+        pages     = {10563-10573}
+        }</code></pre>
+    </div>
+</section>
+<!--End BibTex citation -->
+
+
+
+<!-- Statcounter tracking code -->
+  
+<!-- You can add a tracker to track page visits by creating an account at statcounter.com -->
+
+    <!-- End of Statcounter Code -->
+
+  </body>
+  </html>
