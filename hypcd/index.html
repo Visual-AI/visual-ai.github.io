@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Hyperbolic Category Discovery">
+  <meta name="keywords" content="Generalized Category Discovery, Hyperbolic Geometry">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hyperbolic Category Discovery</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/visailab.jpeg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script type="text/javascript" src="./static/js/copy.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">Hyperbolic Category Discovery</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=GHTB15QAAAAJ&hl=zh-CN/">Yuanpei Liu</a><sup>*</sup>,</span>
+            <span class="author-block">
+              <a href="https://zhenqi-he.github.io//">Zhenqi He</a><sup>*</sup>,</span>
+            <span class="author-block">
+              <a href="https://www.kaihan.org/">Kai Han</a><sup>†</sup>
+            </span>
+          </div>
+
+          <div class="is-size-6 publication-authors">
+            <span class="footnote"><sup>*</sup>Equal contribution <sup>†</sup>Corresponding author</span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">Visual AI Lab, The University of Hong Kong</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://arxiv.org/pdf/2504.06120"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2504.06120"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/Visual-AI/HypCD"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+
+              <!-- Citation Link. -->
+              <span class="link-block">
+                <a href="#Bib"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="far fa-images"></i>
+                  </span>
+                  <span>BibTex</span>
+                  </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!--<div class="col justify-content-center text-center">-->
+<!--  <div class="col-sm-12">-->
+<!--      <center>-->
+<!--      <img src="static/images/introduction.png" style="width:41%">-->
+<!--      </center>-->
+<!--  </div>-->
+<!--</div>-->
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <div class="col-sm-12">
+          <center>
+          <img src="static/images/introduction.png" style="width:100%">
+          </center>
+          </div>
+
+          <p>
+          Generalized Category Discovery (GCD) is an intriguing open-world problem that has garnered increasing attention. Given a dataset that includes both labelled and unlabelled images, GCD aims to categorize all images in the unlabelled subset, regardless of whether they belong to known or unknown classes. In GCD, the common practice typically involves applying a spherical projection operator at the end of the self-supervised pretrained backbone, operating within Euclidean or spherical space.
+          </p>
+          <p>
+            However, both of these spaces have been shown to be suboptimal for encoding samples that possesses hierarchical structures.
+          In contrast, hyperbolic space exhibits exponential volume growth relative to radius, making it inherently strong at capturing the hierarchical structure of samples from both seen and unseen categories.
+          Therefore, we propose to tackle the category discovery challenge in the hyperbolic space.
+          </p>
+          We introduce <b><i>HypCD</i></b>, a simple <b>Hyp</b>erbolic framework for learning hierarchy-aware representations and classifiers for generalized <b>C</b>ategory <b>D</b>iscovery.
+          HypCD first transforms the Euclidean embedding space of the backbone network into hyperbolic space, facilitating subsequent representation and classification learning by considering both hyperbolic distance and the angle between samples. This approach is particularly helpful for knowledge transfer from known to unknown categories in GCD.
+          We thoroughly evaluate HypCD on public GCD benchmarks, by applying it to various baseline and state-of-the-art methods, consistently achieving significant improvements.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+    <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Framework</h2>
+          <!-- <section class="hero teaser">
+            <div class="container is-max-desktop">
+              <div class="hero-body">
+                  <video id="teaser" autoplay muted loop playsinline height="90%">
+                    <source src="static/images/teaser.mp4"
+                            type="video/mp4">
+                  </video>
+                  <!-- <img src="static/images/teaser.gif" alt="this slowpoke moves"/> -->
+              <!-- </div>
+            </div>
+          </section>  -->
+          <div class="col justify-content-center text-center">
+            <div class="col-sm-12">
+                <img src="static/images/method.png" style="width:100%">
+            </div>
+          </div>
+          <div class="content has-text-justified">
+            <br>
+            <p>
+            Overall pipeline of our <b><i>HypCD</i></b> framework for parametric and non-parametric GCD baselines. (a) Hyperbolic representation learning. (b) Hyperbolic classifier. (c) Non-parametric label assignment. (d) Parametric label assignment.
+            </p>
+          </div>
+<!--          <div class="col justify-content-center text-center">-->
+<!--            <div class="col-sm-12">-->
+<!--                <img src="static/images/patchmix.png" style="width:100%">-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="content has-text-justified">-->
+<!--            <br>-->
+<!--            <p>-->
+<!--              PatchMix augments the labelled and unlabelled data by mixing up these patches in the embedding space. We randomly sample from Beta distribution to control the proportion of patches from images. -->
+<!--              The confidence factor is determined by the overall proportion of known semantics in the mixed samples and the attention scores for all the patches of the input image, which is then assigned based on the similarity score or the actual label to guide the training.-->
+<!--            </p>-->
+<!--          </div>-->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Performance</h2>
+          <div class="col justify-content-center text-center">
+          </div>
+          <div class="content has-text-justified">
+            <p>
+              We compare our method with recent GCD methods using both DINO and DINOv2 pretrained backbone. The evaluation encompasses performance on the SSB benchmark and generic datasets (CIFAR-10, CIFAR-100 and ImageNet-100). The hyperbolic methods applying our <b><i>HypCD</i></b> framework are indicated by the 'Hyp-' prefix.
+              We can see that our method consistently achieve significant improvements on the three baselines (GCD, SimGCD and SelEx) and achieve a new SOTA performance.
+            </p>
+            <div class="col justify-content-center text-center">
+                <div class="col-sm-12">
+                    <center>
+                    <img src="static/images/results.png" style="width:80%">
+                    </center>
+                </div>
+            </div>
+<!--            <p>-->
+<!--                The results on three corrupted fine-grained datasets are shown below.-->
+<!--            </p>-->
+<!--            <div class="col justify-content-center text-center">-->
+<!--                <div class="col-sm-12">-->
+<!--                    <center>-->
+<!--                    <img src="static/images/ssbc.png" style="width:95%">-->
+<!--                    </center>-->
+<!--                </div>-->
+<!--            </div>-->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Visualization</h2>
+          <div class="content has-text-justified">
+            <p>
+              T-SNE comparison between SimGCD and our Hyp-SimGCD using 40 randomly sampled instances from 10 randomly selected categories of the Stanford-Cars dataset. This comparison implies that Hyp-SimGCD enhances both intra-class compactness and inter-class separation through our hyperbolic representation and classifier learning method.
+Importantly, even within the original Euclidean space of the backbone network, Hyp-SimGCD exhibits robust clustering performance, which arises from the properties of hyperbolic space in encoding hierarchical structures.
+            </p>
+            <div class="col justify-content-center text-center">
+                <div class="col-sm-12">
+                    <center>
+                    <img src="static/images/tsne.png" style="width:70%">
+                    </center>
+                </div>
+            </div>
+            <p>
+                Visualization of attention maps for the baseline (GCD) and our method (Hyp-GCD). Our approach effectively directs attention towards foreground objects, regardless of whether they belong to the 'Old' or 'New' classes.
+            </p>
+            <div class="col justify-content-center text-center">
+                <div class="col-sm-12">
+                    <center>
+                    <img src="static/images/attn.png" style="width:70%">
+                    </center>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="Bib">
+    <div class="container is-max-desktop content">
+      <h2 class="title">BibTeX</h2>
+<pre><code id="BibTeX">@inproceedings{Liu2025HypCD,
+    author    = {Liu, Yuanpei and He, Zhenqi and Han, Kai},
+    title     = {Hyperbolic Category Discovery},
+    booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+    year      = {2025}
+}
+</code><button class="copy-button" style="--button-hover-background: var(--example-color-alt); --button-color: var(--white); --button-background: var(--example-color-alt); --button-margin-bottom: 0;" class="copyButton btn" onclick="copyToClipboard('BibTeX','BibTeX_cop')"><i class="fa fa-copy"></i></button><p id="BibTeX_cop" style="display:none;color: #a0a0a0">Copied!</p></pre>
+    </div>
+  </section>
+
+
+  <section class="section" id="footer">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+          <center>
+            This website is based on <a href="https://nerfies.github.io/">Nerfies</a>.
+          </center>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+ </section>
+
+
+</body>
+</html>

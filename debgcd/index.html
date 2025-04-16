@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="DebGCD: Debiased Learning with Distribution Guidance for Generalized Category Discovery">
+  <meta name="keywords" content="Generalized Category Discovery, Debiased Learning">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DebGCD: Debiased Learning with Distribution Guidance for Generalized Category Discovery</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/visailab.jpeg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script type="text/javascript" src="./static/js/copy.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">DebGCD: Debiased Learning with Distribution Guidance for Generalized Category Discovery</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=GHTB15QAAAAJ&hl=zh-CN/">Yuanpei Liu</a>,</span>
+            <span class="author-block">
+              <a href="https://www.kaihan.org/">Kai Han</a><sup>†</sup>
+            </span>
+          </div>
+
+          <div class="is-size-6 publication-authors">
+            <span class="footnote"> <sup>†</sup>Corresponding author</span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">Visual AI Lab, The University of Hong Kong</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://openreview.net/pdf?id=9B8o9AxSyb"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2504.04804"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://github.com/Visual-AI/DebGCD"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+
+              <!-- Citation Link. -->
+              <span class="link-block">
+                <a href="#Bib"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="far fa-images"></i>
+                  </span>
+                  <span>BibTex</span>
+                  </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!--<div class="col justify-content-center text-center">-->
+<!--  <div class="col-sm-12">-->
+<!--      <center>-->
+<!--      <img src="static/images/introduction.png" style="width:40%">-->
+<!--      </center>-->
+<!--  </div>-->
+<!--</div>-->
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <div class="col-sm-12">
+              <center>
+              <img src="static/images/introduction.png" style="width:100%">
+              </center>
+          </div>
+
+          <p>
+          In this paper, we tackle the problem of Generalized Category Discovery (GCD). Given a dataset containing both labelled and unlabelled images, the objective is to categorize all images in the unlabelled subset, irrespective of whether they are from known or unknown classes.
+          </p>
+          In GCD, an inherent label bias exists between known and unknown classes due to the lack of ground-truth labels for the latter. State-of-the-art methods in GCD leverage parametric classifiers trained through self-distillation with soft labels, leaving the bias issue unattended. Besides, they treat all unlabelled samples uniformly, neglecting variations in certainty levels and resulting in suboptimal learning. Moreover, the explicit identification of semantic distribution shifts between known and unknown classes, a vital aspect for effective GCD, has been neglected.
+          <p>
+          To address these challenges, we introduce DebGCD, a <u>Deb</u>iased learning with distribution guidance framework for <u>GCD</u>. Initially, DebGCD co-trains an auxiliary debiased classifier in the same feature space as the GCD classifier, progressively enhancing the GCD features. Moreover, we introduce a semantic distribution detector in a separate feature space to implicitly boost the learning efficacy of GCD. Additionally, we employ a curriculum learning strategy based on semantic distribution certainty to steer the debiased learning at an optimized pace.
+          </p>
+          <p>
+          Thorough evaluations on GCD benchmarks demonstrate the consistent state-of-the-art performance of our framework, highlighting its superiority.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+    <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Framework</h2>
+          <div class="col justify-content-center text-center">
+            <div class="col-sm-12">
+                <img src="static/images/method_new.png" style="width:100%">
+            </div>
+          </div>
+          <div class="content has-text-justified">
+            <br>
+            <p>
+            Overview of the DebGCD framework. In the upper branch, raw features are transformed using an MLP and then normalized. These normalized features are used for semantic distribution learning with a one-vs-all classifier. In the lower branch, a GCD classifier is trained on the normalized raw features. The predictions from both branches are combined to train the debiased classifier. As DebGCD aligns with prior work in representation learning, it's not explicitly depicted here.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Performance</h2>
+          <div class="col justify-content-center text-center">
+          </div>
+          <div class="content has-text-justified">
+            <p>
+              We compare DebGCD with previous state-of-the-art GCD methods on the SSB benchmark. All methods are based on the DINO pre-trained backbone. We can see that our method consistently outperforms previous state-of-the-art methods.
+            </p>
+            <div class="col justify-content-center text-center">
+                <div class="col-sm-12">
+                    <center>
+                    <img src="static/images/ssb.png" style="width:70%">
+                    </center>
+                </div>
+            </div>
+            <p>
+                The results on three coarse-grained datasets are shown below.
+            </p>
+            <div class="col justify-content-center text-center">
+                <div class="col-sm-12">
+                    <center>
+                    <img src="static/images/generic.png" style="width:80%">
+                    </center>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Visualization</h2>
+          <div class="content has-text-justified">
+            <p>
+              Visualization of the CIFAR100 features of the baseline and our method using t-SNE. Specifically, we randomly select a set of 20 classes, including 10 from the 'Old' categories and 10 from the 'New' categories. The clearly distinguishable clusters depicted indicate that the features obtained within our framework form notably cohesive groupings compared to those of the baseline. This effectively demonstrates the optimization impacts induced by our method on the clustering feature space.
+            </p>
+            <div class="col justify-content-center text-center">
+                <div class="col-sm-12">
+                    <center>
+                    <img src="static/images/tsne.png" style="width:70%">
+                    </center>
+                </div>
+            </div>
+            <p>
+                Visualization of attention maps. Our method successfully directs its attention towards foreground objects, irrespective of whether they belong to the 'Old' or 'New' classes. The baseline denotes the pre-trained DINO.
+            </p>
+            <div class="col justify-content-center text-center">
+                <div class="col-sm-12">
+                    <center>
+                    <img src="static/images/attn.png" style="width:70%">
+                    </center>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="Bib">
+    <div class="container is-max-desktop content">
+      <h2 class="title">BibTeX</h2>
+<pre><code id="BibTeX">@inproceedings{Liu2025DebGCD,
+    author    = {Liu, Yuanpei and Han, Kai},
+    title     = {DebGCD: Debiased Learning with Distribution Guidance for Generalized Category Discovery},
+    booktitle = {International Conference on Learning Representations (ICLR)},
+    year      = {2025}
+}
+</code><button class="copy-button" style="--button-hover-background: var(--example-color-alt); --button-color: var(--white); --button-background: var(--example-color-alt); --button-margin-bottom: 0;" class="copyButton btn" onclick="copyToClipboard('BibTeX','BibTeX_cop')"><i class="fa fa-copy"></i></button><p id="BibTeX_cop" style="display:none;color: #a0a0a0">Copied!</p></pre>
+    </div>
+  </section>
+
+
+  <section class="section" id="footer">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+          <center>
+            This website is based on <a href="https://nerfies.github.io/">Nerfies</a>.
+          </center>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+ </section>
+
+
+</body>
+</html>
