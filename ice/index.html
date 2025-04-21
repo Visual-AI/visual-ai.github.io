@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="ICE: Intrinsic Concept Extraction from a Single Image via Diffusion Models">
+  <meta name="keywords" content="Generalized Category Discovery, Domain Adaptation">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ICE: Intrinsic Concept Extraction from a Single Image via Diffusion Models</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    function restartVideo(videoID) {
+      var video = document.getElementById(videoID);
+      video.currentTime = 0;
+      video.pause();
+      // video.play();
+    }
+
+    function playPauseVideo(videoID) {
+      var video = document.getElementById(videoID);
+      if (video.currentTime > video.duration - 0.1) {
+        video.currentTime = 0;
+        video.play();
+      } else if (video.paused) {
+        video.play();
+      } else {
+        video.pause();
+      }
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/visailab.jpeg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script type="text/javascript" src="./static/js/copy.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">ICE: Intrinsic Concept Extraction<br>from a Single Image via Diffusion Models</h1>
+            <div class="is-size-5 publication-authors">
+            <span class="author-block" style="margin-right: 40px;">
+              <a href="https://fcendra.github.io/">Fernando Julio Cendra</a></span>
+            <span class="author-block">
+              <a href="https://www.kaihan.org/">Kai Han</a>
+            </span>
+            </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><a href="https://visailab.github.io">Visual AI Lab</a>, The University of Hong Kong</span>
+          </div>
+          <strong>In CVPR 2025</strong>
+          <br>
+            <strong style="color: #cc0000;">Conference highlight</strong>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://arxiv.org/pdf/2503.19902.pdf"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2503.19902"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/Visual-AI/ICE"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+
+              <!-- Citation Link. -->
+              <span class="link-block">
+                <a href="#Bib"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="far fa-images"></i>
+                  </span>
+                  <span>BibTex</span>
+                  </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- 
+<div class="col justify-content-center text-center">
+  <div class="col-sm-12">
+      <center>
+      <img src="static/images/g477.png" style="width:45%">
+      </center>
+  </div> -->
+  <div class="col justify-content-center text-center">
+    <div class="col-sm-12">
+      <center>
+        <img src="static/images/g477.png" style="width:30%">
+        <div class="columns is-centered">
+          <div class="column is-three-fifths">
+            <div style="background-color: #fffef0; border: 1px solid #ffffff00; border-radius: 5px; padding: 15px; margin-top: 10px; margin-left: auto; margin-right: auto;">
+              <p style="margin-bottom: 0; text-align: justify;">
+                Intrinsic Concept Extraction aims at extracting <strong>object-level concepts</strong> and the underlying 
+                <strong>intrinsic attributes</strong> such as <span style="color: #FF8C00;">semantic category</span>, <span style="color: #008000;">colour</span>, and <span style="color: #800080;">material</span>. 
+                Intrinsic Concept Extraction provides a detailed and interpretable representation of visual elements, enabling a structured and comprehensive understanding of the image's components, allowing for versatile downstream generative applications.
+              </p>
+            </div>
+            </div>
+          </div>
+        </div>
+      </center>
+    </div>
+  </div>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            The inherent ambiguity in defining visual concepts poses significant challenges for modern generative models, such as the diffusion-based Text-to-Image (T2I) models, 
+            in accurately learning concepts from a single image. Existing methods lack a systematic way to reliably extract the interpretable underlying intrinsic concepts. 
+            <!-- </p>
+            <p> -->
+            To address this challenge, we present ICE, short for Intrinsic Concept Extraction, a novel framework that exclusively utilizes a T2I model to automatically and systematically extract intrinsic concepts from a single image. ICE consists of two pivotal stages. 
+            In the first stage, ICE devises an automatic concept localization module to pinpoint relevant text-based concepts and their corresponding masks within a single image. This critical stage streamlines concept initialization and provides precise guidance for subsequent analysis. 
+            The second stage delves deeper into each identified mask, decomposing concepts into intrinsic components that capture specific visual characteristics and general components representing broader categories.
+            <!-- </p>
+            <p> -->
+            This decomposition facilitates a more granular understanding by dissecting concepts into detailed intrinsic attributes, such as color and material.
+            Our framework demonstrates superior performance on intrinsic concept extraction from a single image in an unsupervised manner.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <!-- Left column with title and text -->
+      <div class="column is-three-fifths">
+        <h2 class="title is-3">How we define visual concepts</h2>
+        <div class="content has-text-justified">
+          <p>
+            Our proposed framework, ICE, offers a unified and structured approach to automatically and systematically discover intrinsic concepts within an image using a single T2I model. 
+            Unlike previous methods, ICE not only identifies object-level concepts but also decomposes them into intrinsic attributes such as colour and material (see right figure), 
+            providing a more comprehensive and interpretable representation of visual concepts.
+          </p>
+        </div>
+      </div>
+      <!-- Right column with image -->
+      <div class="column is-two-fifths">
+        <figure class="image">
+          <img src="static/images/concept_def.png" alt="ICE method illustration" style="width:70%">
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">ICE framework</h2>
+        <div class="content has-text-justified">
+          <div class="field has-addons is-pulled-right" id="play-controls"
+               title="Hint: Right click the video and choose 'Show All Controls' to enable more fine-grained video controls.">
+            <p class="control">
+              <button class="button is-small is-rounded" onclick="playPauseVideo('pullFigVideo')">
+          <span class="icon is-small">
+            &nbsp;<i class="fa fa-play"></i>&nbsp;<i class="fa fa-pause"></i>&nbsp;
+          </span>
+              </button>
+            </p>
+            <p class="control">
+              <button class="button is-small is-rounded" onclick="restartVideo('pullFigVideo')">
+          <span class="icon is-small">
+            <i class="fas fa-redo"></i>
+          </span>
+          <span>Restart animation</span>
+              </button>
+            </p>
+          </div>
+          <div class="video-container">
+            <video id="pullFigVideo" height="100%" width="100%" preload="metadata" 
+              ontimeupdate="video_time_update(this)" poster="./static/images/framework_0.png" 
+              style="width:100%; max-width:1200px;" muted controls
+              onended="this.currentTime=0; this.pause();">
+              <source src="./static/images/ice_animation-10s-light.mp4" type="video/mp4">
+            </video>
+          </div>
+
+          <script>
+            document.addEventListener("DOMContentLoaded", function() {
+              const video = document.getElementById('pullFigVideo');
+              let hasPlayedOnce = false;
+              
+              // Create an IntersectionObserver to detect when video is visible
+              const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                  if (entry.isIntersecting && !hasPlayedOnce) {
+                    // Start playing when video becomes visible (only once)
+                    video.play().catch(e => console.log("Auto-play was prevented:", e));
+                    hasPlayedOnce = true;
+                    
+                    // Optional: disconnect the observer after first play
+                    observer.disconnect();
+                  } else if (!entry.isIntersecting && !hasPlayedOnce) {
+                    // Only pause if we haven't played yet
+                    video.pause();
+                  }
+                });
+              }, { threshold: 0.5}); // Trigger when 50% of the video is visible
+              
+              // Start observing the video element
+              observer.observe(video);
+            });
+          </script>
+        </div>
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+        <div class="content has-text-centered">
+          <a href="#" class="button is-link is-light" onclick="toggleFrameworkDetails(event)" style="margin: 1rem auto; cursor: pointer;">
+            Click to view detailed framework explanation
+          </a>
+        <div id="frameworkDetails" style="display: none;">
+          <div class="col justify-content-center text-center">
+            <div class="col-sm-12">
+              <center>
+                <img src="static/images/framework_0.png" style="width:80%">
+              </center>
+            </div>
+          </div>
+          <div class="content has-text-justified">
+            <p>
+              The proposed ICE (Intrinsic Concept Extraction) framework is designed to automatically and systematically discover essential concepts within images using a single T2I diffusion model. 
+              The framework operates through a two-stage architecture: Stage One: Automatic Concept Localization and Stage Two: Structured Concept Learning.
+            </p>
+          </div>
+          <div class="col justify-content-center text-center">
+            <div class="col-sm-12">
+              <center>
+                <img src="static/images/framework_1.png" style="width:90%">
+              </center>
+            </div>
+          </div>
+          <div class="content has-text-justified">
+            <br>
+            <div class="col justify-content-center text-center">
+              <div class="col-sm-12">
+                <center>
+                  <img src="static/images/stage-one-light.png" style="width:90%">
+                </center>
+              </div>
+            </div>
+            <br>
+            <p>
+              This stage is designed to extract object-level concepts from an unlabelled input image automatically. 
+              This stage leverages off-the-shelf modules integrated within the T2I diffusion model, ensuring a training-free and seamless concept extraction process.
+              The Automatic Concept Extraction module outputs a set of text-based concepts along with their masks for a given image.
+            </p>
+          </div>
+          <div class="col justify-content-center text-center">
+            <div class="col-sm-12">
+              <center>
+                <img src="static/images/framework_2.png" style="width:90%">
+              </center>
+            </div>
+          </div>
+          <div class="content has-text-justified">
+            <br>
+            <p>
+              This stage focuses on decomposing the extracted object-level concepts into the underlying intrinsic concepts, such as colour and material. 
+              To ensure an accurate decomposition of the concepts, we divide this stage into two phases: (1) learning object-level concepts and (2) learning intrinsic concepts.
+              For Phase one, the framework learns both concept-specific and instance-specific tokens for each extracted object-level concept while the Phase two delves into decomposing the learned object-level concepts into intrinsic attributes.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Qualitative results</h2>
+    <div class="content">
+      <div class="col justify-content-center text-center">
+        <div class="col-sm-12">
+          <center>
+            <img src="static/images/qualitative_resultsv2.png" style="width:90%">
+          </center>
+        </div>
+      </div>
+      <div class="content has-text-justified">
+        <br>
+        <p>
+          Qualitative results of the ICE framework demonstrating its systematic concept discovery process.
+          <strong>Column 1</strong>: Input images.
+          <strong>Column 2</strong>: Extracted text-based concepts and their corresponding masks obtained from Stage One: Automatic Concept Localization. 
+          <strong>Columns 3 & 4</strong>: Generated images of learned object-level and intrinsic concepts derived from Stage Two: Structured Concept Learning.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Add this script to handle the toggle functionality -->
+<script>
+  function toggleFrameworkDetails(e) {
+    e.preventDefault();
+    var details = document.getElementById('frameworkDetails');
+    if (details.style.display === 'none') {
+      details.style.display = 'block';
+    } else {
+      details.style.display = 'none';
+    }
+  }
+</script>
+
+<!-- Bibtex citation -->
+<section class="section" id="Bib">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+      <pre><code id="BibTeX">
+        @inproceedings{cendra2025ICE,
+          author    = {Fernando Julio Cendra and Kai Han},
+          title     = {ICE: Intrinsic Concept Extraction from a Single Image via Diffusion Models},
+          booktitle = {IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+          year      = {2025}
+        }
+    </code><button class="copy-button" style="--button-hover-background: var(--example-color-alt); --button-color: var(--white); --button-background: var(--example-color-alt); --button-margin-bottom: 0;" class="copyButton btn" onclick="copyToClipboard('BibTeX','BibTeX_cop')"><i class="fa fa-copy"></i></button><p id="BibTeX_cop" style="display:none;color: #a0a0a0">Copied!</p></pre>
+  </div>
+</section>
+
+<section class="section" id="footer">
+  <div class="columns is-centered">
+    <div class="column is-8">
+      <div class="content">
+        <p>
+          <center>
+            This website is based on <a href="https://nerfies.github.io/">Nerfies</a>.
+          </center>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+</body>
+</html>
