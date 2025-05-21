@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <!-- Meta tags for social media banners, these should be filled in appropriatly as they are your "business card" -->
+    <!-- Replace the content tag with appropriate information -->
+    <meta name="description" content="DESCRIPTION META TAG">
+    <meta property="og:title" content="SOCIAL MEDIA TITLE TAG"/>
+    <meta property="og:description" content="SOCIAL MEDIA DESCRIPTION TAG TAG"/>
+    <meta property="og:url" content="URL OF THE WEBSITE"/>
+    <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X630-->
+    <meta property="og:image" content="static/image/your_banner_image.png"/>
+    <meta property="og:image:width" content="1200"/>
+    <meta property="og:image:height" content="630"/>
+
+
+    <meta name="twitter:title" content="TWITTER BANNER TITLE META TAG">
+    <meta name="twitter:description" content="TWITTER BANNER DESCRIPTION META TAG">
+    <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X600-->
+    <meta name="twitter:image" content="static/images/your_twitter_banner_image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <!-- Keywords for your paper to be indexed by-->
+    <meta name="keywords" content="KEYWORDS SHOULD BE PLACED HERE">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <title>Panoptic Captioning: Seeking An Equivalency Bridge for Image and Text</title>
+    <link rel="icon" type="image/x-icon" href="static/images/gamebot.ico">
+    <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+          rel="stylesheet">
+
+    <link rel="stylesheet" href="static/css/bulma.min.css">
+    <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+    <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+    <link rel="stylesheet" href="static/css/index.css">
+    <link rel="stylesheet" href="static/css/bargaining.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
+    <script defer src="static/js/fontawesome.all.min.js"></script>
+    <script src="static/js/bulma-carousel.min.js"></script>
+    <script src="static/js/bulma-slider.min.js"></script>
+    <script src="static/js/index.js"></script>
+    <script src="static/js/sort_panel.js"></script>
+
+</head>
+<body>
+
+
+<section class="hero">
+    <div class="hero-body">
+        <div class="container is-max-desktop">
+            <div class="columns is-centered">
+
+                <div class="column has-text-centered">
+                    <!-- <div class="publication-logo">
+                        <img src="static/images/coolerbot_nobg.png" alt="GAMEBOT" style="width: 300px; height: 300px; "> -->
+                <h1 class="title is-1 publication-title">Panoptic Captioning: Seeking An Equivalency Bridge for Image and Text</h1>
+                <div class="is-size-5 publication-authors">
+                            <!-- Paper authors -->
+                            <span class="author-block">
+                <a href="https://kunyulin.github.io/" target="_blank">Kun-Yu Lin</a>,</span>
+                            <span class="author-block">
+                <a href="https://whj363636.github.io/" target="_blank">Hongjun Wang</a>,</span>
+                            <span class="author-block">
+                <a href="https://scholar.google.com/citations?user=AtIdZVoAAAAJ&hl=en" target="_blank">Weining Ren</a>,</span>
+                            <span class="author-block">
+                <a href="https://www.kaihan.org/" target="_blank">Kai Han</a>
+                            </span>
+                </div>
+                <div class="is-size-5 publication-authors">
+                    <span class="author-block">Visual AI Lab, The University of Hong Kong</span>
+                            <!--                    <span class="eql-cntrb"><small><br><sup>*</sup>Indicates Equal Contribution</small></span>-->
+                </div>
+                <div class="column has-text-centered">
+                    <div class="publication-links">
+                        <!-- Arxiv PDF link -->
+                        <span class="link-block">
+                    <a href="" target="_blank"
+                           class="external-link button is-normal is-rounded is-dark">
+                        <span class="icon">
+                          <i class="fas fa-file-pdf"></i>
+                        </span>
+                        <span>Paper</span>
+                      </a>
+                    </span>
+                    <span class="link-block">
+                        <a href="" target="_blank"
+                        class="external-link button is-normal is-rounded is-dark">
+                        <span class="icon">
+                        <i class="fab fa-github"></i>
+                        </span>
+                        <span>Code (coming)</span>
+                        </a>
+                    </span>
+                    <span class="link-block">
+                        <a href="" target="_blank"
+                        class="external-link button is-normal is-rounded is-dark">
+                        <span class="icon">
+                        <i class="fab fa-github"></i>
+                        </span>
+                        <span>Benchmark (coming)</span>
+                        </a>
+                    </span>
+                                <!-- ArXiv abstract Link -->
+                                <span class="link-block">
+                  <a href="" target="_blank"
+                     class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    </div>
+</section>
+
+
+<!-- Paper abstract -->
+<section class="section">
+    <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+            <div class="column has-text-centered">
+                <img src="static/images/pancap-teasor.png" alt="PANCAP" style="width: 900px; height: 430px; ">
+            <div class="column has-text-centered"><h2 class="title is-2">Abstract</h2>
+                <div class="content has-text-justified"><p class="c18"><span
+                        class="c0">This work introduces <strong>panoptic captioning</strong>, a novel task striving to <i>seek the minimum text equivalence of images</i>. We take the first step towards panoptic captioning by formulating it as a task of generating a comprehensive textual description for an image, which <i>encapsulates all entities, their respective locations and attributes, relationships among entities, as well as global image state</i>. Through an extensive evaluation, our work reveals that state-of-the-art Multi-modal Large Language Models (MLLMs) have limited performance in solving panoptic captioning. 
+                        <p>
+                        To address this, we propose an effective data engine named <i>PancapEngine</i> to produce high-quality data and a novel method named <i>PancapChain</i> to improve panoptic captioning. Specifically, our <i>PancapEngine</i> first detects diverse categories of entities in images by an elaborate detection suite, and then generates required panoptic captions using entity-aware prompts. Additionally, our <i>PancapChain</i> explicitly decouples the challenging panoptic captioning task into multiple stages and generates panoptic captions step by step. More importantly, we contribute a comprehensive metric named <i>PancapScore</i> and a human-curated test set for reliable model evaluation. Experiments show that our PancapChain-13B model can beat state-of-the-art open-source MLLMs like InternVL-2.5-78B and even surpass proprietary models like GPT-4o and Gemini-2.0-Pro, demonstrating the effectiveness of our data engine and method.
+                        </p>
+                    </span>
+                </p>
+                <p class="c10"><span class="c0"></span></p>
+                    <div class="content has-text-justified"><p class="c18"><span class="c0">Our <strong>contributions</strong> are listed as follows:
+                    </span>
+                    <ul class="c28 lst-kix_r92srvgun7j-0 start">
+                        <li class="c18 c29 li-bullet-0"><span class="c0">We introduce the novel panoptic captioning task, which strives to seek the minimum text equivalence of an image -- an ambitious yet challenging goal. We formulate it as the task of generating a comprehensive textual description composed of five distinct dimensions, and contribute a comprehensive PancapScore metric for reliable evaluation.</span>
+                        </li>
+                        <li class="c18 c29 li-bullet-0"><span class="c0">We propose an effective data engine named PancapEngine to produce high-quality data. We also contribute the SA-Pancap benchmark for model training and evaluation, which includes a high-quality validation set and a human-curated test set for reliable evaluation.</span>
+                        </li>
+                        <li class="c18 c29 li-bullet-0"><span class="c0">We propose a simple yet effective method named PancapChain to improve panoptic captioning, which decouples the challenging panoptic captioning task into multiple subtasks. Extensive experiments demonstrate the effectiveness and value of our task and model.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+            <div class="column has-text-centered">
+                <h2 class="title is-2">Background and Conception</h2>
+            <div class="content has-text-justified">
+                <p class="c18"><spanclass="c0">
+                    Representing images by textual descriptions is a fundamental topic in the fields computer vision and natural language processing, which benifits various applications, e.g., cross-modal retrieval, multi-modal learning, safe content generation. 
+                    While prior works have explored various image caption formats, identifying the most effective format remains an open challenge. The most concise captions, which describe only primary entity categories, often sacrifice critical details like entity attributes. Conversely, highly detailed representations, such as paragraphs detailing all pixel-level semantics and their interrelations, are computationally burdensome due to their length. 
+                    </span>
+                </p>
+                <p class="c18"><spanclass="c0">
+                    Inspired by these considerations, this work conceives of finding the <i>minimum text equivalence</i> of an image, an ambitious yet challenging goal, which aims to develop a concise textual description that comprehensively captures its <i>essential</i> semantic elements. Conceptually, achieving minimal text equivalence for images can be seen as aligning images and text in the data space, while existing image-text alignment models like CLIP perform this in the embedding space. Such text representations would maximize the utility of image information for learning and downstream applications.
+                    </span>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+            <div class="column has-text-centered">
+                <h2 class="title is-2">Task Formulation of Panoptic Captioning</h2>
+            <div class="content has-text-justified">
+                <p class="c18"><spanclass="c0">
+                    This work introduces the task of <strong>panoptic captioning</strong>, which strives to seek the minimum text equivalence of images. Our work serves as the initial effort towards this challenging task. To make the problem tractable, we formulate panoptic captioning as the task of generating a comprehensive textual description for an image, which encapsulates all entity instances, their respective locations and attributes, relationships among instances, as well as global image state. 
+                    </span>
+                </p>
+                <p class="c10"><span class="c0"></span></p>
+                    </span>
+                    <ul class="c28 lst-kix_r92srvgun7j-0 start">
+                        <li class="c18 c29 li-bullet-0"><span class="c0">
+                            <strong>Semantic tag</strong> refers to the category label assigned to each entity instance in an image. Panoptic captioning requires identifying all entity instances and assigning category label to each instance. </span>
+                        </li>
+                        <li class="c18 c29 li-bullet-0"><span class="c0">
+                            <strong>Location</strong> refers to the spatial positions of entity instances, which are represented in terms of bounding boxes. By introducing bounding boxes, panoptic captions can more accurately describe the locations and occupied regions of entity instances, which also helps distinguishing entity instances with similar attributes more easily. </span>
+                        </li>
+                        <li class="c18 c29 li-bullet-0"><span class="c0">
+                            <strong>Attribute</strong> refers to characteristics or properties that describe an entity instance's appearance, state or quality. The attribute dimension encompasses a wide range of semantic content types, e.g., color, shape, material, texture, type, text rendering. </span>
+                        </li>
+                        <li class="c18 c29 li-bullet-0"><span class="c0">
+                            <strong>Relation</strong> refers to connections or interactions between different entity instances within an image. The relation dimension encompasses a wide range of semantic content types, such as position relation (e.g., A is behind B), part-whole relation (e.g., A is a part of B) and action relation (e.g., A kicks B).</span>
+                        </li>
+                        <li class="c18 c29 li-bullet-0"><span class="c0">
+                            <strong>Global image state</strong> refers to the overall characteristics of an image that provide a holistic understanding of its content, without focusing on specific entity instances within the image. </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="section">
+    <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+            <div class="column has-text-centered">
+                <h2 class="title is-2">Evaluation Metric: PancapScore</h2>
+            <div class="column has-text-centered">
+                <img src="static/images/pancap-metric.png" alt="PANCAP" style="width: 900px; height: 230px">
+            <div class="content has-text-justified">
+                <p class="c18"><spanclass="c0">
+                    The figure above demonstrates an overview of our proposed <strong>PancapScore</strong> metric. PancapScore first extracts semantic content from captions, and then evaluates model performance by entity instance matching and instance-aware question answering (QA). 
+                    Existing captioning metrics cannot effectively evaluate model performance in panoptic captioning, due to the fundamental formulation differences between existing captioning task and our panoptic captioning task. 
+                    </span>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="section">
+    <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+            <div class="column has-text-centered">
+                <h2 class="title is-2">Data Engine and Benchmark</h2>
+            <div class="content has-text-justified">
+                <p class="c18"><spanclass="c0">
+                    To address this new and challenging task, our work proposes an effective data engine named <strong>PancapEngine</strong> to produce high-quality data. Our PancapEngine first detects diverse categories of entities in images using an elaborate entity detection suite. We then employ state-of-the-art MLLMs to generate comprehensive panoptic captions using entity-aware prompts, ensuring the data quality by caption consistency across different MLLMs.  
+                    </span>
+                </p>
+                <p class="c18"><spanclass="c0">
+                    Based on our PancapEngine, we contribute a new <strong>SA-Pancap</strong> benchmark for the panoptic captioning task. We select SA-1B as the data source due to its high image quality and data diversity. Overall, our SA-Pancap benchmark consists of 9,000 training and 500 validation images paired with auto-generated panoptic captions, and 130 test images paired with human-curated panoptic captions. 
+                    </span>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+            <div class="column has-text-centered">
+                <h2 class="title is-2">The Proposed Model: PancapChain</h2>
+            <div class="column has-text-centered">
+                <img src="static/images/pancap-model.png" alt="PANCAP" style="width: 900px; height: 290px;">
+            <div class="content has-text-justified">
+                <p class="c18"><spanclass="c0"> 
+                    The figure above demonstrates an overview of our proposed PancapChain method. The key idea is to decouple the challenging panoptic captioning task into multiple stages and train the model to generate panoptic captions step by step. Specifically, PancapChain explicitly decouples the task into four stages, namely entity instance localization, semantic tag assignment, extra instance discovery and panoptic caption generation. 
+                    </span>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<style>
+/* 方法一：直接控制表格内所有单元格 */
+#leaderboardTable td,
+#leaderboardTable th {
+    font-size: 0.87em;  /* 调整为原始大小的90% */
+    line-height: 1.0;  /* 优化行高 */
+}
+/* 新增垂直居中样式 */
+#leaderboardTable td.numeric {
+    vertical-align: middle !important;
+}
+/* 新增样式定义 */
+.validation-header {
+    background-color: #e3f2fd; /* 浅蓝色 */
+}
+.test-header {
+    background-color: #e8f5e9; /* 浅绿色 */
+}
+.validation-bg {
+    background-color: #F4FAFE !important;
+}
+.test-bg {
+    background-color: #F7FBF7 !important;
+}
+</style>
+
+<!--Leaderboard -->
+<section class="section">
+    <div class="column has-text-centered">
+        <h2 class="title is-2 mb-4">Leaderboard on the SA-Pancap Benchmark</h2>
+        <!-- <p class="content">(Note: You can click the button for sorting)</p> -->
+        <p class="content">(Note: Model names with the suffix "-Tuned" denote models tuned on the training set of SA-Pancap)</p>
+    </div>
+    <div class="container">
+        <table id="leaderboardTable">
+            <thead>
+            <tr>
+                <th class="has-text-centered" rowspan="2" style="vertical-align: middle;">Model</th>
+                <th class="has-text-centered validation-header" colspan="6">Validation Set</th>
+                <th class="has-text-centered test-header" colspan="6">Test Set</th>
+            </tr>
+            <tr>
+                <th class="has-text-centered validation-header">Entity</th>
+                <th class="has-text-centered validation-header">Location</th>
+                <th class="has-text-centered validation-header">Attribute</th>
+                <th class="has-text-centered validation-header">Relation</th>
+                <th class="has-text-centered validation-header">Global</th>
+                <th class="has-text-centered validation-header">Overall</th>
+                <th class="has-text-centered test-header">Entity</th>
+                <th class="has-text-centered test-header">Location</th>
+                <th class="has-text-centered test-header">Attribute</th>
+                <th class="has-text-centered test-header">Relation</th>
+                <th class="has-text-centered test-header">Global</th>
+                <th class="has-text-centered test-header">Overall</th>
+            </tr>
+            </thead>
+            <!-- <tbody>
+            <tr>
+                <td class="model-name"></td>
+                <td class="numeric has-text-centered validation-bg"></td>
+                <td class="numeric has-text-centered validation-bg"></td>
+                <td class="numeric has-text-centered validation-bg"></td>
+                <td class="numeric has-text-centered validation-bg"></td>
+                <td class="numeric has-text-centered validation-bg"></td>
+                <td class="numeric has-text-centered validation-bg"></td>
+                <td class="numeric has-text-centered test-bg"></td>
+                <td class="numeric has-text-centered test-bg"></td>
+                <td class="numeric has-text-centered test-bg"></td>
+                <td class="numeric has-text-centered test-bg"></td>
+                <td class="numeric has-text-centered test-bg"></td>
+                <td class="numeric has-text-centered test-bg"></td>
+            </tr>
+            </tbody> -->
+            <tbody>
+            <tr>
+                <td class="model-name"><a href="https://huggingface.co/allenai/Molmo-72B-0924">Molmo-72B</a></td>
+                <td class="numeric has-text-centered validation-bg">52.06</td>
+                <td class="numeric has-text-centered validation-bg">10.03</td>
+                <td class="numeric has-text-centered validation-bg">36.88</td>
+                <td class="numeric has-text-centered validation-bg">25.90</td>
+                <td class="numeric has-text-centered validation-bg">76.78</td>
+                <td class="numeric has-text-centered validation-bg">132.53</td>
+                <td class="numeric has-text-centered test-bg">50.92</td>
+                <td class="numeric has-text-centered test-bg">14.00</td>
+                <td class="numeric has-text-centered test-bg">38.10</td>
+                <td class="numeric has-text-centered test-bg">38.10</td>
+                <td class="numeric has-text-centered test-bg">68.49</td>
+                <td class="numeric has-text-centered test-bg">130.55</td>
+            </tr>
+            </tbody>
+            <tbody>
+            <tr>
+                <td class="model-name"><a href="https://huggingface.co/llava-hf/llava-onevision-qwen2-72b-ov-hf">LLaVA-OneVision-72B</a></td>
+                <td class="numeric has-text-centered validation-bg">54.20</td>
+                <td class="numeric has-text-centered validation-bg">13.79</td>
+                <td class="numeric has-text-centered validation-bg">38.94</td>
+                <td class="numeric has-text-centered validation-bg">27.80</td>
+                <td class="numeric has-text-centered validation-bg">85.52</td>
+                <td class="numeric has-text-centered validation-bg">143.28</td>
+                <td class="numeric has-text-centered test-bg">53.62</td>
+                <td class="numeric has-text-centered test-bg">15.16</td>
+                <td class="numeric has-text-centered test-bg">41.52</td>
+                <td class="numeric has-text-centered test-bg">25.63</td>
+                <td class="numeric has-text-centered test-bg">82.39</td>
+                <td class="numeric has-text-centered test-bg">144.17</td>
+            </tr>
+            </tbody>
+            <tbody>
+            <tr>
+                <td class="model-name"><a href="https://huggingface.co/Qwen/Qwen2-VL-72B-Instruct">Qwen2-VL-72B</a></td>
+                <td class="numeric has-text-centered validation-bg">49.85</td>
+                <td class="numeric has-text-centered validation-bg">12.92</td>
+                <td class="numeric has-text-centered validation-bg">37.83</td>
+                <td class="numeric has-text-centered validation-bg">24.71</td>
+                <td class="numeric has-text-centered validation-bg">86.30</td>
+                <td class="numeric has-text-centered validation-bg">133.96</td>
+                <td class="numeric has-text-centered test-bg">48.19</td>
+                <td class="numeric has-text-centered test-bg">12.90</td>
+                <td class="numeric has-text-centered test-bg">38.48</td>
+                <td class="numeric has-text-centered test-bg">20.44</td>
+                <td class="numeric has-text-centered test-bg">84.13</td>
+                <td class="numeric has-text-centered test-bg">128.42</td>
+            </tr>
+            </tbody>
+            <tbody>
+            <tr>
+                <td class="model-name"><a href="https://huggingface.co/Qwen/Qwen2.5-VL-72B-Instruct">Qwen2.5-VL-72B</a></td>
+                <td class="numeric has-text-centered validation-bg">54.08</td>
+                <td class="numeric has-text-centered validation-bg">19.70</td>
+                <td class="numeric has-text-centered validation-bg">40.00</td>
+                <td class="numeric has-text-centered validation-bg">27.24</td>
+                <td class="numeric has-text-centered validation-bg">85.34</td>
+                <td class="numeric has-text-centered validation-bg">149.54</td>
+                <td class="numeric has-text-centered test-bg">54.42</td>
+                <td class="numeric has-text-centered test-bg">25.11</td>
+                <td class="numeric has-text-centered test-bg">42.33</td>
+                <td class="numeric has-text-centered test-bg">26.32</td>
+                <td class="numeric has-text-centered test-bg">87.12</td>
+                <td class="numeric has-text-centered test-bg">156.89</td>
+            </tr>
+            </tbody>
+            <tbody>
+            <tr>
+                <td class="model-name"><a href="https://huggingface.co/nvidia/NVLM-D-72B">NVLM-72B</a></td>
+                <td class="numeric has-text-centered validation-bg">54.69</td>
+                <td class="numeric has-text-centered validation-bg">10.78</td>
+                <td class="numeric has-text-centered validation-bg">42.49</td>
+                <td class="numeric has-text-centered validation-bg">30.40</td>
+                <td class="numeric has-text-centered validation-bg">86.21</td>
+                <td class="numeric has-text-centered validation-bg">146.97</td>
+                <td class="numeric has-text-centered test-bg">57.79</td>
+                <td class="numeric has-text-centered test-bg">11.53</td>
+                <td class="numeric has-text-centered test-bg">46.48</td>
+                <td class="numeric has-text-centered test-bg">29.48</td>
+                <td class="numeric has-text-centered test-bg">78.60</td>
+                <td class="numeric has-text-centered test-bg">153.14</td>
+            </tr>
+            </tbody>
+            <tbody>
+            <tr>
+                <td class="model-name"><a href="https://huggingface.co/OpenGVLab/InternVL2_5-78B">InternVL-2.5-78B</a></td>
+                <td class="numeric has-text-centered validation-bg">54.68</td>
+                <td class="numeric has-text-centered validation-bg">15.05</td>
+                <td class="numeric has-text-centered validation-bg">41.81</td>
+                <td class="numeric has-text-centered validation-bg">27.41</td>
+                <td class="numeric has-text-centered validation-bg">88.37</td>
+                <td class="numeric has-text-centered validation-bg">147.79</td>
+                <td class="numeric has-text-centered test-bg">55.90</td>
+                <td class="numeric has-text-centered test-bg">18.26</td>
+                <td class="numeric has-text-centered test-bg">43.63</td>
+                <td class="numeric has-text-centered test-bg">28.72</td>
+                <td class="numeric has-text-centered test-bg">81.46</td>
+                <td class="numeric has-text-centered test-bg">154.66</td>
+            </tr>
+            </tbody>
+            <tbody>
+            <tr>
+                <td class="model-name"><a href="https://huggingface.co/meta-llama/Llama-3.2-90B-Vision">Llama-3.2-90B</a></td>
+                <td class="numeric has-text-centered validation-bg">52.87</td>
+                <td class="numeric has-text-centered validation-bg">20.73</td>
+                <td class="numeric has-text-centered validation-bg">39.94</td>
+                <td class="numeric has-text-centered validation-bg">27.09</td>
+                <td class="numeric has-text-centered validation-bg">83.40</td>
+                <td class="numeric has-text-centered validation-bg">148.98</td>
+                <td class="numeric has-text-centered test-bg">51.64</td>
+                <td class="numeric has-text-centered test-bg">21.88</td>
+                <td class="numeric has-text-centered test-bg">40.55</td>
+                <td class="numeric has-text-centered test-bg">25.33</td>
+                <td class="numeric has-text-centered test-bg">79.55</td>
+                <td class="numeric has-text-centered test-bg">79.55</td>
+            </tr>
+            </tbody>
+            <tbody>
+            <tr>
+                <td class="model-name"><a href="https://openai.com/index/hello-gpt-4o/">GPT-4o</a></td>
+                <td class="numeric has-text-centered validation-bg">50.89</td>
+                <td class="numeric has-text-centered validation-bg">10.12</td>
+                <td class="numeric has-text-centered validation-bg">40.54</td>
+                <td class="numeric has-text-centered validation-bg">25.40</td>
+                <td class="numeric has-text-centered validation-bg">88.85</td>
+                <td class="numeric has-text-centered validation-bg">135.83</td>
+                <td class="numeric has-text-centered test-bg">53.51</td>
+                <td class="numeric has-text-centered test-bg">14.55</td>
+                <td class="numeric has-text-centered test-bg">43.86</td>
+                <td class="numeric has-text-centered test-bg">27.38</td>
+                <td class="numeric has-text-centered test-bg">87.08</td>
+                <td class="numeric has-text-centered test-bg">148.01</td>
+            </tr>
+            </tbody>
+            <tbody>
+            <tr>
+                <td class="model-name"><a href="https://gemini.google/subscriptions/">Gemini-2.0-Pro</a></td>
+                <td class="numeric has-text-centered validation-bg">53.79</td>
+                <td class="numeric has-text-centered validation-bg">16.66</td>
+                <td class="numeric has-text-centered validation-bg">43.14</td>
+                <td class="numeric has-text-centered validation-bg">28.52</td>
+                <td class="numeric has-text-centered validation-bg">86.50</td>
+                <td class="numeric has-text-centered validation-bg">150.75</td>
+                <td class="numeric has-text-centered test-bg">53.89</td>
+                <td class="numeric has-text-centered test-bg">21.59</td>
+                <td class="numeric has-text-centered test-bg">45.62</td>
+                <td class="numeric has-text-centered test-bg">27.99</td>
+                <td class="numeric has-text-centered test-bg">87.91</td>
+                <td class="numeric has-text-centered test-bg">157.88</td>
+            </tr>
+            </tbody>
+            <tbody>
+            <tr>
+                <td class="model-name"><a href="https://huggingface.co/liuhaotian/llava-v1.5-13b">LLaVA-1.5-13B</a>-Tuned</td>
+                <td class="numeric has-text-centered validation-bg">54.92</td>
+                <td class="numeric has-text-centered validation-bg">27.76</td>
+                <td class="numeric has-text-centered validation-bg">41.27</td>
+                <td class="numeric has-text-centered validation-bg">28.69</td>
+                <td class="numeric has-text-centered validation-bg">81.94</td>
+                <td class="numeric has-text-centered validation-bg">161.84</td>
+                <td class="numeric has-text-centered test-bg">54.33</td>
+                <td class="numeric has-text-centered test-bg">30.57</td>
+                <td class="numeric has-text-centered test-bg">41.81</td>
+                <td class="numeric has-text-centered test-bg">30.62</td>
+                <td class="numeric has-text-centered test-bg">75.73</td>
+                <td class="numeric has-text-centered test-bg">164.92</td>
+            </tr>
+            </tbody>
+            <tbody>
+            <tr>
+                <td class="model-name"><a href="https://huggingface.co/Lin-Chen/ShareGPT4V-13B">ShareGPT4V-13B</a>-Tuned</td>
+                <td class="numeric has-text-centered validation-bg">55.02</td>
+                <td class="numeric has-text-centered validation-bg">23.81</td>
+                <td class="numeric has-text-centered validation-bg">40.53</td>
+                <td class="numeric has-text-centered validation-bg">29.13</td>
+                <td class="numeric has-text-centered validation-bg">82.16</td>
+                <td class="numeric has-text-centered validation-bg">156.70</td>
+                <td class="numeric has-text-centered test-bg">52.94</td>
+                <td class="numeric has-text-centered test-bg">25.56</td>
+                <td class="numeric has-text-centered test-bg">39.56</td>
+                <td class="numeric has-text-centered test-bg">25.11</td>
+                <td class="numeric has-text-centered test-bg">80.36</td>
+                <td class="numeric has-text-centered test-bg">151.21</td>
+            </tr>
+            </tbody>
+            <tbody>
+            <tr>
+                <td class="model-name">PancapChain-13B (Ours)</td>
+                <td class="numeric has-text-centered validation-header">57.56</td>
+                <td class="numeric has-text-centered validation-header">30.34</td>
+                <td class="numeric has-text-centered validation-header">44.78</td>
+                <td class="numeric has-text-centered validation-header">34.61</td>
+                <td class="numeric has-text-centered validation-header">84.59</td>
+                <td class="numeric has-text-centered validation-header"><strong>175.75</strong></td>
+                <td class="numeric has-text-centered test-header">56.45</td>
+                <td class="numeric has-text-centered test-header">31.76</td>
+                <td class="numeric has-text-centered test-header">44.46</td>
+                <td class="numeric has-text-centered test-header">32.54</td>
+                <td class="numeric has-text-centered test-header">79.85</td>
+                <td class="numeric has-text-centered test-header"><strong>173.19</strong></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+<!--&lt;!&ndash;BibTex citation &ndash;&gt;-->
+<!--<section class="section" id="BibTeX">-->
+<!--    <div class="container is-max-desktop content">-->
+<!--        <h2 class="title">BibTeX</h2>-->
+<!--        <pre><code>BibTex Code Here</code></pre>-->
+<!--    </div>-->
+<!--</section>-->
+<!--&lt;!&ndash;End BibTex citation &ndash;&gt;-->
+
+
+<section class="section">
+    <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+            <div class="column has-text-centered">
+                <h2 class="title is-2">An Application Example: Image-Text Retrieval</h2>
+            <div class="content has-text-justified">
+                <p class="c18"><spanclass="c0"> 
+                    We apply our model to the downstream image-text retrieval task to demonstrate the application potential of our task and model. Specifically, to perform image-text retrieval, we first employ image captioners to generate the description for a given query image, followed by retrieving similar descriptions using the <a href="https://huggingface.co/nvidia/NV-Embed-v2">NV-Embed-v2</a> text embedding model. As shown in table below, on the challenging <a href="https://google.github.io/docci/">DOCCI</a> dataset, our PancapChain can achieve comparable performance with the state-of-the-art <a href="https://arxiv.org/abs/2407.09541">MATE</a> model, despite using no image-text retrieval training data or specialized module designs. Our PancapChain also outperforms state-of-the-art image captioners (e.g., ShareGPT4V), demonstrating its effectiveness in capturing image details. In addition, using the <a href="https://github.com/foundation-multimodal-models/CAPTURE">Capture</a> metrics, we demonstrate that PancapChain retrieves descriptions from the text corpus that are more semantically aligned with ground-truth descriptions, excelling on the dimensions of object, attribute, and relation. 
+                    </span>
+                </p>
+            </div>
+            <div class="column has-text-centered">
+                <img src="static/images/pancap-i2t-retrieval.png" alt="PANCAP" style="width: 600px; height: 250px;">
+        </div>
+    </div>
+</section>
+
+
+<section class="section">
+    <div class="container is-max-desktop">
+        <div class="columns is-centered has-text-centered">
+            <div class="column has-text-centered">
+                <h2 class="title is-2">Image "Reconstruction" from Captions</h2>
+            <div class="column has-text-centered">
+                <img src="static/images/pancap-pixart.png" alt="PANCAP" style="width: 900px; height: 720px;">
+            <div class="content has-text-justified">
+                <p class="c18"><spanclass="c0"> 
+                    We conduct an image reconstruction experiment by associating captioners with text-to-image generation models. This experiment serves as a proxy for evaluating the completeness of image descriptions, i.e., if a caption captures all essential visual elements, a text-to-image model would be able to reconstruct an image similar to the original one. Based on a generated caption for an input image, we adopt the text-to-image generation model <a href="https://github.com/PixArt-alpha/PixArt-sigma">PixArt-&#8721</a> to generate a new image. As shown in the above figure, PixArt-&#8721 associated with our PancapChain model can generate more similar images to the original images, compared with other baseline models. 
+                    </span>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="footer">
+    <div class="container">
+        <div class="columns is-centered">
+            <div class="column is-8">
+                <div class="content">
+
+                    <p>
+                        This page was built using the <a
+                            href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic
+                        Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io"
+                                                                                target="_blank">Nerfies</a> project
+                        page.
+                        This website is licensed under a <a rel="license"
+                                                            href="http://creativecommons.org/licenses/by-sa/4.0/"
+                                                            target="_blank">Creative
+                        Commons Attribution-ShareAlike 4.0 International License</a>.
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Load React -->
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="static/js/bargaining-game.js"></script>
+</body>
+</html>
