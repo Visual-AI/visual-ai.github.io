@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="MLLMs Need 3D-Aware Representation Supervision for Scene Understanding">
+  <meta name="keywords" content="3D Vision, Multimodal LLM, Scene Understanding, 3D Foundation Model">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MLLMs Need 3D-Aware Representation Supervision for Scene Understanding</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans:400,700|Noto+Sans|Castoro"
+        rel="stylesheet">
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/visailab.jpeg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+  <style>
+    body {
+      background: #f8fafc;
+      font-family: 'Google Sans', 'Noto Sans', Arial, sans-serif;
+      color: #23272f;
+    }
+    .hero {
+      background: linear-gradient(90deg, #e3f0ff 0%, #fff 100%);
+      box-shadow: 0 1px 3px rgba(180,200,255,0.02);
+      border-bottom: 1px solid #e9e9ea;
+    }
+    .publication-title {
+      font-weight: 700;
+      letter-spacing: -1px;
+      color: #1b284b;
+      margin-bottom: 0.7em;
+      line-height: 1.1;
+    }
+    .author-block a {
+      color: #1565c0 !important;
+      text-decoration: none;
+    }
+    .author-block a:hover {
+      text-decoration: underline;
+    }
+    .publication-links .button {
+      margin: 0.2em 0.25em;
+      background: #fff;
+      border: 1.5px solid #1976d2;
+      color: #1976d2;
+      font-weight: 600;
+      transition: all 0.18s;
+    }
+    .publication-links .button:hover {
+      background: #1976d2;
+      color: #fff;
+      border: 1.5px solid #1976d2;
+    }
+    hr.fancy {
+      max-width: 84%;
+      border: none;
+      border-top: 2.5px dashed #b8c4e8;
+      margin: 2em auto 2em auto;
+      opacity: 0.6;
+    }
+    section.section {
+      background: #fff;
+      border-radius: 16px;
+      margin-bottom: 1.7em;
+      box-shadow: 0 2px 16px rgba(43,71,120,0.04);
+      padding-top: 2.2em;
+    }
+    h2.title {
+      color: #3251a8;
+      font-weight: 700;
+    }
+    .content.has-text-justified {
+      font-size: 1.08em;
+      line-height: 1.7;
+      color: #2b354f;
+    }
+    img, video {
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(80,110,170,0.06);
+      background: #f6f8fc;
+    }
+    .is-size-7 {
+      color: #6d7c99;
+    }
+    ul {
+      margin-top: 1em;
+      margin-bottom: 0.5em;
+    }
+    ul li {
+      margin-bottom: 0.3em;
+    }
+    @media (max-width: 700px) {
+      .hero { padding-bottom: 0.3em; }
+      section.section { padding-top: 1em;}
+      h1.title { font-size: 2em; }
+      h2.title { font-size: 1.25em;}
+      img, video { max-width: 99vw !important; }
+    }
+  </style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">MLLMs Need 3D-Aware Representation Supervision for Scene Understanding</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><a href="https://scholar.google.com/citations?user=sBjFwuQAAAAJ&hl=en">Xiaohu Huang</a><sup>1</sup>,</span>
+            <span class="author-block"><a href="#">Jingjing Wu</a><sup>2</sup>,</span>
+            <span class="author-block"><a href="#">Qunyi Xie</a><sup>2</sup>,</span>
+            <span class="author-block"><a href="https://www.kaihan.org/">Kai Han</a><sup>1*</sup></span>
+          </div>
+          <div class="is-size-5 publication-authors" style="margin-bottom:0.3em;">
+            <span class="author-block"><sup>1</sup>Visual AI Lab, The University of Hong Kong</span><br>
+            <span class="author-block"><sup>2</sup>Baidu VIS</span>
+          </div>
+          <div style="margin-top:0.3em;" class="is-size-7">* Corresponding author</div>
+          <div class="column has-text-centered">
+            <div class="publication-links" style="margin-top:1.3em">
+              <span class="link-block">
+                <a href="..." class="external-link button is-normal is-rounded">
+                  <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="..." class="external-link button is-normal is-rounded">
+                  <span class="icon"><i class="ai ai-arxiv"></i></span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="..." class="external-link button is-normal is-rounded">
+                  <span class="icon"><i class="fab fa-github"></i></span>
+                  <span>Code</span>
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <video id="teaser" autoplay muted playsinline style="width:82%;max-width:900px;display:block;margin:0 auto 1.5em auto;">
+        <source src="static/images/teaser.mp4" type="video/mp4">
+      </video>
+      <hr class="fancy">
+      <div style="text-align:center; margin-top:0;">
+        <img src="static/images/radar_performance.png"
+             alt="Comparison radar chart"
+             style="max-width:80%; width:1000px; min-width:270px; display:block; margin:auto;">
+        <p class="has-text-centered is-size-7" style="margin-top:0.7em;">
+          <span style="background:#f3f6ff; padding: 0.2em 0.9em; border-radius:0.6em;">
+            Performance comparison across all benchmarks. Our method consistently improves different MLLMs.
+          </span>
+        </p>
+      </div>
+      <h2 class="subtitle has-text-centered" style="margin-top:2.2em;">
+        <span class="dnerf" style="font-weight:700;">3DRS</span> introduces explicit 3D-aware representation supervision into Multimodal Large Language Models (MLLMs) using 3D foundation models, significantly improving scene understanding across a wide range of 3D tasks.
+      </h2>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths card" style="background:#fafdff;border-radius:14px;">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Recent advances in scene understanding have leveraged multimodal large language models (MLLMs) for 3D reasoning by capitalizing on their strong 2D pretraining. However, the lack of explicit 3D data during MLLM pretraining limits 3D representation capability. In this paper, we investigate the 3D-awareness of MLLMs by evaluating multi-view correspondence and reveal a strong positive correlation between the quality of 3D-aware representation and downstream task performance. Motivated by this, we propose <b>3DRS</b>, a framework that enhances MLLM <b>3D</b> <b>R</b>epresentation learning through <b>S</b>upervision from pretrained 3D foundation models. Our approach aligns MLLM visual features with rich 3D knowledge distilled from 3D models, effectively improving scene understanding. Extensive experiments across multiple benchmarks and MLLMs—including visual grounding, captioning, and question answering—demonstrate consistent performance gains.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background:linear-gradient(96deg,#f7faff 60%,#eaf6ff 100%);">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths card" style="background:#ffffffe0;border-radius:14px;">
+        <h2 class="title is-3">Motivation: <span style="color:#1976d2">3D-Aware Feature Learning Matters!</span></h2>
+        <div class="content has-text-justified">
+          <p>
+            <b>How important is 3D-aware feature learning for MLLMs?</b> We conduct a systematic analysis on three representative MLLMs and observe a <b style="color:#e53935">strong positive correlation</b> between 3D correspondence scores (measuring 3D feature consistency across multi-view images) and downstream scene understanding performance. This motivates explicit 3D-aware supervision for MLLMs.
+          </p>
+          <div style="text-align:center;">
+            <img src="static/images/corr_vs_performance.png" 
+                 style="max-width:100%; width:700px; min-width:280px; display:block; margin:auto;box-shadow:0 2px 16px #90caf940;">
+            <p class="has-text-centered is-size-7" style="margin-top:0.5em;">
+              <span style="background:#e0e7f7; padding:0.15em 0.8em; border-radius:0.5em;">
+                Performance consistently improves as 3D correspondence score increases.
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths card" style="background:#fafdff;border-radius:14px;">
+        <h2 class="title is-3">State-of-the-Art Results</h2>
+        <div class="content has-text-justified">
+          <p>
+            <b>3DRS</b> achieves new state-of-the-art performance on a wide range of 3D scene understanding tasks, significantly outperforming both specialist and generalist baselines.
+          </p>
+          <div class="col justify-content-center text-center">
+            <img src="static/images/SOTA.png" style="width:98%;max-width:900px;box-shadow:0 2px 16px #90caf940;">
+            <p class="has-text-centered is-size-7"><span style="background:#f3f6ff; padding: 0.2em 0.9em; border-radius:0.6em;">Comparison with state-of-the-art on ScanRefer, Multi3DRefer, Scan2Cap, ScanQA, SQA3D.</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background:linear-gradient(95deg,#f7faff 60%,#eaf6ff 100%);">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths card" style="background:#ffffffe0;border-radius:14px;">
+        <h2 class="title is-3">Qualitative Visualization</h2>
+        <div class="content has-text-justified">
+          <p>
+            <b>3DRS</b> delivers more accurate grounding, richer captions, and more reliable answers.
+          </p>
+          <div style="text-align:center;">
+            <img src="static/images/visualization_1.png" 
+                 alt="Visualization Results" 
+                 style="max-width:96%; width:800px; min-width:200px; display:block; margin:auto;box-shadow:0 2px 16px #90caf940;">
+            <p class="has-text-centered is-size-7" style="margin-top:0.5em;">
+              <span style="background:#e0e7f7; padding:0.15em 0.8em; border-radius:0.5em;">
+                Qualitative Visualization: Performance comparison in grounding, captioning, and question answering tasks.
+              </span>
+            </p>
+          </div>
+          <ul style="margin-top:1em">
+            <li><b>Visual Grounding:</b> Our model's predictions match the ground truth more closely than baselines.</li>
+            <li><b>Object Captioning:</b> Our captions are more accurate and fine-grained.</li>
+            <li><b>Question Answering:</b> Our answers are better supported by visual evidence.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@inproceedings{huang2025,
+  title={MLLMs Need 3D-Aware Representation Supervision for Scene Understanding},
+  author={Xiaohu Huang and Jingjing Wu and Qunyi Xie and Kai Han},
+  booktitle={Arxiv},
+  year={2025}
+}</code></pre>
+  </div>
+</section>
+
+<section class="section" id="footer" style="background:transparent;box-shadow:none;">
+  <div class="columns is-centered">
+    <div class="column is-8">
+      <div class="content" style="text-align:center;color:#8692b3;">
+        <p>
+          © 2025 Visual AI Lab, HKU &amp; Baidu VIS. All rights reserved.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
