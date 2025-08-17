@@ -1,0 +1,224 @@
+{
+    "player1": "gemini-2.5-pro_cot",
+    "player2": "gpt-5-2025-08-07_cot",
+    "turns": [
+        {
+            "turn": 0,
+            "player": "gemini-2.5-pro_cot",
+            "move": 6,
+            "board_state": [
+                [
+                    "",
+                    "",
+                    "X",
+                    "X",
+                    "X",
+                    "O",
+                    "O",
+                    "",
+                    ""
+                ],
+                [
+                    "",
+                    "",
+                    "X",
+                    "X",
+                    "O",
+                    "X",
+                    "O",
+                    "",
+                    ""
+                ],
+                [
+                    "",
+                    "",
+                    "O",
+                    "O",
+                    "X",
+                    "O",
+                    "X",
+                    "",
+                    ""
+                ],
+                [
+                    "",
+                    "",
+                    "X",
+                    "O",
+                    "O",
+                    "O",
+                    "X",
+                    "",
+                    ""
+                ],
+                [
+                    "",
+                    "",
+                    "O",
+                    "X",
+                    "X",
+                    "X",
+                    "O",
+                    "",
+                    ""
+                ],
+                [
+                    " ",
+                    "X",
+                    "O",
+                    "X",
+                    "O",
+                    "X",
+                    "O"
+                ]
+            ],
+            "thinking": {
+                "gemini-2.5-pro_cot": "Thinking about the best move. Evaluating column 6.",
+                "gpt-5-2025-08-07_cot": "Waiting for opponent..."
+            }
+        },
+        {
+            "turn": 1,
+            "player": "gpt-5-2025-08-07_cot",
+            "move": 0,
+            "board_state": [
+                [
+                    "",
+                    "",
+                    "X",
+                    "X",
+                    "X",
+                    "O",
+                    "O",
+                    "",
+                    ""
+                ],
+                [
+                    "",
+                    "",
+                    "X",
+                    "X",
+                    "O",
+                    "X",
+                    "O",
+                    "",
+                    ""
+                ],
+                [
+                    "",
+                    "",
+                    "O",
+                    "O",
+                    "X",
+                    "O",
+                    "X",
+                    "",
+                    ""
+                ],
+                [
+                    "",
+                    "",
+                    "X",
+                    "O",
+                    "O",
+                    "O",
+                    "X",
+                    "",
+                    ""
+                ],
+                [
+                    " ",
+                    "O",
+                    "X",
+                    "X",
+                    "X",
+                    "O",
+                    "O"
+                ],
+                [
+                    " ",
+                    "X",
+                    "O",
+                    "X",
+                    "O",
+                    "X",
+                    "O"
+                ]
+            ],
+            "thinking": {
+                "gemini-2.5-pro_cot": "Waiting for opponent...",
+                "gpt-5-2025-08-07_cot": "Thinking about the best move. Evaluating column 0."
+            }
+        },
+        {
+            "turn": 2,
+            "player": "gemini-2.5-pro_cot",
+            "move": 0,
+            "board_state": [
+                [
+                    "",
+                    "",
+                    "X",
+                    "X",
+                    "X",
+                    "O",
+                    "O",
+                    "",
+                    ""
+                ],
+                [
+                    "X",
+                    "X",
+                    "X",
+                    "O",
+                    "X",
+                    "O",
+                    "",
+                    ""
+                ],
+                [
+                    "O",
+                    "O",
+                    "O",
+                    "X",
+                    "O",
+                    "X",
+                    "",
+                    ""
+                ],
+                [
+                    "X",
+                    "X",
+                    "O",
+                    "O",
+                    "O",
+                    "X",
+                    "",
+                    ""
+                ],
+                [
+                    "O",
+                    "O",
+                    "X",
+                    "X",
+                    "X",
+                    "O",
+                    "O"
+                ],
+                [
+                    "X",
+                    "X",
+                    "O",
+                    "X",
+                    "O",
+                    "X",
+                    "O"
+                ]
+            ],
+            "thinking": {
+                "gemini-2.5-pro_cot": "Thinking about the best move. Evaluating column 0.",
+                "gpt-5-2025-08-07_cot": "Waiting for opponent..."
+            }
+        }
+    ]
+}
