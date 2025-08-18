@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Connect4 Battle Visualization</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .visualization-container {
+        background: #1a1a1a;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        display: flex;
+        flex-direction: column;
+        max-width: 1400px;
+        width: 100%;
+        overflow: hidden;
+        animation: slideIn 0.5s ease-out;
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Top Panel - Match Selection */
+    .match-selection {
+        width: 100%;
+        padding: 20px;
+        background: #333;
+        border-radius: 8px 8px 0 0;
+        text-align: center;
+    }
+
+    .match-selection h3 {
+        color: #fff;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+
+    .match-list {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap;
+        max-height: 80px;
+        overflow-y: auto;
+    }
+
+    .match-item {
+        padding: 12px 20px;
+        background: #444;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        color: #fff;
+        font-size: 14px;
+        white-space: nowrap;
+    }
+
+    .match-item:hover {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        transform: translateY(-2px);
+    }
+
+    .match-item.selected {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .loading-indicator {
+        text-align: center;
+        color: #aaa;
+        padding: 20px;
+    }
+
+    /* Main Content Container */
+    .main-content {
+        display: flex;
+        flex: 1;
+    }
+
+    /* Left Panel - Model Thinking */
+    .thinking-panel {
+        flex: 1;
+        padding: 20px;
+        background: #242424;
+        border-right: 1px solid #333;
+        display: flex;
+        flex-direction: column;
+        min-height: 600px;
+    }
+
+    .thinking-content {
+        flex: 1;
+        background: #1a1a1a;
+        border-radius: 12px;
+        padding: 20px;
+        overflow-y: auto;
+        color: #e0e0e0;
+        max-height: 700px;
+        min-height: 500px;
+    }
+
+    .thinking-content::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .thinking-content::-webkit-scrollbar-track {
+        background: #333;
+        border-radius: 4px;
+    }
+
+    .thinking-content::-webkit-scrollbar-thumb {
+        background: #667eea;
+        border-radius: 4px;
+    }
+
+    .thinking-content::-webkit-scrollbar-thumb:hover {
+        background: #764ba2;
+    }
+
+    /* Right Panel - Game Board */
+    .game-panel {
+        flex: 1;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background: #1a1a1a;
+        min-height: 500px;
+    }
+
+    .game-header {
+        width: 100%;
+        text-align: center;
+        color: #fff;
+    }
+
+    .game-panel .current-player {
+        padding: 8px 0;
+        margin-bottom: 5px;
+        text-align: center;
+        color: #fff;
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .game-panel .player-indicator {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 16px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 20px;
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    .player-piece {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        display: inline-block;
+    }
+
+    .player-piece.red {
+        background: #ff4757;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .player-piece.yellow {
+        background: #ffd93d;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .thinking-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 12px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid #333;
+    }
+
+    .thinking-header h3 {
+        font-size: 16px;
+        margin: 0;
+    }
+
+    .thinking-text {
+        line-height: 1.6;
+        font-size: 13px;
+        white-space: pre-wrap;
+        font-family: 'Courier New', monospace;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+
+    .move-info-panel {
+        background: #2a2a2a;
+        border-left: 3px solid #667eea;
+        padding: 15px;
+        margin-top: 20px;
+        border-radius: 8px;
+    }
+
+    .move-info-panel h4 {
+        color: #667eea;
+        margin-bottom: 8px;
+    }
+
+    .connect4-board {
+        background: #2c3e50;
+        padding: 15px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .board-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 60px);
+        grid-template-rows: repeat(6, 60px);
+        gap: 8px;
+        background: #34495e;
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    .cell {
+        background: #1a1a1a;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .cell:hover {
+        transform: scale(1.05);
+    }
+
+    .piece {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        position: absolute;
+    }
+
+    .piece.animate-drop {
+        animation: dropIn 0.5s ease-out;
+    }
+
+    @keyframes dropIn {
+        from {
+            transform: translateY(-300px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .piece.red {
+        background: radial-gradient(circle at 30% 30%, #ff6b7a, #ff4757);
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(255, 71, 87, 0.5);
+    }
+
+    .piece.yellow {
+        background: radial-gradient(circle at 30% 30%, #fff3a3, #ffd93d);
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(255, 217, 61, 0.5);
+    }
+
+    .winning-piece {
+        animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% {
+            transform: scale(1);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(255, 255, 255, 0.8);
+        }
+        50% {
+            transform: scale(1.1);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3), 0 4px 16px rgba(255, 255, 255, 1);
+        }
+    }
+
+    .piece.no-animation {
+        animation: none;
+    }
+
+    .controls {
+        margin-top: 30px;
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .control-btn {
+        padding: 10px 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+
+    .control-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .control-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .speed-control {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #fff;
+        background: #333;
+        padding: 8px 15px;
+        border-radius: 8px;
+    }
+
+    .speed-slider {
+        width: 100px;
+        accent-color: #667eea;
+    }
+
+    .timeline {
+        width: 100%;
+        margin-top: 20px;
+        background: #333;
+        height: 20px;
+        border-radius: 8px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .timeline-progress {
+        height: 100%;
+        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        width: 0%;
+        transition: width 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 12px;
+    }
+
+    .winner-banner {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 30px 60px;
+        border-radius: 20px;
+        font-size: 24px;
+        font-weight: bold;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        display: none;
+        animation: bounceIn 0.5s ease-out;
+    }
+
+    @keyframes bounceIn {
+        0% {
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0;
+        }
+        50% {
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+        100% {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+    }
+
+    .chosen-move-highlight {
+        background: #4CAF50;
+        color: white;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-weight: bold;
+    }
+</style>
+</head>
+<body>
+<div class="visualization-container">
+    <!-- Top Panel - Match Selection -->
+    <div class="match-selection">
+        <h3>📁 Select Match</h3>
+        <div class="match-list" id="matchList">
+            <div class="loading-indicator">Loading matches...</div>
+        </div>
+    </div>
+
+    <!-- Main Content Container -->
+    <div class="main-content">
+        <!-- Left Panel - Model Thinking -->
+        <div class="thinking-panel">
+            <div class="thinking-content">
+                <div class="thinking-header">
+                    <h3 id="thinkingTitle">Model Reasoning</h3>
+                </div>
+                <div class="thinking-text" id="thinkingText">
+                    <p>Select a match to view the model's thinking process...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel - Game Board -->
+        <div class="game-panel">
+            <div class="game-header">
+                <h2 style="margin-bottom: 10px;">Connect4 Battle</h2>
+            </div>
+
+            <div class="current-player">
+                <div class="player-indicator">
+                    <span class="player-piece" id="currentPiece"></span>
+                    <span id="currentModelName">Select a match...</span>
+                </div>
+            </div>
+
+            <div class="connect4-board">
+                <div class="board-grid" id="gameBoard">
+                    <!-- Board will be generated by JavaScript -->
+                </div>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-progress" id="timelineProgress">
+                    <span id="timelineText">Ready</span>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="control-btn" id="playBtn">▶️ Play</button>
+                <button class="control-btn" id="pauseBtn" style="display: none;">⏸️ Pause</button>
+                <button class="control-btn" id="prevBtn">⏮️ Previous</button>
+                <button class="control-btn" id="nextBtn">⏭️ Next</button>
+                <button class="control-btn" id="resetBtn">🔄 Reset</button>
+
+                <div class="speed-control">
+                    <label>Speed:</label>
+                    <input type="range" class="speed-slider" id="speedSlider" min="1" max="10" value="3">
+                    <span id="speedValue">3.0s</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="winner-banner" id="winnerBanner">
+    <div id="winnerText"></div>
+</div>
+
+<script>
+    let gameSteps = [];
+    let currentStep = 0;
+    let isPlaying = false;
+    let playInterval;
+    let previousBoard = null;
+    let modelThinking = {}; // Store thinking logs for each model
+    let currentMatch = null;
+
+    // Available matches (you can dynamically fetch this from server)
+    const availableMatches = [
+        'gpt-5_vs_gemini-2.5-pro',
+        'gemini-2.5-pro_vs_gpt-5',
+        'deepseek-r1_vs_o3-mini',
+        'o3-mini_vs_deepseek-r1',
+        // Add more matches as needed
+    ];
+
+    // Load available matches
+    async function loadMatchList() {
+        const matchList = document.getElementById('matchList');
+        matchList.innerHTML = '';
+
+        // For demo purposes, using predefined list
+        // In production, you might fetch this from an API
+        for (const match of availableMatches) {
+            const matchItem = document.createElement('div');
+            matchItem.className = 'match-item';
+            matchItem.textContent = match.replace(/_/g, ' ').replace(/vs/g, 'VS');
+            matchItem.dataset.match = match;
+            matchItem.addEventListener('click', () => loadMatch(match));
+            matchList.appendChild(matchItem);
+        }
+    }
+
+    // Load a specific match
+    async function loadMatch(matchName) {
+        currentMatch = matchName;
+
+        // Update UI to show selected match
+        document.querySelectorAll('.match-item').forEach(item => {
+            item.classList.toggle('selected', item.dataset.match === matchName);
+        });
+
+        try {
+            // Extract model names from match name
+            const models = matchName.split('_vs_');
+
+            // Load game log
+            const gameLogPath = `game_log/connect4/${matchName}/game.log`;
+            const gameLogResponse = await fetch(gameLogPath);
+            const gameLogContent = await gameLogResponse.text();
+
+            // Load thinking logs for each model
+            for (const model of models) {
+                const thinkingLogPath = `game_log/connect4/${matchName}/${model}.log`;
+                try {
+                    const thinkingResponse = await fetch(thinkingLogPath);
+                    const thinkingContent = await thinkingResponse.text();
+                    modelThinking[model] = parseThinkingLog(thinkingContent);
+                } catch (e) {
+                    console.warn(`Could not load thinking log for ${model}`);
+                    modelThinking[model] = {};
+                }
+            }
+
+            // Parse game log
+            gameSteps = parseGameLog(gameLogContent);
+
+            if (gameSteps.length > 0) {
+                currentStep = 0;
+                previousBoard = null;
+                updateBoard();
+            }
+        } catch (error) {
+            console.error('Error loading match:', error);
+            alert('Error loading match files. Please check if the files exist.');
+        }
+    }
+
+    // Parse thinking log
+    function parseThinkingLog(logContent) {
+        const thinking = {};
+        const sections = logContent.split(/step\s+(\d+)-+/i);
+
+        for (let i = 1; i < sections.length; i += 2) {
+            const stepNum = parseInt(sections[i]);
+            let content = sections[i + 1].trim();
+            
+            // Remove content from "Current Game Board:" to "please choose the best move considering the current board state."
+            const boardStartIndex = content.indexOf('Current Game Board:');
+            const moveRequestIndex = content.indexOf('please choose the best move considering the current board state.\n\n');
+            
+            if (boardStartIndex !== -1 && moveRequestIndex !== -1 && moveRequestIndex > boardStartIndex) {
+                // Remove the content between these two markers
+                const beforeBoard = content.substring(0, boardStartIndex);
+                const afterMoveRequest = content.substring(moveRequestIndex + 'please choose the best move considering the current board state.\n\n'.length);
+                content = beforeBoard + afterMoveRequest;
+            }
+            
+            thinking[stepNum] = content;
+        }
+        console.log('thinking step2',thinking[2])
+        console.log('Complete thinking object:', thinking);
+        console.log('Available step numbers:', Object.keys(thinking));
+        return thinking;
+    }
+
+    // Parse the game log
+    function parseGameLog(logContent) {
+        const steps = [];
+        const lines = logContent.split('\n');
+        let currentStepData = null;
+        let boardLines = [];
+        let collectingBoard = false;
+
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i];
+
+            // Check for step marker
+            if (line.includes('Step') && line.includes('------------')) {
+                // Save previous step if exists
+                if (currentStepData && boardLines.length > 0) {
+                    currentStepData.board = parseBoardLines(boardLines);
+                    steps.push(currentStepData);
+                }
+
+                // Start new step
+                const stepMatch = line.match(/Step\s+(\d+)/);
+                if (stepMatch) {
+                    currentStepData = {
+                        stepNumber: parseInt(stepMatch[1]),
+                        board: null,
+                        player: null,
+                        move: null,
+                        winner: null
+                    };
+                    boardLines = [];
+                    collectingBoard = true;
+                }
+            }
+            // Check for board lines
+            else if (collectingBoard && line.includes('|') && (line.includes('_') || line.includes('X') || line.includes('O'))) {
+                boardLines.push(line);
+            }
+            // Check for player move
+            else if (line.includes('takes move')) {
+                const playerMatch = line.match(/(.+?)\s+takes move\s+(\d+)/);
+                if (playerMatch && currentStepData) {
+                    currentStepData.player = playerMatch[1].trim();
+                    currentStepData.move = parseInt(playerMatch[2]);
+                }
+                collectingBoard = false;
+            }
+            // Check for winner
+            else if (line.includes('wins!')) {
+                const winnerMatch = line.match(/(.+?)\s+wins!/);
+                if (winnerMatch && currentStepData) {
+                    currentStepData.winner = winnerMatch[1].trim();
+                }
+            }
+        }
+
+        // Don't forget the last step
+        if (currentStepData && boardLines.length > 0) {
+            currentStepData.board = parseBoardLines(boardLines);
+            steps.push(currentStepData);
+        }
+
+        return steps;
+    }
+
+    // Parse board lines into 2D array
+    function parseBoardLines(lines) {
+        const board = [];
+        for (const line of lines) {
+            const row = [];
+            const cells = line.split('|').slice(1, -1);
+            for (const cell of cells) {
+                const trimmed = cell.trim();
+                if (trimmed === '_') {
+                    row.push(null);
+                } else if (trimmed === 'X') {
+                    row.push('X');
+                } else if (trimmed === 'O') {
+                    row.push('O');
+                }
+            }
+            if (row.length === 7) {
+                board.push(row);
+            }
+        }
+        return board;
+    }
+
+    // Initialize the board display
+    function initBoard() {
+        const boardElement = document.getElementById('gameBoard');
+        boardElement.innerHTML = '';
+
+        for (let row = 0; row < 6; row++) {
+            for (let col = 0; col < 7; col++) {
+                const cell = document.createElement('div');
+                cell.className = 'cell';
+                cell.dataset.row = row;
+                cell.dataset.col = col;
+                boardElement.appendChild(cell);
+            }
+        }
+    }
+
+    // Update board display
+    function updateBoard() {
+        if (gameSteps.length === 0) return;
+
+        const step = gameSteps[currentStep];
+        // 显示下一个step的棋盘状态（即执行完当前action后的状态）
+        const nextStepIndex = Math.min(currentStep + 1, gameSteps.length - 1);
+        const board = gameSteps[nextStepIndex].board;
+
+        if (!board || board.length === 0) return;
+
+        const cells = document.querySelectorAll('.cell');
+
+        // Clear or update cells
+        if (previousBoard === null || currentStep === 0) {
+            cells.forEach(cell => {
+                cell.innerHTML = '';
+            });
+            previousBoard = null;
+        }
+
+        // Place pieces
+        for (let row = 0; row < board.length; row++) {
+            for (let col = 0; col < board[row].length; col++) {
+                const cellIndex = row * 7 + col;
+                const cell = cells[cellIndex];
+                const currentPiece = board[row][col];
+
+                const hadPiece = previousBoard && previousBoard[row] && previousBoard[row][col];
+                const hasPiece = currentPiece !== null;
+
+                if (hasPiece && !hadPiece) {
+                    const piece = document.createElement('div');
+                    piece.className = `piece ${currentPiece === 'X' ? 'red' : 'yellow'} animate-drop`;
+                    cell.appendChild(piece);
+                } else if (hasPiece && hadPiece) {
+                    const piece = document.createElement('div');
+                    piece.className = `piece ${currentPiece === 'X' ? 'red' : 'yellow'} no-animation`;
+                    cell.appendChild(piece);
+                } else if (!hasPiece && hadPiece) {
+                    cell.innerHTML = '';
+                }
+            }
+        }
+
+        previousBoard = JSON.parse(JSON.stringify(board));
+
+        // Update displays
+        updatePlayerDisplay(step);
+        updateThinking(step);
+
+        // Update timeline
+        const progress = ((currentStep + 1) / gameSteps.length) * 100;
+        document.getElementById('timelineProgress').style.width = progress + '%';
+        document.getElementById('timelineText').textContent = `Step ${step.stepNumber}`;
+
+        // Show winner if exists (检查下一个step是否有winner)
+        if (nextStepIndex < gameSteps.length && gameSteps[nextStepIndex].winner) {
+            showWinner(gameSteps[nextStepIndex].winner);
+        } else {
+            hideWinner();
+        }
+    }
+
+    // Update player display
+    function updatePlayerDisplay(step) {
+        const currentPiece = document.getElementById('currentPiece');
+        const currentModelName = document.getElementById('currentModelName');
+
+        if (step.player) {
+            // Determine piece color based on move order (odd steps = X/red, even = O/yellow)
+            const isX = step.stepNumber % 2 === 1;
+            currentPiece.className = `player-piece ${isX ? 'red' : 'yellow'}`;
+            currentModelName.textContent = step.player;
+        } else {
+            currentModelName.textContent = 'Game Start';
+            currentPiece.className = 'player-piece';
+        }
+    }
+
+    // Update thinking panel with model's reasoning
+    function updateThinking(step) {
+        const thinkingTitle = document.getElementById('thinkingTitle');
+        const thinkingText = document.getElementById('thinkingText');
+
+        // 添加调试信息
+        console.log('=== Debug updateThinking ===');
+        console.log('step:', step);
+        console.log('step.player:', step.player);
+        console.log('step.stepNumber:', step.stepNumber);
+        console.log('modelThinking keys:', Object.keys(modelThinking));
+        console.log('modelThinking[step.player]:', step.player ? modelThinking[step.player] : 'no player');
+        if (step.player && modelThinking[step.player]) {
+            console.log('Available steps for this player:', Object.keys(modelThinking[step.player]));
+        }
+
+        if (step.player && modelThinking[step.player]) {
+            thinkingTitle.textContent = `${step.player} - Step ${step.stepNumber}`;
+            console.log('modelThinking',modelThinking)
+            let reasoning = modelThinking[step.player][step.stepNumber] || 'No reasoning available for this step.';
+
+            // Highlight the chosen move in the reasoning
+            if (step.move !== null) {
+                // Look for patterns like "Chosen Move: (0,6)" or "Move: 6"
+                reasoning = reasoning.replace(/Chosen Move:\s*\((\d+),(\d+)\)/gi, (match, row, col) => {
+                    return `<span class="chosen-move-highlight">Chosen Move: Column ${col}</span>`;
+                });
+                reasoning = reasoning.replace(/Move:\s*(\d+)/gi, (match, col) => {
+                    return `<span class="chosen-move-highlight">Move: Column ${col}</span>`;
+                });
+            }
+
+            thinkingText.innerHTML = reasoning;
+        } else if (step.player) {
+            thinkingTitle.textContent = `${step.player} - Step ${step.stepNumber}`;
+
+            let content = `<div class="move-info-panel">
+                <h4>Move Decision:</h4>
+                <p>Placed piece in column ${step.move}</p>`;
+
+            if (step.winner) {
+                content += `<p style="color: #4CAF50; margin-top: 10px;"><strong>🎉 Victory achieved!</strong></p>`;
+            }
+
+            content += `</div>`;
+            content += `<p style="margin-top: 15px; color: #888;">Detailed reasoning not available for this model.</p>`;
+
+            thinkingText.innerHTML = content;
+        } else {
+            thinkingTitle.textContent = 'Game Analysis';
+            thinkingText.innerHTML = '<p>Initial board state - game ready to begin.</p>';
+        }
+    }
+
+    // Show winner banner
+    function showWinner(winner) {
+        const banner = document.getElementById('winnerBanner');
+        const text = document.getElementById('winnerText');
+        text.textContent = `🏆 ${winner} Wins! 🏆`;
+        banner.style.display = 'block';
+
+        setTimeout(() => {
+            banner.style.display = 'none';
+        }, 3000);
+    }
+
+    // Hide winner banner
+    function hideWinner() {
+        document.getElementById('winnerBanner').style.display = 'none';
+    }
+
+    // Play functionality
+    function play() {
+        if (gameSteps.length === 0) return;
+
+        isPlaying = true;
+        document.getElementById('playBtn').style.display = 'none';
+        document.getElementById('pauseBtn').style.display = 'block';
+
+        const speed = parseInt(document.getElementById('speedSlider').value) * 1000;
+
+        playInterval = setInterval(() => {
+            if (currentStep < gameSteps.length - 1) {
+                currentStep++;
+                updateBoard();
+            } else {
+                pause();
+            }
+        }, speed);
+    }
+
+    // Pause functionality
+    function pause() {
+        isPlaying = false;
+        document.getElementById('playBtn').style.display = 'block';
+        document.getElementById('pauseBtn').style.display = 'none';
+        clearInterval(playInterval);
+    }
+
+    // Event listeners
+    document.getElementById('playBtn').addEventListener('click', play);
+    document.getElementById('pauseBtn').addEventListener('click', pause);
+
+    document.getElementById('prevBtn').addEventListener('click', () => {
+        if (currentStep > 0) {
+            currentStep--;
+            updateBoard();
+        }
+    });
+
+    document.getElementById('nextBtn').addEventListener('click', () => {
+        if (currentStep < gameSteps.length - 1) {
+            currentStep++;
+            updateBoard();
+        }
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+        pause();
+        currentStep = 0;
+        previousBoard = null;
+        updateBoard();
+    });
+
+    document.getElementById('speedSlider').addEventListener('input', (e) => {
+        const speed = parseInt(e.target.value);
+        document.getElementById('speedValue').textContent = speed + '.0s';
+        if (isPlaying) {
+            pause();
+            play();
+        }
+    });
+
+    // Initialize
+    initBoard();
+    loadMatchList();
+
+    // Initialize speed display
+    const initialSpeed = parseInt(document.getElementById('speedSlider').value);
+    document.getElementById('speedValue').textContent = initialSpeed + '.0s';
+</script>
+</body>
+</html>
