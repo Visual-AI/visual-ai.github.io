@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semantic Correspondence: Unified Benchmarking and a Strong Baseline</title>
+    <link rel="icon" type="image/jpeg" href="icons/visailab_icon.jpeg"> <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #fff;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Hero Section */
+        #hero {
+            padding: 60px 0;
+            text-align: center;
+            background-color: #ffffff;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            line-height: 1.2;
+            color: #1a1a1a;
+            text-align: justify;
+            text-align-last: center;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #4285f4 0%, #34a853 30%, #1ba1e2 60%, #0891b2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+            font-weight: 800;
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            color: #555;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        h3 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            color: #1a1a1a;
+        }
+
+        .contributors {
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+            line-height: 1.8;
+            color: #555;
+        }
+
+        .contributors a {
+            color: #1f71f6;
+            text-decoration: none;
+        }
+
+        .contributors a:hover {
+            text-decoration: underline;
+        }
+        /* 请将这个新规则添加到您的 <style> 标签内 */
+        .midrule {
+            border-bottom: 1.5px solid #888;
+        }
+        
+        .contributors .black-name {
+            color: #333;
+            text-decoration: none;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 50px;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            background: #4a5568;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            border: 1px solid #4a5568;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            background: #1f71f6;
+            border-color: #1f71f6;
+        }
+
+        .button img {
+            width: 18px;
+            height: 18px;
+            filter: brightness(0) invert(1);
+        }
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+            font-size: 0.95rem;
+            color: #333;
+            /* 移除所有内部边框，只保留上下横线 */
+            border: none; 
+        }
+
+        /* 表头和表体的单元格样式 */
+        .results-table th, .results-table td {
+            padding: 6px 15px;
+            white-space: nowrap; /* 防止内容换行 */
+            border-left: 1px solid #e0e0e0; /* 只保留垂直分割线 */
+            border-right: 1px solid #e0e0e0;
+        }
+
+        /* 模拟 LaTeX 的 \toprule (最顶部的粗线) */
+        .results-table thead {
+            border-top: 2px solid #333;
+        }
+
+        /* 模拟 LaTeX 的 \bottomrule (最底部的粗线) */
+        .results-table tbody {
+            border-bottom: 2px solid #333;
+        }
+
+        /* 模拟 LaTeX 的 \midrule (中间的细线) */
+        .results-table thead tr:last-child {
+            border-bottom: 1.5px solid #888;
+        }
+
+        /* 我们的方法所在行的特殊背景色 */
+        .ours-row {
+            background-color: #f5f8ff;
+        }
+
+        /* 单元格内容的高亮样式 */
+        .bold {
+            font-weight: 700;
+        }
+
+        .underline {
+            text-decoration: underline;
+            text-decoration-thickness: 1.5px;
+        }
+
+        /* HTML 下标样式 */
+        sub {
+            font-size: 0.8em;
+            vertical-align: sub;
+        }
+
+        /* 表格标题样式 */
+        .table-caption {
+            font-size: 0.9rem;
+            color: #555;
+            margin-top: 15px;
+            text-align: left;
+            max-width: 800px; /* 根据您的布局调整 */
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .teaser-image {
+            width: calc(33.333% - 14px); 
+            min-width: 250px; 
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            object-fit: cover;
+            aspect-ratio: 16 / 10;
+        }
+
+        .description {
+            font-size: 1.2rem;
+            line-height: 1.7;
+            color: #000;
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: justify;
+        }
+
+        /* Section Styles */
+        section {
+            margin-bottom: 0;
+            padding: 80px 0;
+        }
+
+        #hero, #taxonomy, #results, .bibtex-section {
+            background-color: #ffffff;
+        }
+
+        #contributions, #baseline {
+            background-color: #f8f9fa;
+        }
+
+        .full-width-section {
+            width: 100vw;
+            margin-left: calc(-50vw + 50%);
+            padding-left: calc(50vw - 50%);
+            padding-right: calc(50vw - 50%);
+        }
+
+        .section-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .large-header {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #1a1a1a;
+        }
+
+        .small-text {
+            font-size: 1.1rem;
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: justify;
+        }
+
+        /* Contributions Section */
+        .contributions-grid {
+        display: flex;             /* 使用 Flexbox 布局 */
+        flex-direction: column;    /* 设置主轴方向为垂直 */
+        align-items: center;       /* 将所有项目在交叉轴（水平方向）上居中 */
+        gap: 50px;                 /* 设置项目之间的垂直间距 */
+    }
+        .contribution-item {
+            text-align: center;
+        }
+        .contribution-item img {
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+        .contribution-item h3 {
+             font-size: 1.5rem;
+             margin-bottom: 10px;
+        }
+        .contribution-item p {
+            font-size: 1rem;
+            color: #555;
+            text-align: justify;
+        }
+
+        /* Baseline Section */
+        .baseline-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+        
+        .baseline-image {
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .baseline-content p {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #555;
+            margin-bottom: 30px;
+            text-align: justify;
+        }
+        
+        /* Results Section */
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+        }
+        .result-item img {
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+        }
+
+        /* BibTeX Section */
+        .title-center {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 40px;
+            color: #1a1a1a;
+        }
+
+        .bibtex-container {
+            margin-bottom: 60px;
+            max-width: 1100px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .bibtex-wrapper {
+            position: relative;
+            background: #2d3748;
+            border-radius: 12px;
+            padding: 30px;
+            border: 1px solid #4a5568;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #4a5568;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .copy-button:hover { background: #718096; }
+        .copy-button img { width: 16px; height: 16px; filter: brightness(0) invert(1); }
+
+        .bibtex-entry {
+            color: #e2e8f0;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            overflow-x: auto;
+            white-space: pre;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2rem; text-align: center; }
+            .baseline-section { grid-template-columns: 1fr; }
+            .results-grid { grid-template-columns: 1fr; }
+        }
+        .teaser-container {
+            display: flex; 
+            justify-content: center; 
+            gap: 20px;
+            flex-wrap: wrap; 
+            margin-bottom: 30px;
+        }
+
+        .teaser-gif {
+            width: calc(33.333% - 14px); 
+            min-width: 250px; /* 在小屏幕上，图片不会被压得过小 */
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            object-fit: cover;
+            aspect-ratio: 16 / 10;
+        }
+        @media (max-width: 768px) {
+            .teaser-gif {
+                max-width: 100%; /* 在手机上，让每个 GIF 占满一行 */
+            }
+            h1 {
+                font-size: 2.2rem;
+                text-align: center;
+            }
+            .baseline-section { grid-template-columns: 1fr; }
+            .results-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <section id="hero" class="full-width-section">
+            <div class="section-content">
+                <h1>Semantic Correspondence:<br>Unified Benchmarking and a Strong Baseline</h1>
+                <!-- <h2> TPAMI </h2> -->
+                <p class="contributors">
+                    <span class="black-name">Kaiyan Zhang</span>,
+                    <span class="black-name">Xinghui Li</span>,
+                    <span class="black-name">Jingyi Lu</span>,
+                    <a href="https://www.kaihan.org/" target="_blank">Kai Han</a>
+                    <br>
+                    <a href="https://visailab.github.io/index.html" target="_blank">Visual AI Lab</a>, The University of Hong Kong
+                </p>
+                
+                <div class="button-container">
+                    <a href="https://arxiv.org/abs/2505.18060" target="_blank" class="button" download="Semantic Correspondence.pdf">
+                        <img src="icons/pdf-icon.svg" alt="Paper Icon"> 
+                        Paper
+                    </a>
+                    <a href="https://arxiv.org/abs/2505.18060" target="_blank" class="button">
+                            <img src="icons/arxiv-icon.svg" alt="arXiv Icon">
+                        arXiv
+                    </a>
+                    <a href="https://github.com/Visual-AI/Semantic-Correspondence" target="_blank" class="button">
+                        <img src="icons/github-icon.svg" alt="Code Icon"> 
+                        Code
+                    </a>
+                    <a href="https://github.com/Visual-AI/Awesome-Semantic-Correspondence" target="_blank" class="button">
+                        <img src="icons/github-icon.svg" alt="Code Icon"> 
+                        Paper List
+                    </a>
+                    <a href="#bibtex" class="button">
+                        <img src="icons/bibtex-icon.svg" alt="Bibtex Icon"> 
+                        BibTeX
+                    </a>
+                </div>
+
+                <div class="teaser-container">
+                    <img src="gifs/bird.gif" alt="Qualitative Result GIF 1" class="teaser-gif">
+                    <img src="gifs/bike.gif" alt="Qualitative Result GIF 2" class="teaser-gif">
+                    <img src="gifs/airplane.gif" alt="Qualitative Result GIF 3" class="teaser-gif">
+                    <img src="gifs/cat.gif" alt="Qualitative Result GIF 4" class="teaser-gif">
+                    <img src="gifs/car.gif" alt="Qualitative Result GIF 5" class="teaser-gif">
+                    <img src="gifs/chair.gif" alt="Qualitative Result GIF 6" class="teaser-gif">
+                </div>
+                
+                <p class="description">
+                    This paper presents the first extensive survey of semantic correspondence methods. We first propose a taxonomy to classify existing methods based on the type of their method designs.
+                    These methods are then categorized accordingly, and we provide a detailed analysis of each approach.
+                    Furthermore, we aggregate and summarize the results of methods in literature across various benchmarks into a unified comparative table, with detailed configurations to highlight performance variations.
+                    Additionally, we thoroughly conduct controlled experiments to analyse the effectiveness of the components of different methods. 
+                    Finally, we propose a simple yet effective baseline that achieves sota performance on multiple benchmarks, providing a solid foundation for future research in this field.
+                    We hope this survey serves as a comprehensive reference and consolidated baseline for future development.
+                </p>
+            </div>
+        </section>
+
+        <section id="contributions" class="full-width-section">
+            <div class="section-content">
+                <div class="section-header">
+                    <h2 class="large-header">Core Contributions</h2>
+                </div>
+                <div class="contributions-grid">
+                    <div class="contribution-item">
+                        <h3>Comprehensive Survey & Taxonomy</h3>
+                        <img src="figs/taxonomy.jpg" alt="Taxonomy">
+                        <p>This taxonomy provides a comprehensive overview of semantic correspondence methods to enhance feature quality, matching performance, or training strategies.</p>
+                    </div>
+                    <div class="contribution-item">
+                    <h3>A Strong SOTA Baseline</h3>
+                    <p>We propose a simple yet effective baseline that achieves state-of-the-art performance on multiple benchmarks, offering a strong and solid foundation for future research in the field.</p>
+    
+                    <div class="table-container">
+                        <table class="results-table">
+                            <thead>
+                                <tr>
+                                    <th rowspan="3">Methods</th>
+                                    <th rowspan="3">Backbone</th>
+                                    <th rowspan="3">Reso.</th>
+                                    <th colspan="3">SPair-71k</th>
+                                    <th colspan="3">PF-PASCAL</th>
+                                    <th colspan="3">PF-WILLOW</th>
+                                </tr>
+                                <tr>
+                                    <th colspan="3">PCK @ α<sub>bbox</sub></th>
+                                    <th colspan="3">PCK @ α<sub>img</sub></th>
+                                    <th colspan="3">PCK @ α<sub>bbox-kp</sub></th>
+                                </tr>
+                                <tr>
+                                    <th>0.05</th>
+                                    <th>0.1</th>
+                                    <th>0.15</th>
+                                    <th>0.05</th>
+                                    <th>0.1</th>
+                                    <th>0.15</th>
+                                    <th>0.05</th>
+                                    <th>0.1</th>
+                                    <th>0.15</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>SimSC-iBOT</td>
+                                    <td>iBOT</td>
+                                    <td>256</td>
+                                    <td>43.0</td>
+                                    <td>63.5</td>
+                                    <td>-</td>
+                                    <td class="bold">88.4</td>
+                                    <td class="underline">95.6</td>
+                                    <td>97.3</td>
+                                    <td>44.9</td>
+                                    <td>71.4</td>
+                                    <td>84.5</td>
+                                </tr>
+                                <tr>
+                                    <td>DHF</td>
+                                    <td>SD+DINOv2</td>
+                                    <td>Ori</td>
+                                    <td>-</td>
+                                    <td>64.6</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>86.7</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>LPMFlow</td>
+                                    <td>ViT-B/16</td>
+                                    <td>256</td>
+                                    <td>46.7</td>
+                                    <td>65.6</td>
+                                    <td>-</td>
+                                    <td>82.4</td>
+                                    <td>94.3</td>
+                                    <td>97.2</td>
+                                    <td>-</td>
+                                    <td class="bold">81.0</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>SD-DINO</td>
+                                    <td>SD+DINOv2</td>
+                                    <td>960, 840</td>
+                                    <td>-</td>
+                                    <td>74.6</td>
+                                    <td>-</td>
+                                    <td>80.9</td>
+                                    <td>93.6</td>
+                                    <td>96.9</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>SD4Match</td>
+                                    <td>SD+DINOv2</td>
+                                    <td>768</td>
+                                    <td>59.5</td>
+                                    <td>75.5</td>
+                                    <td>-</td>
+                                    <td>84.4</td>
+                                    <td>95.2</td>
+                                    <td class="underline">97.5</td>
+                                    <td class="bold">52.1</td>
+                                    <td class="underline">80.4</td>
+                                    <td class="bold">91.2</td>
+                                </tr>
+                                <tr class="midrule"> <td>GeoAware-SC</td>
+                                    <td>SD+DINOv2</td>
+                                    <td>960, 840</td>
+                                    <td>72.6</td>
+                                    <td>82.9</td>
+                                    <td>-</td>
+                                    <td>85.5</td>
+                                    <td>95.1</td>
+                                    <td>97.4</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr class="ours-row">
+                                    <td class="bold">Ours(DINOv2)</td>
+                                    <td>DINOv2</td>
+                                    <td>840</td>
+                                    <td class="underline">73.3</td>
+                                    <td class="underline">85.1</td>
+                                    <td>89.3</td>
+                                    <td class="underline">87.6</td>
+                                    <td class="underline">95.8</td>
+                                    <td class="underline">98.2</td>
+                                    <td class="underline">48.8</td>
+                                    <td>73.7</td>
+                                    <td>85.8</td>
+                                </tr>
+                                <tr class="ours-row">
+                                    <td class="bold">Ours(DINOv2+ResNet)</td>
+                                    <td>DINOv2</td>
+                                    <td>840</td>
+                                    <td class="underline">72.7</td>
+                                    <td class="underline">85.2</td>
+                                    <td class="underline">89.3</td>
+                                    <td>80.3</td>
+                                    <td>90.8</td>
+                                    <td>94.9</td>
+                                    <td>46.6</td>
+                                    <td>74.1</td>
+                                    <td class="underline">87.1</td>
+                                </tr>
+                                <tr class="ours-row midrule"> <td class="bold">Ours(DINOv2+NC)</td>
+                                    <td>DINOv2</td>
+                                    <td>840</td>
+                                    <td>70.2</td>
+                                    <td class="underline">85.2</td>
+                                    <td class="bold">89.6</td>
+                                    <td>80.6</td>
+                                    <td>91.5</td>
+                                    <td>95.0</td>
+                                    <td>39.8</td>
+                                    <td>62.3</td>
+                                    <td>74.9</td>
+                                </tr>
+                                <tr class="ours-row">
+                                    <td class="bold">Ours(DINOv3)</td>
+                                    <td>DINOv3</td>
+                                    <td>960</td>
+                                    <td class="bold">81.3</td>
+                                    <td class="bold">90.6</td>
+                                    <td class="bold">93.5</td>
+                                    <td class="bold">89.7</td>
+                                    <td class="bold">96.8</td>
+                                    <td class="bold">98.5</td>
+                                    <td class="bold">51.5</td>
+                                    <td class="bold">78.1</td>
+                                    <td class="bold">89.1</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="qualitative-results" class="full-width-section">
+            <div class="section-content">
+                <div class="section-header">
+                    <h2 class="large-header">Qualitative Results</h2>
+                </div>
+                <div class="teaser-container">
+                    <img src="qualitative-results/cat.png" alt="cat" class="teaser-image">
+                    <img src="qualitative-results/horse.png" alt="cat" class="teaser-image">
+                    <img src="qualitative-results/cow.png" alt="cat" class="teaser-image">
+                    <img src="qualitative-results/chair.png" alt="cat" class="teaser-image">
+                    <img src="qualitative-results/airplane.png" alt="cat" class="teaser-image">
+                    <img src="qualitative-results/pig.png" alt="cat" class="teaser-image">
+                    <img src="qualitative-results/girl.png" alt="cat" class="teaser-image">
+                    <img src="qualitative-results/boat.png" alt="cat" class="teaser-image">
+                    <img src="qualitative-results/bird.png" alt="cat" class="teaser-image">
+
+                </div>
+            </div>
+        </section>
+        
+
+        <div class="bibtex-section full-width-section" id="bibtex">
+            <div class="section-content">
+                <h1 class="title-center">BibTeX</h1>
+                <div class="bibtex-container">
+                    <div class="bibtex-wrapper">
+                        <button class="copy-button" onclick="copyBibtex()">
+                            <img src="icons/bibtex-icon.svg" alt="Copy Icon">
+                        </button>
+                        <pre class="bibtex-entry" id="bibtex-entry">    @article{semantic_correspondence_benchmark,
+      title={Semantic Correspondence: Unified Benchmarking and a Strong Baseline}, 
+      author={Kaiyan Zhang and Xinghui Li and Jingyi Lu and Kai Han},
+      year={2025},
+      eprint={2505.18060},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2505.18060}, 
+      }
+
+</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function copyBibtex() {
+            const bibtexEntry = document.getElementById('bibtex-entry').innerText.trim();
+            navigator.clipboard.writeText(bibtexEntry).then(() => {
+                alert('BibTeX copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+    </script>
+</body>
+</html>
