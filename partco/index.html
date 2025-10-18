@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="PartCo: Part-Level Correspondence Priors Enhance Category Discovery">
+  <meta name="keywords" content="Generalized Category Discovery, Domain Adaptation">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PartCo: Part-Level Correspondence Priors Enhance Category Discovery</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    function restartVideo(videoID) {
+      var video = document.getElementById(videoID);
+      video.currentTime = 0;
+      video.pause();
+      // video.play();
+    }
+
+    function playPauseVideo(videoID) {
+      var video = document.getElementById(videoID);
+      if (video.currentTime > video.duration - 0.1) {
+        video.currentTime = 0;
+        video.play();
+      } else if (video.paused) {
+        video.play();
+      } else {
+        video.pause();
+      }
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/visailab.jpeg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script type="text/javascript" src="./static/js/copy.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">PartCo: Part-Level Correspondence Priors Enhance Category Discovery</h1>
+            <div class="is-size-5 publication-authors">
+            <span class="author-block" style="margin-right: 40px;">
+              <a href="https://fcendra.github.io/">Fernando Julio Cendra</a></span>
+            <span class="author-block">
+              <a href="https://www.kaihan.org/">Kai Han</a>
+            </span>
+            </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><a href="https://visailab.github.io">Visual AI Lab</a>, <a href="https://www.hku.hk/">The University of Hong Kong</a></span>
+          </div>
+          <!-- <strong>In CVPR 2025</strong>
+          <br>
+            <strong style="color: #cc0000;">Conference highlight</strong> -->
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://arxiv.org/pdf/2509.22769"
+                   class="external-link button is-normal is-rounded is-dark", target="_blank">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2509.22769"
+                   class="external-link button is-normal is-rounded is-dark", target="_blank">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href=""
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code (coming soon)</span>
+                  </a>
+              </span>
+
+              <!-- Citation Link. -->
+              <span class="link-block">
+                <a href="#Bib"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="far fa-images"></i>
+                  </span>
+                  <span>BibTex</span>
+                  </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="container is-max-desktop">
+  <div class="columns is-centered">
+    <div class="column is-four-fifths">
+      <div style="background-color: #ffffff; border: 1px solid #ffffff00; border-radius: 5px; padding: 15px; margin-bottom: 30px;">
+        <p style="margin-bottom: 0; text-align: justify; font-size: 1.1em;">
+          <strong>TL;DR:</strong> We present PartCo, a framework that uses part-level visual cues to enhance Generalized Category Discovery, achieving state-of-the-art performance with seamless integration into existing methods.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <!-- <div class="col justify-content-center text-center">
+    <div class="col-sm-12"></div>
+      <center>
+        <img src="static/images/task.png" style="width:90%">
+      </center>
+    </div>
+    <div class="column is-three-fifths">
+      <center>
+        <div style="background-color: #fffef0; border: 1px solid #ffffff00; border-radius: 5px; padding: 15px; margin-top: 10px; margin-left: auto; margin-right: auto;">
+          <p style="margin-bottom: 0; text-align: center;">
+            The focus of this paper is on Generalized Category Discovery (GCD). Given a labeled subset contains seen classes, the task is to categorize the unlabeled images, which may belong to seen or unseen classes.
+          </p>
+        </div>
+      </center>
+    </div>
+  </div> -->
+
+<div class="container is-max-desktop">
+  <div class="columns is-centered">
+    <div class="column is-three-fifths has-text-centered">
+      <center>
+        <img src="static/images/task.png" style="width:100%">
+      </center>
+      <div style="background-color: #fffef0; border: 1px solid #ffffff00; border-radius: 5px; padding: 15px; margin-top: 10px;">
+        <p style="margin-bottom: 0; text-align: justify;">
+          The focus of this paper is on Generalized Category Discovery (GCD). Given a labeled subset contains seen classes, the task is to categorize the unlabeled images, which may belong to seen or unseen classes.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Existing GCD methods primarily depend on semantic labels and global image representations, 
+            often overlooking the detailed part-level cues that are crucial for distinguishing closely related categories. In this paper, we introduce PartCo, short for Part-Level Correspondence Prior, a novel framework that enhances category discovery by incorporating part-level visual feature correspondences. By leveraging part-level relationships, PartCo captures finer-grained semantic structures, enabling a more nuanced understanding of category relationships. Importantly, PartCo seamlessly integrates with existing GCD methods without requiring significant modifications. Our extensive experiments on multiple benchmark datasets demonstrate that PartCo significantly improves the performance of current GCD approaches, achieving state-of-the-art results by bridging
+that are crucial for distinguishing closely related categories. In this paper, we introduce PartCo, short for Part-Level Correspondence Prior, a novel framework
+that enhances category discovery by incorporating part-level visual feature correspondences. By leveraging part-level relationships, PartCo captures finer-grained
+semantic structures, enabling a more nuanced understanding of category relationships. Importantly, PartCo seamlessly integrates with existing GCD methods
+without requiring significant modifications. Our extensive experiments on multiple
+benchmark datasets demonstrate that PartCo significantly improves the performance of current GCD approaches, achieving state-of-the-art results by bridging
+the gap between semantic labels and part-level visual compositions.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <!-- Left column with title and text -->
+      <div class="column is-three-fifths">
+        <h2 class="title is-3">Motivations</h2>
+        <div class="content has-text-justified">
+          <p>
+          Object parts are often shared across categories and thus aid generalization to novel classes, 
+          yet many recent methods rely on transformer CLS tokens that capture global semantics while 
+          discarding crucial part-level details needed to distinguish similar categories. 
+          Although spatial prompt tuning (e.g., Wang et al., 2024) injects local cues, 
+          it struggles with inherent part variability in scale, pose, occlusion, and fluctuating part counts. 
+          This motivates an explicit, part-aware prior that is robust to these factors.
+          </p>
+        </div>
+      </div>
+      <!-- Right column with image -->
+      <div class="column is-two-fifths">
+        <figure class="image">
+          <img src="static/images/part_illus.png" alt="motivation" style="width:95%">
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Constructing explicit part-level correspondence labels</h2>
+    <div class="content">
+      <div class="col justify-content-center text-center">
+        <div class="col-sm-12">
+          <center>
+            <img src="static/images/label_processing.png" style="width:90%">
+          </center>
+        </div>
+      </div>
+      <div class="content has-text-justified">
+        <br>
+        <p>
+          <strong>Overview of part-level correspondence labels construction:</strong> This two-step process
+begins by applying PCA projections to extract object and detailed features from ViT’s patch tokens
+using a subset of the dataset. These projections are then applied to the entire dataset to generate
+part-level correspondence labels.
+        </p>
+      </div>
+          <div class="col-sm-12">
+          <center>
+            <img src="static/images/label_vis.jpg" style="width:90%">
+          </center>
+        </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Integrating PartCo framework with GCD method</h2>
+    <div class="content">
+      <div class="col justify-content-center text-center">
+        <div class="col-sm-12">
+          <center>
+            <img src="static/images/framework.png" style="width:90%">
+          </center>
+        </div>
+      </div>
+      <div class="content has-text-justified">
+        <br>
+        <p>
+          <strong>(a) PartCo framework:</strong> Introduces part-level correspondence labels as a plug-and-play
+          module to enhance GCD methods. <strong>(b) Part-level correspondence loss:</strong> This loss
+          encourages features of the same part type and class to be close while separating different parts and/or
+          classes, thereby enhancing the discriminative capability of the model at the part level.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Performance</h2>
+      <div class="content has-text-justified">
+        <br>
+        <p>
+         We integrate our PartCo framework with the widely used parametric model: SimGCD (ICCV'23) and
+         the SOTA non-parametric GCD method: SelEx (ECCV'24), employing DINO-variants backbones. Overall, PartCo
+         integration consistently boost GCD methods, yielding new SOTA results across diverse datasets.
+        </p>
+      </div>
+    <div class="content">
+      <div class="col justify-content-center text-center">
+        <div class="col-sm-12">
+          <center>
+            <img src="static/images/ssb.png" style="width:90%">
+          </center>
+        </div>
+        <div class="col-sm-12">
+          <center>
+            <img src="static/images/generic.png" style="width:90%">
+          </center>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Visualization</h2>
+      <div class="content has-text-justified">
+        <br>
+        <p>
+        Attention map visualizations from PartCo show that our method consistently focuses on discriminative object parts, 
+        across both seen and novel classes, highlighting regions essential for category discovery.
+        </p>
+      </div>
+    <div class="content">
+      <div class="col justify-content-center text-center">
+        <div class="col-sm-12">
+          <center>
+            <img src="static/images/cub_attn_map.jpg" style="width:75%">
+          </center>
+        </div>
+        <div class="col-sm-12">
+          <center>
+            <img src="static/images/scars_attn_map.jpg" style="width:75%">
+          </center>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-two-thirds">
+        <h2 class="title is-3 has-text-centered">Acknowledgments</h2>
+        <div style="background-color: #fffef0; border: 1px solid #ffffff00; border-radius: 5px; padding: 15px; margin-top: 10px;">
+          <p style="margin-bottom: 0; text-align: justify;">
+            This work is supported by the Hong Kong Research Grants Council - General Research Fund (Grant No.: 17211024).
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Add this script to handle the toggle functionality -->
+<script>
+  function toggleFrameworkDetails(e) {
+    e.preventDefault();
+    var details = document.getElementById('frameworkDetails');
+    if (details.style.display === 'none') {
+      details.style.display = 'block';
+    } else {
+      details.style.display = 'none';
+    }
+  }
+</script>
+
+<!-- Bibtex citation -->
+<section class="section" id="Bib">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+      <pre><code id="BibTeX">
+        @article{Cendra2025PartCo,
+          author    = {Fernando Julio Cendra and Kai Han},
+          title     = {PartCo: Part-Level Correspondence Priors Enhance Category Discovery},
+          journal   = {arXiv preprint arXiv:2509.22769},
+          year      = {2025}
+        }
+    </code><button class="copy-button" style="--button-hover-background: var(--example-color-alt); --button-color: var(--white); --button-background: var(--example-color-alt); --button-margin-bottom: 0;" class="copyButton btn" onclick="copyToClipboard('BibTeX','BibTeX_cop')"><i class="fa fa-copy"></i></button><p id="BibTeX_cop" style="display:none;color: #a0a0a0">Copied!</p></pre>
+  </div>
+</section>
+
+<section class="section" id="footer">
+  <div class="columns is-centered">
+    <div class="column is-8">
+      <div class="content">
+        <p>
+          <center>
+            This website is based on <a href="https://nerfies.github.io/">Nerfies</a>.
+          </center>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+</body>
+</html>
