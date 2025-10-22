@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="SEAL: Semantic-Aware Hierarchical Learning for Generalized Category Discovery">
+  <meta name="keywords" content="Generalized Category Discovery, Hierarchical Learning">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SEAL: Semantic-Aware Hierarchical Learning for Generalized Category Discovery</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/visailab.jpeg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script type="text/javascript" src="./static/js/copy.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">
+            <img src="./static/images/seal.png" alt="seal logo" style="height:1.2em; vertical-align:middle; margin-right:0.3em;">
+            SEAL: Semantic-Aware Hierarchical Learning for Generalized Category Discovery
+        </h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://zhenqi-he.github.io//">Zhenqi He</a><sup>*</sup>,</span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=GHTB15QAAAAJ&hl=zh-CN/">Yuanpei Liu</a><sup>*</sup>,</span>
+            <span class="author-block">
+              <a href="https://www.kaihan.org/">Kai Han</a><sup>†</sup>
+            </span>
+          </div>
+
+          <div class="is-size-6 publication-authors">
+            <span class="footnote"><sup>*</sup>Equal contribution <sup>†</sup>Corresponding author</span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">Visual AI Lab, The University of Hong Kong</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://arxiv.org/pdf/2510.18740"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://arxiv.org/pdf/2510.18740"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/Visual-AI/seal"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+
+              <!-- Citation Link. -->
+              <span class="link-block">
+                <a href="#Bib"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="far fa-images"></i>
+                  </span>
+                  <span>BibTex</span>
+                  </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!--<div class="col justify-content-center text-center">-->
+<!--  <div class="col-sm-12">-->
+<!--      <center>-->
+<!--      <img src="static/images/introduction.png" style="width:41%">-->
+<!--      </center>-->
+<!--  </div>-->
+<!--</div>-->
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <div class="col-sm-12">
+          <center>
+          <img src="static/images/introduction.png" style="width:100%">
+          </center>
+          </div>
+
+          <p>
+          Given a partially labelled dataset, Generalized Category Discovery (GCD) aims to categorize all unlabelled images, regardless of whether they belong to known or unknown classes.
+          Existing approaches typically depend on either single-level semantics or manually designed abstract hierarchies, which limit their generalizability and scalability.
+          </p>
+          <p>
+            To address these limitations, we introduce a <b>SE</b> hier<b>A</b>rchical <b>L</b>earning framework (<b><i>SEAL</i></b>), guided by naturally occurring and easily accessible hierarchical structures.  
+            Within SEAL, we propose a Hierarchical Semantic-Guided Soft Contrastive Learning approach that exploits hierarchical similarity to generate informative soft negatives, addressing the limitations of conventional contrastive losses that treat all negatives equally.
+            Furthermore, a Cross-Granularity Consistency (CGC) module is designed to align the predictions from different levels of granularity.
+          </p>
+          SEAL consistently achieves state-of-the-art performance on fine-grained benchmarks, including the SSB benchmark, Oxford-Pet, and the Herbarium19 dataset, and further demonstrates generalization on coarse-grained datasets.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+    <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Framework</h2>
+          <div class="col justify-content-center text-center">
+            <div class="col-sm-12">
+                <img src="static/images/method.png" style="width:100%">
+            </div>
+          </div>
+          <div class="content has-text-justified">
+            <br>
+            <p style="text-align: center;">
+            Overview of our proposed <b><i>SEAL</i></b> framework.
+            </p>
+            <p>
+            In contrast to prior GCD approaches that either rely solely on single-granularity information or depend on abstract hierarchies, we embed explicit semantic structure via three key elements: (1) a semantic-aware multi-task framework; (2) a cross-granularity consistency module to align predictions across levels; and (3) a hierarchical soft contrastive learning strategy to mitigate the ''equivalent negative'' assumption by weighting dissimilarity according to semantic proximity.
+            </p>
+          </div>
+<!--          <div class="col justify-content-center text-center">-->
+<!--            <div class="col-sm-12">-->
+<!--                <img src="static/images/patchmix.png" style="width:100%">-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="content has-text-justified">-->
+<!--            <br>-->
+<!--            <p>-->
+<!--              PatchMix augments the labelled and unlabelled data by mixing up these patches in the embedding space. We randomly sample from Beta distribution to control the proportion of patches from images. -->
+<!--              The confidence factor is determined by the overall proportion of known semantics in the mixed samples and the attention scores for all the patches of the input image, which is then assigned based on the similarity score or the actual label to guide the training.-->
+<!--            </p>-->
+<!--          </div>-->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Performance</h2>
+          <div class="col justify-content-center text-center">
+          </div>
+          <div class="content has-text-justified">
+            <p>
+              We present benchmark results of our method and compare it with state-of-the-art techniques in GCD  as well as three robust baselines derived from novel category discovery.
+              All methods are based on the DINO and DINOv2 pre-trained backbone. 
+              This comparative evaluation encompasses performance on the fine-grained SSB benchmark, and more results are presented in the paper.
+              Our method consistently achieves state-of-the-art performance on the SSB benchmark based on both DINO and DINOv2 pretrained backbones.
+            </p>
+            <div class="col justify-content-center text-center">
+                <div class="col-sm-12">
+                    <center>
+                    <img src="static/images/results.png" style="width:80%">
+                    </center>
+                </div>
+            </div>
+<!--            <p>-->
+<!--                The results on three corrupted fine-grained datasets are shown below.-->
+<!--            </p>-->
+<!--            <div class="col justify-content-center text-center">-->
+<!--                <div class="col-sm-12">-->
+<!--                    <center>-->
+<!--                    <img src="static/images/ssbc.png" style="width:95%">-->
+<!--                    </center>-->
+<!--                </div>-->
+<!--            </div>-->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Visualization</h2>
+          <div class="content has-text-justified">
+            <p>
+              We present a T-SNE visualization comparing the feature representations learned by the baseline and ours. For clarity, we randomly select 20 categories, including 10 from the Old set and 10 from the New set. 
+      As shown in the figure below, our method yields tighter, better-separated clusters, indicating stronger inter-class discrimination. The zoomed view further reveals that the model preserves coarse-to-fine semantics: visually diverse subcategories within the broader <i>Cab</i> group lie close together, yet each remains distinct. This confirms that our method captures hierarchical structure while retaining fine-grained separability.
+            </p>
+            <div class="col justify-content-center text-center">
+                <div class="col-sm-12">
+                    <center>
+                    <img src="static/images/tsne.png" style="width:100%">
+                    </center>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="Bib">
+    <div class="container is-max-desktop content">
+      <h2 class="title">BibTeX</h2>
+<pre><code id="BibTeX">@inproceedings{He2025SEAL,
+  author    = {Zhenqi He and Yuanpei Liu and Kai Han},
+  title     = {SEAL: Semantic-Aware Hierarchical Learning for Generalized Category Discovery},
+  booktitle = {Conference on Neural Information Processing Systems (NeurIPS),
+  year      = {2025},
+  }
+</code><button class="copy-button" style="--button-hover-background: var(--example-color-alt); --button-color: var(--white); --button-background: var(--example-color-alt); --button-margin-bottom: 0;" class="copyButton btn" onclick="copyToClipboard('BibTeX','BibTeX_cop')"><i class="fa fa-copy"></i></button><p id="BibTeX_cop" style="display:none;color: #a0a0a0">Copied!</p></pre>
+    </div>
+  </section>
+
+
+  <section class="section" id="footer">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+          <center>
+            This website is based on <a href="https://nerfies.github.io/">Nerfies</a>.
+          </center>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+ </section>
+
+
+</body>
+</html>
