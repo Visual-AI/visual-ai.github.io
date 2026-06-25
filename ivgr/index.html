@@ -2,433 +2,184 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="description"
-        content="iVGR: Internalizing Visually Grounded Reasoning for MLLMs with Reinforcement Learning">
-  <meta name="keywords" content="iVGR, Visually Grounded Reasoning, MLLM, Chain-of-Thought, Reinforcement Learning, ICML 2026">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>document.documentElement.classList.add('js');</script>
   <title>iVGR: Internalizing Visually Grounded Reasoning for MLLMs with Reinforcement Learning</title>
+  <meta name="description" content="iVGR (ICML 2026): a reinforcement-learning framework that internalizes visual localization into textual chain-of-thought via dual-stream training with a novel consistency reward, reaching state-of-the-art fine-grained VQA without explicit boxes at inference.">
+  <meta name="keywords" content="iVGR, Visually Grounded Reasoning, MLLM, Chain-of-Thought, Reinforcement Learning, GRPO, Consistency Reward, ICML 2026">
 
-  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
-        rel="stylesheet">
+  <!-- Open Graph / Twitter -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://visual-ai.github.io/ivgr/">
+  <meta property="og:title" content="iVGR: Internalizing Visually Grounded Reasoning for MLLMs with Reinforcement Learning">
+  <meta property="og:description" content="ICML 2026 · Internalize localization into textual reasoning via dual-stream RL with a consistency reward. SOTA fine-grained VQA without boxes at inference.">
+  <meta property="og:image" content="https://visual-ai.github.io/ivgr/static/images/teaser.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="iVGR: Internalizing Visually Grounded Reasoning for MLLMs with RL">
+  <meta name="twitter:description" content="ICML 2026 · Dual-stream RL with a consistency reward. SOTA fine-grained VQA without boxes at inference.">
+  <meta name="twitter:image" content="https://visual-ai.github.io/ivgr/static/images/teaser.png">
 
-  <link rel="stylesheet" href="./static/css/bulma.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
-  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
-  <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-  <link rel="stylesheet" href="./static/css/index.css">
   <link rel="icon" href="./static/images/visailab.jpeg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./static/css/style.css">
+  <link rel="stylesheet" href="./static/css/method-diagram.css">
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script defer src="./static/js/fontawesome.all.min.js"></script>
-  <script src="./static/js/bulma-carousel.min.js"></script>
-  <script type="text/javascript" src="./static/js/copy.js"></script>
-  <script src="./static/js/bulma-slider.min.js"></script>
-  <script src="./static/js/index.js"></script>
-
-  <style>
-    /* ----- iVGR custom styles ----- */
-    .venue-tag {
-      display: inline-block;
-      padding: 4px 14px;
-      margin-bottom: 18px;
-      border-radius: 999px;
-      background: linear-gradient(90deg, #2156c4 0%, #4f7be6 100%);
-      color: #fff;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      font-size: 0.9rem;
-    }
-    .ivgr-title {
-      font-family: 'Google Sans', 'Noto Sans', sans-serif;
-      line-height: 1.15;
-    }
-    .ivgr-title .brand {
-      font-weight: 800;
-      color: #2156c4;
-      letter-spacing: -0.5px;
-    }
-    .ivgr-title .hl {
-      color: #2156c4;
-      font-weight: 700;
-    }
-    .ivgr-logo {
-      display: inline-block;
-      width: 1.15em;
-      height: 1.15em;
-      vertical-align: -0.18em;
-      margin-right: 0.18em;
-    }
-    .author-row {
-      margin-bottom: 4px;
-    }
-    .author-row a { color: #2156c4; }
-    .author-row a:hover { text-decoration: underline; }
-    .affil-row { color: #555; font-size: 0.95rem; }
-
-    /* Buttons: align HuggingFace emoji and academicons nicely */
-    .publication-links .link-block { margin: 0 4px; }
-    .publication-links .icon.hf-icon {
-      font-size: 1.1rem;
-      line-height: 1;
-    }
-
-    /* Section headings */
-    section.section { padding-top: 2.5rem; padding-bottom: 2.5rem; }
-    h2.section-title {
-      font-size: 1.7rem;
-      font-weight: 700;
-      color: #1a1a1a;
-      text-align: center;
-      margin-bottom: 1.5rem;
-      letter-spacing: -0.2px;
-    }
-    h2.section-title::after {
-      content: "";
-      display: block;
-      width: 56px;
-      height: 3px;
-      background: #2156c4;
-      margin: 10px auto 0;
-      border-radius: 2px;
-    }
-
-    .caption {
-      color: #555;
-      font-size: 0.9rem;
-      text-align: center;
-      margin: 14px auto 0;
-      max-width: 760px;
-      line-height: 1.65;
-    }
-    .caption b { color: #1a1a1a; font-weight: 600; }
-    .caption em { font-style: italic; color: #3a3a3a; }
-
-    .lead {
-      color: #4a4a4a;
-      font-size: 0.98rem;
-      text-align: center;
-      margin: 0 auto 22px;
-      max-width: 780px;
-      line-height: 1.65;
-    }
-    .lead b { color: #1a1a1a; font-weight: 600; }
-
-    h3.subsection-title {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #1a1a1a;
-      text-align: center;
-      margin-top: 56px;
-      margin-bottom: 14px;
-      letter-spacing: -0.1px;
-    }
-
-    .body-text {
-      color: #2a2a2a;
-      font-size: 1rem;
-      line-height: 1.75;
-      text-align: left;
-    }
-    .body-text b { color: #1a1a1a; font-weight: 600; }
-    .body-text em { font-style: italic; color: #2a2a2a; }
-
-    .takeaway {
-      background: linear-gradient(135deg, #eef5ff 0%, #e0ecff 100%);
-      border-left: 6px solid #2156c4;
-      padding: 22px 28px;
-      margin: 2rem auto 0;
-      max-width: 820px;
-      border-radius: 0 14px 14px 0;
-      font-size: 1.08rem;
-      line-height: 1.7;
-      color: #1a1a1a;
-      box-shadow: 0 4px 18px rgba(33, 86, 196, 0.12);
-    }
-    .takeaway .takeaway-label {
-      display: inline-block;
-      background: #2156c4;
-      color: #fff;
-      font-size: 0.74rem;
-      font-weight: 800;
-      padding: 4px 12px;
-      border-radius: 999px;
-      letter-spacing: 0.14em;
-      margin-right: 12px;
-      vertical-align: 0.12em;
-      text-transform: uppercase;
-    }
-    .takeaway b { font-weight: 700; color: #1a3470; }
-
-    /* Tables */
-    .results-wrapper { overflow-x: auto; }
-    table.results-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.86rem;
-      font-family: 'Google Sans', 'Noto Sans', sans-serif;
-      margin: 0 auto;
-    }
-    table.results-table th,
-    table.results-table td {
-      padding: 8px 10px;
-      text-align: center;
-      border-bottom: 1px solid #e6e8ec;
-      white-space: nowrap;
-    }
-    table.results-table th {
-      background: #f4f6fa;
-      color: #1a1a1a;
-      font-weight: 700;
-      border-bottom: 2px solid #d4d8e0;
-    }
-    table.results-table tbody td:first-child,
-    table.results-table thead tr:first-child th:first-child {
-      text-align: left;
-      padding-left: 14px;
-    }
-    table.results-table tr.group-header td {
-      background: #fafbfd;
-      color: #555;
-      font-weight: 700;
-      text-align: left;
-      font-size: 0.82rem;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      padding-left: 14px;
-    }
-    table.results-table tr.ours td {
-      background: #eef5ff;
-      font-weight: 600;
-    }
-    table.results-table tr.delta td {
-      background: #f9fbff;
-      color: #2156c4;
-      font-size: 0.8rem;
-    }
-    table.results-table tr.delta td:first-child {
-      color: #555;
-      font-style: italic;
-    }
-    table.results-table .best { font-weight: 700; }
-    table.results-table .neg { color: #888; }
-    .col-tool { width: 50px; }
-
-    /* Figure rows */
-    .figure-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      justify-content: center;
-      margin-top: 14px;
-    }
-    .figure-row .fig-item {
-      flex: 1 1 360px;
-      max-width: 460px;
-      text-align: center;
-    }
-    .figure-row .fig-item img { width: 100%; height: auto; }
-    .figure-row .fig-item .sub-cap {
-      margin-top: 6px;
-      color: #555;
-      font-size: 0.88rem;
-      font-style: italic;
-    }
-
-    /* Containers */
-    .img-frame {
-      background: #fff;
-      padding: 8px;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
-    }
-
-    /* BibTeX */
-    pre.bibtex {
-      background: #f4f6fa;
-      color: #2a2a2a;
-      padding: 22px 26px;
-      border-radius: 10px;
-      border-left: 4px solid #2156c4;
-      font-size: 0.88rem;
-      font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
-      overflow-x: auto;
-      line-height: 1.65;
-      margin: 0 auto;
-      max-width: 820px;
-      box-shadow: 0 2px 12px rgba(33, 86, 196, 0.06);
-    }
-    pre.bibtex .bib-placeholder {
-      color: #888;
-      font-style: italic;
-      font-family: 'Google Sans', 'Noto Sans', sans-serif;
-      font-size: 0.95rem;
-      display: block;
-      text-align: center;
-    }
-
-    /* Footer */
-    footer.page-footer {
-      padding: 24px 0 40px;
-      text-align: center;
-      color: #888;
-      font-size: 0.85rem;
-    }
-    footer.page-footer a { color: #2156c4; }
-
-    @media (max-width: 768px) {
-      .ivgr-title { font-size: 1.45rem !important; }
-      table.results-table { font-size: 0.75rem; }
-      table.results-table th, table.results-table td { padding: 6px 6px; }
-    }
-  </style>
+  <script defer src="./static/js/main.js"></script>
+  <script defer src="./static/js/method-diagram.js"></script>
 </head>
 <body>
 
-<!-- ================= HEADER ================= -->
-<section class="hero">
-  <div class="hero-body">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered">
-        <div class="column has-text-centered">
-
-          <span class="venue-tag">ICML 2026</span>
-
-          <h1 class="title is-2 publication-title ivgr-title">
-            <svg class="ivgr-logo" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-              <!-- viewfinder corner brackets = explicit bounding box -->
-              <path d="M4 17V4H17" stroke="#2156c4" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M39 4H52V17" stroke="#2156c4" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M4 39V52H17" stroke="#2156c4" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M39 52H52V39" stroke="#2156c4" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
-              <!-- eye = internalized perception -->
-              <path d="M10 28 C 17 19, 39 19, 46 28 C 39 37, 17 37, 10 28 Z" stroke="#2156c4" stroke-width="2.8" stroke-linejoin="round"/>
-              <circle cx="28" cy="28" r="4.6" fill="#2156c4"/>
-            </svg><span class="brand">iVGR</span>: <span class="hl">I</span>nternalizing <span class="hl">V</span>isually <span class="hl">G</span>rounded <span class="hl">R</span>easoning<br>
-            for MLLMs with Reinforcement Learning
-          </h1>
-
-          <div class="is-size-5 publication-authors author-row" style="margin-top: 14px;">
-            <span class="author-block">
-              <a href="https://github.com/zhangchbin">Chang-Bin Zhang</a><sup>1</sup>,&nbsp;
-            </span>
-            <span class="author-block">
-              <a href="#">Yujie Zhong</a><sup>2</sup>,&nbsp;
-            </span>
-            <span class="author-block">
-              <a href="#">Qiang Zhang</a><sup>3</sup>,&nbsp;
-            </span>
-            <span class="author-block">
-              <a href="https://www.kaihan.org/">Kai Han</a><sup>1,&dagger;</sup>
-            </span>
-          </div>
-
-          <div class="is-size-6 publication-authors affil-row">
-            <span class="author-block"><sup>1</sup>Visual AI Lab, The University of Hong Kong</span>&nbsp;&nbsp;
-            <span class="author-block"><sup>2</sup>Independent Researcher</span>&nbsp;&nbsp;
-            <span class="author-block"><sup>3</sup>University of Science and Technology of China</span>
-          </div>
-          <div class="is-size-7 publication-authors affil-row" style="margin-top: 4px; font-size: 0.88rem; color: #777;">
-            <sup>&dagger;</sup>Corresponding author
-          </div>
-
-          <!-- Links -->
-          <div class="column has-text-centered" style="margin-top: 14px;">
-            <div class="publication-links">
-              <!-- arXiv -->
-              <span class="link-block">
-                <a href="#" class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon"><i class="ai ai-arxiv"></i></span>
-                  <span>arXiv</span>
-                </a>
-              </span>
-              <!-- HuggingFace -->
-              <span class="link-block">
-                <a href="#" class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon hf-icon">🤗</span>
-                  <span>Model</span>
-                </a>
-              </span>
-              <!-- Code -->
-              <span class="link-block">
-                <a href="#" class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon"><i class="fab fa-github"></i></span>
-                  <span>Code</span>
-                </a>
-              </span>
-              <!-- BibTeX -->
-              <span class="link-block">
-                <a href="#bibtex" class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon"><i class="fas fa-quote-right"></i></span>
-                  <span>BibTeX</span>
-                </a>
-              </span>
-            </div>
-          </div>
-
-        </div>
-      </div>
+<!-- ===================== NAV ===================== -->
+<nav class="nav">
+  <div class="nav__inner">
+    <a class="nav__brand" href="#top">iVGR</a>
+    <div class="nav__links" id="navlinks">
+      <a href="#abstract">Abstract</a>
+      <a href="#insight">Insight</a>
+      <a href="#method">Method</a>
+      <a href="#results">Results</a>
+      <a href="#ablation">Ablation</a>
+      <a href="#bibtex">BibTeX</a>
     </div>
+    <div class="nav__icons">
+      <a href="https://arxiv.org/abs/2605.31096" target="_blank" rel="noopener" aria-label="arXiv">
+        <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg>
+      </a>
+      <a href="https://github.com/Visual-AI/iVGR" target="_blank" rel="noopener" aria-label="Code on GitHub">
+        <svg viewBox="0 0 16 16" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+      </a>
+      <a href="https://huggingface.co/collections/allencbzhang/ivgr" target="_blank" rel="noopener" aria-label="Models on HuggingFace"><span class="emoji" style="font-size:1.2rem">🤗</span></a>
+    </div>
+    <button class="nav__burger" aria-label="Toggle menu" aria-expanded="false" aria-controls="navlinks">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ===================== HERO ===================== -->
+<header class="hero" id="top">
+  <span class="venue-tag">ICML 2026</span>
+  <h1 class="hero__title">
+    <span class="brand">iVGR</span>: Internalizing Visually Grounded Reasoning<br>for MLLMs with Reinforcement Learning
+  </h1>
+
+  <div class="hero__authors">
+    <a href="https://scholar.google.com/citations?user=3nFfqMIAAAAJ" target="_blank" rel="noopener">Chang-Bin Zhang</a><sup>1</sup>,
+    Yujie Zhong<sup>2</sup>,
+    Qiang Zhang<sup>3</sup>,
+    <a href="https://www.kaihan.org/" target="_blank" rel="noopener">Kai Han</a><sup>1,&dagger;</sup>
+  </div>
+  <div class="hero__affils">
+    <sup>1</sup>Visual AI Lab, The University of Hong Kong &nbsp;&middot;&nbsp;
+    <sup>2</sup>Independent Researcher &nbsp;&middot;&nbsp;
+    <sup>3</sup>University of Science and Technology of China
+  </div>
+  <div class="hero__note"><sup>&dagger;</sup>Corresponding author</div>
+
+  <div class="btn-row">
+    <a class="btn btn--brand" href="https://arxiv.org/abs/2605.31096" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg>
+      <span>arXiv</span>
+    </a>
+    <a class="btn btn--solid" href="https://github.com/Visual-AI/iVGR" target="_blank" rel="noopener">
+      <svg viewBox="0 0 16 16" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+      <span>Code</span>
+    </a>
+    <a class="btn btn--solid" href="https://huggingface.co/collections/allencbzhang/ivgr" target="_blank" rel="noopener">
+      <span class="emoji">🤗</span><span>Models</span>
+    </a>
+    <a class="btn btn--solid" href="https://huggingface.co/datasets/allencbzhang/iVGR-RL-51K" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg>
+      <span>Data</span>
+    </a>
+    <a class="btn btn--ghost" href="#bibtex">
+      <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M7.17 6A5.17 5.17 0 0 0 2 11.17V18h6.83v-6.83H5.5a3.67 3.67 0 0 1 3.67-3.67V6zm9 0A5.17 5.17 0 0 0 11 11.17V18h6.83v-6.83H14.5a3.67 3.67 0 0 1 3.67-3.67V6z"/></svg>
+      <span>BibTeX</span>
+    </a>
+  </div>
+</header>
+
+<main>
+
+<!-- ===================== TEASER ===================== -->
+<section class="section" style="padding-top: var(--s-7);">
+  <div class="container">
+    <figure class="mdgm" data-diagram="teaser" role="group" aria-roledescription="animated diagram"
+            aria-label="Three paradigms of visually grounded reasoning, three steps" tabindex="0" data-reveal>
+      <div class="mdgm__scroller">
+        <div class="mdgm__stage" data-step="1"></div>
+      </div>
+
+      <p class="mdgm__caption" aria-live="polite">
+        <span class="step-no">1/3</span>
+        <span class="cap-text">Paradigm 1 (crop tools): the model “thinks with images”, calling a tool to crop regions.</span>
+      </p>
+
+      <div class="mdgm__controls">
+        <button class="mdgm__btn" data-act="prev" aria-label="Previous paradigm">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 6 9 12 15 18"/></svg>
+        </button>
+        <button class="mdgm__btn" data-act="play" aria-label="Play animation" aria-pressed="false">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+        <button class="mdgm__btn" data-act="next" aria-label="Next paradigm">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
+        </button>
+        <ol class="mdgm__dots" role="tablist" aria-label="Paradigms">
+          <li><button role="tab" data-goto="1" aria-selected="true" aria-label="Paradigm 1"></button></li>
+          <li><button role="tab" data-goto="2" aria-selected="false" aria-label="Paradigm 2"></button></li>
+          <li><button role="tab" data-goto="3" aria-selected="false" aria-label="Paradigm 3"></button></li>
+        </ol>
+      </div>
+
+      <noscript>
+        <div class="figure figure--wide" style="margin-top: var(--s-5);">
+          <img src="./static/images/teaser.png" alt="Three paradigms of visually grounded reasoning.">
+        </div>
+      </noscript>
+    </figure>
+    <figcaption class="figcaption">
+      <b>Three paradigms of visually grounded reasoning.</b>
+      (a) grounded CoT with crop tools, (b) grounded CoT with explicit boxes, and
+      <b>(c) iVGR (ours)</b>, which aligns a grounded and a textual stream through a consistency reward and reasons in pure text at inference.
+    </figcaption>
   </div>
 </section>
 
-
-<!-- ================= TEASER ================= -->
-<section class="section" style="padding-top: 0;">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered">
-      <div class="column is-three-fifths">
-        <div class="img-frame">
-          <img src="static/images/teaser.png" alt="Paradigms of visually grounded reasoning" style="width:100%; display:block;">
-        </div>
-        <p class="caption">
-          <b>Paradigms of visually grounded reasoning.</b>
-        </p>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- ================= ABSTRACT ================= -->
-<section class="section" style="padding-top: 1rem;">
-  <div class="container is-max-desktop">
+<!-- ===================== ABSTRACT ===================== -->
+<section class="section section--alt" id="abstract">
+  <div class="container">
+    <span class="section-kicker">Abstract</span>
     <h2 class="section-title">Abstract</h2>
-    <div class="columns is-centered">
-      <div class="column is-four-fifths">
-        <p class="body-text">
-          Visually grounded chain-of-thought has emerged as a promising paradigm to enhance fine-grained perception in MLLMs.
-          However, we empirically find that mandating explicit object boxes during inference often <em>degrades</em> performance compared to standard textual CoT.
-          We hypothesize that visual localization capability can be <em>internalized</em> into the textual CoT, and that mandatory explicit grounding introduces unnecessary task interference.
-          We propose <b>iVGR</b>, a reinforcement learning framework that transfers localization capability into the textual reasoning process through a dual-stream training strategy: a textual stream is aligned with a high-quality grounded stream via a novel <b>consistency reward</b>.
-          Extensive experiments show iVGR significantly outperforms existing baselines on fine-grained benchmarks, while remaining compatible with tool-assisted inference workflows.
-        </p>
-      </div>
-    </div>
+    <p class="body-text" style="max-width: 820px; margin: 0 auto; text-align: justify;">
+      Visually grounded chain-of-thought has emerged as a promising paradigm to enhance fine-grained perception in MLLMs.
+      However, we empirically find that mandating explicit object boxes during inference often <em>degrades</em> performance compared to standard textual CoT.
+      We hypothesize that visual localization capability can be <em>internalized</em> into the textual CoT, and that mandatory explicit grounding introduces unnecessary task interference.
+      We propose <b>iVGR</b>, a reinforcement learning framework that transfers localization capability into the textual reasoning process through a dual-stream training strategy: a textual stream is aligned with a high-quality grounded stream via a novel <b>consistency reward</b>.
+      Extensive experiments show iVGR significantly outperforms existing baselines on fine-grained benchmarks, while remaining compatible with tool-assisted inference workflows.
+    </p>
   </div>
 </section>
 
+<!-- ===================== KEY INSIGHT ===================== -->
+<section class="section" id="insight">
+  <div class="container">
+    <span class="section-kicker">Key Insight</span>
+    <h2 class="section-title">Textual CoT can outperform Grounded CoT</h2>
 
-<!-- ================= KEY INSIGHT ================= -->
-<section class="section" style="background: #fafbfd;">
-  <div class="container is-max-desktop">
-    <h2 class="section-title">Key Insight: Textual CoT can outperform Grounded CoT</h2>
-
-    <div class="takeaway" style="margin-top: 0; margin-bottom: 2rem;">
-      <span class="takeaway-label">Takeaway</span>Explicit grounding at inference is not necessary, and can even hurt. iVGR is designed to internalize this localization capability into textual reasoning.
+    <div class="takeaway takeaway--insight" data-reveal>
+      <span class="takeaway__label">Takeaway</span>
+      <span>Explicit grounding at inference is <b>not necessary</b>, and can even hurt. iVGR is designed to <b>internalize</b> this localization capability into textual reasoning.</span>
     </div>
 
     <p class="lead">
-      Off-the-shelf models trained with visually grounded CoT (DeepEyes, TreeVGR) actually perform better when we simply switch to textual CoT at inference time, without any retraining.
+      Off-the-shelf models trained with visually grounded CoT (DeepEyes, TreeVGR) actually perform <b>better</b> when we simply switch to textual CoT at inference, <b>without any retraining</b>.
     </p>
 
-    <p class="caption" style="margin-bottom: 12px;">
-      <b>T</b>&nbsp;= textual CoT &nbsp;&nbsp;&middot;&nbsp;&nbsp; <b>G</b>&nbsp;= visually grounded CoT.
-    </p>
-
-    <div class="results-wrapper">
-      <table class="results-table">
+    <div class="rtable-scroll" data-reveal>
+      <table class="rtable">
         <thead>
           <tr>
             <th rowspan="2" style="vertical-align: middle;">Benchmarks</th>
@@ -436,26 +187,19 @@
             <th colspan="2">DeepEyes-7B</th>
             <th colspan="2">TreeVGR-7B</th>
           </tr>
-          <tr>
-            <th>T</th>
-            <th>G</th><th>T</th>
-            <th>G</th><th>T</th>
-          </tr>
+          <tr><th>Textual CoT</th><th>Grounded CoT</th><th>Textual CoT</th><th>Grounded CoT</th><th>Textual CoT</th></tr>
         </thead>
         <tbody>
-          <tr><td>V*</td><td>78.5</td><td><b>82.7</b></td><td>81.7</td><td>83.8</td><td><b>84.3</b></td></tr>
-          <tr><td>HRBench4K</td><td>69.0</td><td><b>75.1</b></td><td>74.9</td><td><b>77.1</b></td><td>76.9</td></tr>
-          <tr><td>HRBench8K</td><td>65.1</td><td>72.6</td><td><b>73.1</b></td><td>73.1</td><td><b>74.7</b></td></tr>
-          <tr><td>MME-RealWorld-Lite</td><td>44.5</td><td>53.2</td><td><b>53.5</b></td><td><b>54.9</b></td><td>54.7</td></tr>
-          <tr><td>POPE</td><td>86.3</td><td>87.7</td><td><b>89.2</b></td><td>87.3</td><td><b>88.4</b></td></tr>
-          <tr><td>RealWorldQA</td><td>68.1</td><td>69.4</td><td><b>69.7</b></td><td>67.3</td><td><b>69.5</b></td></tr>
-          <tr><td>CV-Bench-2D</td><td>75.7</td><td>75.0</td><td><b>77.9</b></td><td>76.6</td><td><b>77.7</b></td></tr>
-          <tr><td>CV-Bench-3D</td><td>73.6</td><td>77.3</td><td><b>80.8</b></td><td>77.2</td><td><b>79.3</b></td></tr>
-          <tr class="ours">
-            <td><b>Avg.</b></td>
-            <td>70.1</td>
-            <td>74.1</td><td><b>75.1</b></td>
-            <td>74.7</td><td><b>75.7</b></td>
+          <tr><td>V*</td><td>78.5</td><td>82.7</td><td>81.7</td><td>83.8</td><td class="is-best">84.3</td></tr>
+          <tr><td>HRBench4K</td><td>69.0</td><td>75.1</td><td>74.9</td><td>77.1</td><td>76.9</td></tr>
+          <tr><td>HRBench8K</td><td>65.1</td><td>72.6</td><td class="is-best">73.1</td><td>73.1</td><td class="is-best">74.7</td></tr>
+          <tr><td>MME-RealWorld-Lite</td><td>44.5</td><td>53.2</td><td class="is-best">53.5</td><td>54.9</td><td>54.7</td></tr>
+          <tr><td>POPE</td><td>86.3</td><td>87.7</td><td class="is-best">89.2</td><td>87.3</td><td class="is-best">88.4</td></tr>
+          <tr><td>RealWorldQA</td><td>68.1</td><td>69.4</td><td class="is-best">69.7</td><td>67.3</td><td class="is-best">69.5</td></tr>
+          <tr><td>CV-Bench-2D</td><td>75.7</td><td>75.0</td><td class="is-best">77.9</td><td>76.6</td><td class="is-best">77.7</td></tr>
+          <tr><td>CV-Bench-3D</td><td>73.6</td><td>77.3</td><td class="is-best">80.8</td><td>77.2</td><td class="is-best">79.3</td></tr>
+          <tr class="rtable__ours">
+            <td><b>Avg.</b></td><td>70.1</td><td>74.1</td><td class="is-best">75.1</td><td>74.7</td><td class="is-best">75.7</td>
           </tr>
         </tbody>
       </table>
@@ -463,65 +207,139 @@
   </div>
 </section>
 
+<!-- ===================== WHY GROUNDED FAILS (IoU) ===================== -->
+<section class="section section--alt" id="why-fail">
+  <div class="container">
+    <span class="section-kicker">Why?</span>
+    <h2 class="section-title">When does grounding actually help?</h2>
+    <p class="lead">
+      We bucket questions by the <b>IoU</b> of the model's grounded region (HRBench8K) and compare answering with explicit grounding / crops against plain textual CoT.
+    </p>
 
-<!-- ================= METHOD ================= -->
-<section class="section">
-  <div class="container is-max-desktop">
-    <h2 class="section-title">Method: Dual-Stream Training with Consistency Reward</h2>
-
-    <div class="img-frame">
-      <img src="static/images/method.png" alt="iVGR method overview" style="width:100%; display:block;">
+    <div class="fig-grid" data-reveal>
+      <div>
+        <figure class="figure"><img src="./static/images/iouacc_deepeyes.png" alt="Accuracy vs. IoU interval for DeepEyes: tool crops vs. textual CoT."></figure>
+        <p class="sub-cap"><b>DeepEyes (crop tool).</b> Textual CoT matches or beats tool-based cropping at low IoU; crops only pull ahead when they are accurate; bad crops inject noise.</p>
+      </div>
+      <div>
+        <figure class="figure"><img src="./static/images/iouacc_treevgr.png" alt="Accuracy vs. IoU interval for TreeVGR: grounded CoT vs. textual CoT."></figure>
+        <p class="sub-cap"><b>TreeVGR (explicit boxes).</b> Textual CoT is on par or better than grounded CoT across <em>every</em> IoU interval.</p>
+      </div>
     </div>
 
-    <p class="caption" style="max-width: 100%;">
+    <div class="takeaway takeaway--insight" style="margin-top: var(--s-7);" data-reveal>
+      <span class="takeaway__label">Insight</span>
+      <span>Forcing explicit localization at inference helps only when it is <b>highly accurate</b>, and often interferes with answering. Better to <b>internalize localization during training</b> and reason in pure text at inference.</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== METHOD (animated) ===================== -->
+<section class="section" id="method">
+  <div class="container container--wide">
+    <span class="section-kicker">Method</span>
+    <h2 class="section-title">Dual-Stream RL with a Consistency Reward</h2>
+    <p class="lead">
+      For each query, the policy MLLM rolls out a <b>grounded stream</b> (explicit boxes) and a <b>textual stream</b> (plain reasoning). A <b>consistency reward</b>, scored by an LLM judge against the best grounded rollout in a rollout archive, transfers localization into the textual stream, so no coordinates are needed at inference.
+    </p>
+
+    <figure class="mdgm" role="group" aria-roledescription="animated diagram"
+            aria-label="iVGR dual-stream reinforcement-learning pipeline, six build steps" tabindex="0" data-reveal>
+      <div class="mdgm__scroller">
+        <div class="mdgm__stage" data-step="1"></div>
+      </div>
+
+      <p class="mdgm__caption" aria-live="polite">
+        <span class="step-no">1/6</span>
+        <span class="cap-text">Each query is rolled out by the policy MLLM under both prompts.</span>
+      </p>
+
+      <div class="mdgm__controls">
+        <button class="mdgm__btn" data-act="prev" aria-label="Previous step">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 6 9 12 15 18"/></svg>
+        </button>
+        <button class="mdgm__btn" data-act="play" aria-label="Play animation" aria-pressed="false">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+        <button class="mdgm__btn" data-act="next" aria-label="Next step">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
+        </button>
+        <ol class="mdgm__dots" role="tablist" aria-label="Method steps">
+          <li><button role="tab" data-goto="1" aria-selected="true" aria-label="Step 1"></button></li>
+          <li><button role="tab" data-goto="2" aria-selected="false" aria-label="Step 2"></button></li>
+          <li><button role="tab" data-goto="3" aria-selected="false" aria-label="Step 3"></button></li>
+          <li><button role="tab" data-goto="4" aria-selected="false" aria-label="Step 4"></button></li>
+          <li><button role="tab" data-goto="5" aria-selected="false" aria-label="Step 5"></button></li>
+          <li><button role="tab" data-goto="6" aria-selected="false" aria-label="Step 6"></button></li>
+        </ol>
+      </div>
+
+      <noscript>
+        <div class="figure figure--wide" style="margin-top: var(--s-5);">
+          <img src="./static/images/method.png" alt="iVGR dual-stream RL method diagram.">
+        </div>
+      </noscript>
+    </figure>
+
+    <figcaption class="figcaption" style="max-width: 980px;">
       <b>Dual-stream training.</b>
-      For each query, the policy MLLM samples a grounded stream (explicit boxes, rewarded by format / accuracy / IoU) and a textual stream (plain reasoning, rewarded by format / accuracy / consistency). The consistency reward is computed by an LLM judge against the best grounded rollout in a Rollout Archive, transferring localization from the grounded stream into the textual stream without exposing coordinates at inference.
-    </p>
+      The grounded stream is rewarded by format / accuracy / box-IoU; the textual stream by format / accuracy / <b>consistency</b>.
+      The consistency reward is computed by an LLM judge (Qwen2.5-72B) against the best grounded rollout archived per query, transferring localization from the grounded stream into the textual stream without exposing coordinates at inference.
+    </figcaption>
   </div>
 </section>
 
+<!-- ===================== TRAINING DATA ===================== -->
+<section class="section section--alt" id="data">
+  <div class="container">
+    <span class="section-kicker">Training</span>
+    <h2 class="section-title">Cold-Start, then Reinforcement Learning</h2>
+    <p class="lead">A two-stage recipe: cold-start SFT to seed both answer formats, then GRPO over grounding-rich and general-reasoning data.</p>
 
-<!-- ================= QUALITATIVE RESULTS ================= -->
-<section class="section" style="background: #fafbfd;">
-  <div class="container is-max-desktop">
-    <h2 class="section-title">Qualitative Results</h2>
+    <div class="dataflow" data-reveal>
+      <div class="stage card">
+        <div class="stage__head">Cold-start (SFT) <span class="count">35K</span></div>
+        <p class="body-text" style="font-size: 0.95rem;">Seeds both the grounded and textual answer formats before RL.</p>
+        <div>
+          <span class="chip"><span class="chip__n">32K</span> grounded CoT &middot; box annotations</span>
+          <span class="chip"><span class="chip__n">3K</span> textual CoT &middot; Qwen2.5-VL-72B</span>
+        </div>
+      </div>
 
-    <div class="takeaway" style="margin-top: 0; margin-bottom: 2rem;">
-      <span class="takeaway-label">Takeaway</span>Grounded CoT suffers from two failure modes: <b>(a)</b> localization errors that lead to incorrect answers, and <b>(b)</b> accurate localization paired with recognition failures.
+      <div class="arrow" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="20" y2="12"/><polyline points="13 5 20 12 13 19"/></svg>
+      </div>
+
+      <div class="stage card">
+        <div class="stage__head">GRPO RL <span class="count count--green">51K</span></div>
+        <p class="body-text" style="font-size: 0.95rem; margin-bottom: var(--s-3);"><b>37K with target boxes</b> from TreeVGR, for grounding:</p>
+        <div>
+          <span class="chip chip--green"><span class="chip__n">32K</span> V* &middot; high-res scenes</span>
+          <span class="chip chip--green"><span class="chip__n">5K</span> VisDrone &middot; small objects</span>
+        </div>
+        <p class="body-text" style="font-size: 0.95rem; margin: var(--s-4) 0 var(--s-3);"><b>14K general reasoning</b>:</p>
+        <div>
+          <span class="chip"><span class="chip__n">12K</span> OpenMMReasoner</span>
+          <span class="chip"><span class="chip__n">2K</span> ArxivQA</span>
+        </div>
+      </div>
     </div>
-
-    <!-- vis_2cots -->
-    <div class="img-frame">
-      <img src="static/images/vis_2cots.png" alt="Grounded CoT vs Textual CoT in iVGR" style="width:100%; display:block;">
-    </div>
-    <p class="caption">
-      <b>Grounded CoT vs. textual CoT within iVGR.</b>
-      Left: the grounded CoT misses objects and undercounts, while the textual CoT enumerates correctly. Right: the grounded CoT localizes well but misreads the label, while the textual CoT, freed from emitting coordinates, correctly recognizes the hazard numbers.
-    </p>
-
-    <!-- vis_consistency -->
-    <div class="img-frame" style="margin-top: 36px;">
-      <img src="static/images/vis_consistency.png" alt="With vs. without consistency reward" style="width:100%; display:block;">
-    </div>
-    <p class="caption">
-      <b>Effect of the consistency reward.</b>
-      Without it, the textual stream mis-localizes the trailer and reports the wrong color. iVGR attends to the correct region and recovers the right answer.
-    </p>
   </div>
 </section>
 
+<!-- ===================== MAIN RESULTS ===================== -->
+<section class="section" id="results">
+  <div class="container container--wide">
+    <span class="section-kicker">Results</span>
+    <h2 class="section-title">State of the Art Without Boxes at Inference</h2>
 
-<!-- ================= MAIN RESULTS ================= -->
-<section class="section">
-  <div class="container is-max-desktop">
-    <h2 class="section-title">Main Results</h2>
-
-    <div class="takeaway" style="margin-top: 0; margin-bottom: 2rem;">
-      <span class="takeaway-label">Takeaway</span><b>(a)</b> State-of-the-art performance on fine-grained and general VQA benchmarks. <b>(b)</b> Compatible with crop tools; test-time scaling further boosts performance on fine-grained benchmarks.
+    <div class="takeaway" data-reveal>
+      <span class="takeaway__label">Takeaway</span>
+      <span><b>(a)</b> State-of-the-art on fine-grained and general VQA. <b>(b)</b> Still compatible with crop tools; test-time scaling further boosts fine-grained accuracy.</span>
     </div>
 
-    <div class="results-wrapper">
-      <table class="results-table">
+    <div class="rtable-scroll" data-reveal>
+      <table class="rtable">
         <thead>
           <tr>
             <th rowspan="2" style="vertical-align: middle;">Model</th>
@@ -536,11 +354,11 @@
           </tr>
         </thead>
         <tbody>
-          <tr class="group-header"><td colspan="11">Proprietary Models</td></tr>
+          <tr class="rtable__group"><td colspan="11">Proprietary Models</td></tr>
           <tr><td>Gemini-3.1-Pro-Preview</td><td>&mdash;</td><td>87.4</td><td>88.9</td><td>88.1</td><td>55.8</td><td>88.0</td><td>83.5</td><td>85.0</td><td>94.6</td><td>83.9</td></tr>
           <tr><td>GPT-5.4</td><td>&mdash;</td><td>88.0</td><td>87.4</td><td>80.6</td><td>63.4</td><td>87.9</td><td>83.0</td><td>82.4</td><td>91.9</td><td>83.1</td></tr>
 
-          <tr class="group-header"><td colspan="11">Open-source General Models</td></tr>
+          <tr class="rtable__group"><td colspan="11">Open-source General Models</td></tr>
           <tr><td>LLaVA-OneVision-7B</td><td>&#10007;</td><td>72.8</td><td>64.6</td><td>57.9</td><td>48.2</td><td>88.3</td><td>69.5</td><td>72.9</td><td>76.9</td><td>68.9</td></tr>
           <tr><td>InternVL3-8B</td><td>&#10007;</td><td>70.2</td><td>70.0</td><td>69.3</td><td>48.6</td><td>90.3</td><td>71.0</td><td>80.6</td><td>86.1</td><td>73.3</td></tr>
           <tr><td>Qwen2.5-VL-7B</td><td>&#10007;</td><td>78.5</td><td>69.0</td><td>65.1</td><td>44.5</td><td>86.3</td><td>68.1</td><td>75.7</td><td>73.6</td><td>70.1</td></tr>
@@ -550,7 +368,7 @@
           <tr><td>Qwen3-VL-8B</td><td>&#10007;</td><td>82.7</td><td>76.5</td><td>70.4</td><td>49.0</td><td>88.1</td><td>70.5</td><td>78.6</td><td>93.5</td><td>76.2</td></tr>
           <tr><td>Qwen3-VL-32B</td><td>&#10007;</td><td>83.8</td><td>80.0</td><td>78.1</td><td>52.1</td><td>89.4</td><td>79.3</td><td>81.2</td><td>92.8</td><td>79.6</td></tr>
 
-          <tr class="group-header"><td colspan="11">Visually Grounded Reasoning Models</td></tr>
+          <tr class="rtable__group"><td colspan="11">Visually Grounded Reasoning Models</td></tr>
           <tr><td>GRIT-3B</td><td>&#10007;</td><td>54.5</td><td>48.4</td><td>43.5</td><td>33.8</td><td>80.8</td><td>58.0</td><td>72.5</td><td>68.2</td><td>57.5</td></tr>
           <tr><td>Pixel-Reasoner-7B</td><td>&#10003;</td><td>&mdash;</td><td>72.9</td><td>66.9</td><td>49.7</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td></tr>
           <tr><td>DeepEyes-7B</td><td>&#10003;</td><td>82.7</td><td>75.1</td><td>72.6</td><td>53.2</td><td>87.7</td><td>69.4</td><td>75.0</td><td>77.3</td><td>74.1</td></tr>
@@ -558,51 +376,39 @@
           <tr><td>Mini-o3-7B</td><td>&#10003;</td><td>&mdash;</td><td>77.5</td><td>73.3</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td></tr>
           <tr><td>Thyme-7B</td><td>&#10003;</td><td>82.2</td><td>77.0</td><td>72.0</td><td>55.2</td><td>86.8</td><td><b>70.2</b></td><td>78.0</td><td>75.1</td><td>74.6</td></tr>
           <tr><td>TreeVGR-7B</td><td>&#10007;</td><td>83.8</td><td>77.1</td><td>73.1</td><td>54.9</td><td>87.3</td><td>67.3</td><td>76.6</td><td>77.2</td><td>74.7</td></tr>
-          <tr class="ours">
+          <tr class="rtable__ours">
             <td><b>iVGR-Qwen2.5-VL-7B (ours)</b></td><td>&#10007;</td>
-            <td class="best">86.4</td><td class="best">78.3</td><td class="best">75.5</td>
-            <td class="best">55.6</td><td class="best">88.9</td><td>68.6</td>
-            <td class="best">78.4</td><td class="best">81.1</td><td class="best">76.6</td>
+            <td class="is-best">86.4</td><td class="is-best">78.3</td><td class="is-best">75.5</td>
+            <td class="is-best">55.6</td><td class="is-best">88.9</td><td>68.6</td>
+            <td class="is-best">78.4</td><td class="is-best">81.1</td><td class="is-best">76.6</td>
           </tr>
-          <tr class="delta">
-            <td>Δ vs. Qwen2.5-VL-7B</td><td></td>
-            <td>+7.9</td><td>+9.3</td><td>+10.4</td>
-            <td>+11.1</td><td>+2.6</td><td>+0.5</td>
-            <td>+2.7</td><td>+7.5</td><td>+6.5</td>
+          <tr class="rtable__delta">
+            <td>&Delta; vs. Qwen2.5-VL-7B</td><td></td>
+            <td>+7.9</td><td>+9.3</td><td>+10.4</td><td>+11.1</td><td>+2.6</td><td>+0.5</td><td>+2.7</td><td>+7.5</td><td>+6.5</td>
           </tr>
-          <tr class="ours">
+          <tr class="rtable__ours">
             <td><b>iVGR-Qwen3-VL-8B (ours)</b></td><td>&#10007;</td>
-            <td>90.1</td><td>82.0</td><td>80.1</td>
-            <td>60.7</td><td>89.4</td><td>71.0</td>
-            <td>80.8</td><td>91.0</td><td><b>80.6</b></td>
+            <td>90.1</td><td>82.0</td><td>80.1</td><td>60.7</td><td>89.4</td><td>71.0</td><td>80.8</td><td>91.0</td><td><b>80.6</b></td>
           </tr>
-          <tr class="delta">
-            <td>Δ vs. Qwen3-VL-8B</td><td></td>
-            <td>+7.4</td><td>+5.5</td><td>+9.7</td>
-            <td>+11.7</td><td>+1.3</td><td>+0.5</td>
-            <td>+2.2</td><td class="neg">-2.5</td><td>+4.4</td>
+          <tr class="rtable__delta">
+            <td>&Delta; vs. Qwen3-VL-8B</td><td></td>
+            <td>+7.4</td><td>+5.5</td><td>+9.7</td><td>+11.7</td><td>+1.3</td><td>+0.5</td><td>+2.2</td><td class="is-neg">-2.5</td><td>+4.4</td>
           </tr>
-          <tr class="ours">
+          <tr class="rtable__ours">
             <td><b>iVGR-Qwen3-VL-32B (ours)</b></td><td>&#10007;</td>
-            <td>93.2</td><td>82.9</td><td>82.9</td>
-            <td>61.2</td><td>88.8</td><td>76.3</td>
-            <td>83.9</td><td>93.8</td><td><b>82.9</b></td>
+            <td>93.2</td><td>82.9</td><td>82.9</td><td>61.2</td><td>88.8</td><td>76.3</td><td>83.9</td><td>93.8</td><td><b>82.9</b></td>
           </tr>
-          <tr class="delta">
-            <td>Δ vs. Qwen3-VL-32B</td><td></td>
-            <td>+9.4</td><td>+2.9</td><td>+4.8</td>
-            <td>+9.1</td><td class="neg">-0.6</td><td class="neg">-3.0</td>
-            <td>+2.7</td><td>+1.0</td><td>+3.3</td>
+          <tr class="rtable__delta">
+            <td>&Delta; vs. Qwen3-VL-32B</td><td></td>
+            <td>+9.4</td><td>+2.9</td><td>+4.8</td><td>+9.1</td><td class="is-neg">-0.6</td><td class="is-neg">-3.0</td><td>+2.7</td><td>+1.0</td><td>+3.3</td>
           </tr>
         </tbody>
       </table>
     </div>
 
-
-    <!-- Chart understanding + multidisciplinary reasoning -->
-    <h3 class="subsection-title">Chart Understanding &amp; Multidisciplinary Reasoning</h3>
-    <div class="results-wrapper">
-      <table class="results-table">
+    <h3 class="subsection-title" style="text-align:center; margin-top: var(--s-8);">Chart Understanding &amp; Multidisciplinary Reasoning</h3>
+    <div class="rtable-scroll" data-reveal>
+      <table class="rtable" style="max-width: 920px;">
         <thead>
           <tr>
             <th rowspan="2" style="vertical-align: middle;">Model</th>
@@ -610,63 +416,137 @@
             <th colspan="4">Multidisciplinary Reasoning</th>
             <th rowspan="2" style="vertical-align: middle;"><b>Avg.</b></th>
           </tr>
-          <tr>
-            <th>ChartQA</th><th>AI2D</th>
-            <th>WeMath</th><th>MMStar</th><th>MMMU</th><th>MMK12</th>
-          </tr>
+          <tr><th>ChartQA</th><th>AI2D</th><th>WeMath</th><th>MMStar</th><th>MMMU</th><th>MMK12</th></tr>
         </thead>
         <tbody>
           <tr><td>Qwen2.5-VL-7B</td><td>86.4</td><td>83.6</td><td>35.3</td><td>63.9</td><td>54.4</td><td>53.6</td><td>62.9</td></tr>
-          <tr class="ours"><td><b>iVGR-Qwen2.5-VL-7B</b></td><td>88.5</td><td>85.0</td><td>41.1</td><td>66.3</td><td>55.2</td><td>56.3</td><td><b>65.4</b> <span style="color:#2156c4">(+2.5)</span></td></tr>
+          <tr class="rtable__ours"><td><b>iVGR-Qwen2.5-VL-7B</b></td><td>88.5</td><td>85.0</td><td>41.1</td><td>66.3</td><td>55.2</td><td>56.3</td><td><b>65.4</b> <span style="color:var(--brand-500)">(+2.5)</span></td></tr>
           <tr><td>Qwen3-VL-8B</td><td>83.2</td><td>80.4</td><td>49.7</td><td>67.9</td><td>58.0</td><td>60.4</td><td>66.6</td></tr>
-          <tr class="ours"><td><b>iVGR-Qwen3-VL-8B</b></td><td>87.6</td><td>85.5</td><td>55.1</td><td>69.7</td><td>59.8</td><td>61.6</td><td><b>69.9</b> <span style="color:#2156c4">(+3.3)</span></td></tr>
+          <tr class="rtable__ours"><td><b>iVGR-Qwen3-VL-8B</b></td><td>87.6</td><td>85.5</td><td>55.1</td><td>69.7</td><td>59.8</td><td>61.6</td><td><b>69.9</b> <span style="color:var(--brand-500)">(+3.3)</span></td></tr>
           <tr><td>Qwen3-VL-32B</td><td>85.0</td><td>84.5</td><td>60.0</td><td>72.3</td><td>67.7</td><td>73.9</td><td>73.9</td></tr>
-          <tr class="ours"><td><b>iVGR-Qwen3-VL-32B</b></td><td>90.4</td><td>88.7</td><td>61.6</td><td>75.1</td><td>67.7</td><td>75.2</td><td><b>76.5</b> <span style="color:#2156c4">(+2.6)</span></td></tr>
+          <tr class="rtable__ours"><td><b>iVGR-Qwen3-VL-32B</b></td><td>90.4</td><td>88.7</td><td>61.6</td><td>75.1</td><td>67.7</td><td>75.2</td><td><b>76.5</b> <span style="color:var(--brand-500)">(+2.6)</span></td></tr>
         </tbody>
       </table>
     </div>
 
-
-    <!-- Tool-assisted scaling -->
-    <h3 class="subsection-title">Tool-Assisted Test-Time Scaling</h3>
-
-    <div class="results-wrapper">
-      <table class="results-table" style="max-width: 720px;">
+    <h3 class="subsection-title" style="text-align:center; margin-top: var(--s-8);">Tool-Assisted Test-Time Scaling</h3>
+    <p class="caption" style="margin-bottom: var(--s-4);">Generate a grounded CoT once, crop each predicted box plus a union crop, then answer with textual CoT.</p>
+    <div class="rtable-scroll" data-reveal>
+      <table class="rtable" style="max-width: 720px;">
         <thead>
           <tr><th>Model</th><th>V*</th><th>HR4K</th><th>HR8K</th><th><b>Avg.</b></th></tr>
         </thead>
         <tbody>
           <tr><td>Qwen2.5-VL-7B</td><td>78.5</td><td>69.0</td><td>65.1</td><td>70.9</td></tr>
           <tr><td>iVGR-7B</td><td>86.4</td><td>78.3</td><td>75.5</td><td>80.1</td></tr>
-          <tr><td>iVGR-7B + crops</td><td>89.0</td><td>79.4</td><td><b>76.3</b></td><td>81.6</td></tr>
+          <tr><td>iVGR-7B + crops</td><td>89.0</td><td>79.4</td><td class="is-best">76.3</td><td>81.6</td></tr>
           <tr><td>iVGR-7B + union crop</td><td>89.0</td><td>79.9</td><td>75.8</td><td>81.6</td></tr>
-          <tr class="ours"><td><b>iVGR-7B + crops + union crop</b></td><td><b>90.1</b></td><td><b>81.8</b></td><td><b>76.3</b></td><td><b>82.7</b></td></tr>
+          <tr class="rtable__ours"><td><b>iVGR-7B + crops + union</b></td><td class="is-best">90.1</td><td class="is-best">81.8</td><td class="is-best">76.3</td><td class="is-best">82.7</td></tr>
           <tr><td>Qwen3-VL-8B</td><td>82.7</td><td>76.5</td><td>70.4</td><td>76.5</td></tr>
           <tr><td>Qwen3-VL-8B + tool</td><td>90.1</td><td>82.3</td><td>78.0</td><td>83.5</td></tr>
-          <tr><td>iVGR-8B</td><td>90.1</td><td>82.0</td><td><b>80.1</b></td><td>84.1</td></tr>
+          <tr><td>iVGR-8B</td><td>90.1</td><td>82.0</td><td class="is-best">80.1</td><td>84.1</td></tr>
           <tr><td>iVGR-8B + crops</td><td>89.5</td><td>83.5</td><td>78.0</td><td>83.7</td></tr>
-          <tr><td>iVGR-8B + union crop</td><td>92.7</td><td><b>84.5</b></td><td>78.8</td><td>85.3</td></tr>
-          <tr class="ours"><td><b>iVGR-8B + crops + union crop</b></td><td><b>93.2</b></td><td>84.3</td><td>79.3</td><td><b>85.6</b></td></tr>
+          <tr><td>iVGR-8B + union crop</td><td>92.7</td><td class="is-best">84.5</td><td>78.8</td><td>85.3</td></tr>
+          <tr class="rtable__ours"><td><b>iVGR-8B + crops + union</b></td><td class="is-best">93.2</td><td>84.3</td><td>79.3</td><td class="is-best">85.6</td></tr>
         </tbody>
       </table>
     </div>
   </div>
 </section>
 
+<!-- ===================== ABLATION ===================== -->
+<section class="section section--alt" id="ablation">
+  <div class="container">
+    <span class="section-kicker">Analysis</span>
+    <h2 class="section-title">What Actually Drives the Gains?</h2>
 
-<!-- ================= BIBTEX ================= -->
-<section class="section" id="bibtex" style="background: #fafbfd;">
-  <div class="container is-max-desktop">
-    <h2 class="section-title">BibTeX</h2>
-    <pre class="bibtex"><span class="bib-placeholder">BibTeX coming soon.</span></pre>
+    <div class="takeaway" data-reveal>
+      <span class="takeaway__label">Takeaway</span>
+      <span>The <b>consistency reward + rollout archive</b> deliver the gains. A dual-stream setup <em>alone</em> barely helps (71.0 vs. 71.1).</span>
+    </div>
+
+    <p class="caption" style="margin-bottom: 0;">Average of 5 benchmarks; all RL variants start from the same cold-start. Bars are scaled for contrast; labels are the true scores.</p>
+    <div class="ablation" data-reveal>
+      <div class="abl-row"><div class="abl-label">Cold-start SFT</div><div class="abl-track"><div class="abl-bar" data-pct="31">67.1</div></div></div>
+      <div class="abl-row"><div class="abl-label">GRPO · textual stream only</div><div class="abl-track"><div class="abl-bar" data-pct="51">69.1</div></div></div>
+      <div class="abl-row"><div class="abl-label">GRPO · grounded stream only</div><div class="abl-track"><div class="abl-bar" data-pct="72">71.1</div></div></div>
+      <div class="abl-row"><div class="abl-label">Dual-stream · no consistency</div><div class="abl-track"><div class="abl-bar" data-pct="71">71.0</div></div></div>
+      <div class="abl-row"><div class="abl-label">+ consistency reward</div><div class="abl-track"><div class="abl-bar" data-pct="76">71.5</div></div></div>
+      <div class="abl-row is-best"><div class="abl-label">+ rollout archive (full iVGR)</div><div class="abl-track"><div class="abl-bar" data-pct="90">72.4</div></div></div>
+    </div>
   </div>
 </section>
 
+<!-- ===================== QUALITATIVE ===================== -->
+<section class="section" id="qualitative">
+  <div class="container">
+    <span class="section-kicker">Qualitative</span>
+    <h2 class="section-title">Qualitative Results</h2>
 
-<!-- ================= FOOTER ================= -->
+    <div class="takeaway" data-reveal>
+      <span class="takeaway__label">Takeaway</span>
+      <span>Grounded CoT suffers two failure modes: <b>(a)</b> localization errors that lead to wrong answers, and <b>(b)</b> accurate localization paired with recognition failures.</span>
+    </div>
+
+    <figure class="figure" data-reveal><img src="./static/images/vis_2cots.png" alt="Grounded CoT vs. textual CoT within iVGR."></figure>
+    <figcaption class="figcaption">
+      <b>Grounded CoT vs. textual CoT within iVGR.</b>
+      Left: the grounded CoT misses objects and undercounts, while the textual CoT enumerates correctly.
+      Right: the grounded CoT localizes well but misreads the label, while the textual CoT, freed from emitting coordinates, correctly recognizes the hazard numbers.
+    </figcaption>
+
+    <figure class="figure" style="margin-top: var(--s-7);" data-reveal><img src="./static/images/vis_consistency.png" alt="With vs. without the consistency reward."></figure>
+    <figcaption class="figcaption">
+      <b>Effect of the consistency reward.</b>
+      Without it, the textual stream mis-localizes the trailer and reports the wrong color. iVGR attends to the correct region and recovers the right answer.
+    </figcaption>
+  </div>
+</section>
+
+<!-- ===================== TAKEAWAYS ===================== -->
+<section class="section section--alt" id="takeaways">
+  <div class="container">
+    <span class="section-kicker">Conclusion</span>
+    <h2 class="section-title">Takeaways</h2>
+    <div class="checks" data-reveal>
+      <div class="check"><span class="check__mark">✓</span><span class="check__text">Grounding at inference is <b>unnecessary</b>; internalize it during training.</span></div>
+      <div class="check"><span class="check__mark">✓</span><span class="check__text"><b>SOTA</b> performance benefits from a <b>dual-stream</b> design aligned by a <b>consistency reward</b>.</span></div>
+      <div class="check"><span class="check__mark">✓</span><span class="check__text"><b>Tool-compatible</b>: still works well with “think with images” pipelines.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== BIBTEX ===================== -->
+<section class="section" id="bibtex">
+  <div class="container">
+    <span class="section-kicker">Cite</span>
+    <h2 class="section-title">BibTeX</h2>
+    <div class="codeblock">
+      <button class="copy-btn" data-copy="#bib-pre" aria-label="Copy BibTeX">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+        <span class="copy-label">Copy</span>
+      </button>
+      <pre id="bib-pre">@inproceedings{zhang2026ivgr,
+  title     = {iVGR: Internalizing Visually Grounded Reasoning for MLLMs with Reinforcement Learning},
+  author    = {Zhang, Chang-Bin and Zhong, Yujie and Zhang, Qiang and Han, Kai},
+  booktitle = {International Conference on Machine Learning (ICML)},
+  year      = {2026}
+}</pre>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ===================== FOOTER ===================== -->
 <footer class="page-footer">
-  Project page styled after <a href="https://nerfies.github.io/">Nerfies</a>.
-  &copy; <a href="https://visailab.github.io/">Visual AI Lab</a>, The University of Hong Kong.
+  <div class="footer-brand">iVGR</div>
+  <div class="footer-links">
+    <a href="https://arxiv.org/abs/2605.31096" target="_blank" rel="noopener">arXiv</a>
+    <a href="https://github.com/Visual-AI/iVGR" target="_blank" rel="noopener">Code</a>
+    <a href="https://huggingface.co/collections/allencbzhang/ivgr" target="_blank" rel="noopener">Models &amp; Data</a>
+  </div>
+  <div>&copy; 2026 <a href="https://visailab.github.io/" target="_blank" rel="noopener">Visual AI Lab</a>, The University of Hong Kong.</div>
 </footer>
 
 </body>
