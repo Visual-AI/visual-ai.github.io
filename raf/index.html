@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Scene-Level Heterogeneous Physics Simulation with 3D Gaussian Splats" />
+  <meta property="og:title" content="Scene-Level Heterogeneous Physics Simulation with 3D Gaussian Splats" />
+  <meta property="og:description" content="RAF brings captured 3D Gaussian splats into scene-level heterogeneous physics simulation." />
+  <meta property="og:image" content="./assets/images/og_image.png" />
+  <title>Scene-Level Heterogeneous Physics Simulation with 3D Gaussian Splats</title>
+  <link rel="stylesheet" href="./assets/css/style.css" />
+</head>
+<body>
+  <nav class="topnav">
+    <div class="container nav-inner">
+      <a class="brand" href="#">RAF</a>
+      <div class="navlinks">
+        <a href="#demos">demos</a>
+        <a href="#method">method</a>
+        <a href="#qualitative-results">qualitative results</a>
+        <a href="#bibtex">bibtex</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="container hero-content">
+      <h1 class="title">Scene-Level Heterogeneous Physics Simulation with 3D Gaussian Splats</h1>
+      <div class="authors">
+        <a href="https://orcid.org/0009-0005-5395-5710" target="_blank" rel="noopener">Xiaoyang Liu</a><sup>1</sup>
+        <span class="sep"></span>
+        <a href="https://www.elliottwu.com" target="_blank" rel="noopener">Shangzhe Wu</a><sup>2</sup>
+        <span class="sep"></span>
+        <a href="https://www.kaihan.org" target="_blank" rel="noopener">Kai Han</a><sup>1</sup>
+      </div>
+      <div class="affiliations"><sup>1</sup>The University of Hong Kong &nbsp;&nbsp; <sup>2</sup>University of Cambridge</div>
+      <div class="venue">CVPR Findings 2026</div>
+      <p class="tldr"><span>TL;DR</span> <em>A Representation Abstraction Framework for making captured 3DGS assets physically interact with meshes, fluids, cloth, rigid bodies, and complex scenes.</em></p>
+      <div class="buttons">
+        <a class="btn primary" href="./assets/files/paper.pdf">Paper</a>
+        <a class="btn" href="./assets/files/paper.pdf#page=11">Supplementary</a>
+        <a class="btn" href="#demos">Demos</a>
+        <a class="btn" href="https://github.com/Visual-AI/RAF" target="_blank" rel="noopener">Code</a>
+      </div>
+      <div class="abstract-card">
+        <h2>Abstract</h2>
+        <p>3D Gaussian Splatting (3DGS) has achieved state-of-the-art photorealistic rendering, but the representation gap prevents these assets from being physically interactive. Production-grade physics engines do not understand the 3DGS representation, while prior physics-for-3DGS methods are monolithic silos. These prior works are fundamentally limited, demonstrating only object-centric physics in isolated environments, such as on an ideal plane — they are incapable of interacting with complex static collision geometry or heterogeneous assets. We propose a novel framework that, for the first time, bridges this gap by enabling 3DGS assets to participate in scene-level, heterogeneous, multi-solver physical simulations. Our core contribution is a Representation Abstraction Framework that “translates” all diverse assets—including 3DGS, virtual meshes, and fluids—into a unified physical particle set. This abstraction is key to enabling complex behaviors, such as the non-rigid deformation of 3DGS assets, within a unified physics pipeline. This particle set, along with the static scene collision boundaries derived from scene capture, is processed within a solver-agnostic physics kernel. The physical results are then mapped back to drive each asset’s specific visual reconstruction. This architecture unlocks capabilities impossible with prior art. We demonstrate complex, two-way interactions between deformable 3DGS assets, standard CG assets (like fluids and meshes), and large-scale captured static environments, showcasing realistic coupled phenomena that were previously unattainable.</p>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="demos" class="featured-section">
+      <div class="container">
+        <div class="section-title compact single-title">
+          <h2>Representative heterogeneous physical interactions</h2>
+        </div>
+
+        <div class="demo-grid featured-grid">
+          <article class="demo-card featured-card">
+            <video controls poster="./assets/images/video_thumbs/10_go2_curtain_unitree_outdoor_integrated.jpg" autoplay muted loop playsinline preload="auto">
+              <source src="./assets/videos/10_go2_curtain_unitree_outdoor_integrated.mp4" type="video/mp4" />
+            </video>
+            <div class="demo-body">
+              <h3>Robot dog through cloth</h3>
+              <p>A quadruped pushes through a deformable cloth curtain in an outdoor scene.</p>
+              <div class="tag-row"><span class="tag">Articulated body</span><span class="tag">Cloth</span><span class="tag">Contact</span></div>
+            </div>
+          </article>
+
+          <article class="demo-card featured-card">
+            <video controls poster="./assets/images/video_thumbs/13_rubber_duck_clear_water_orbit_mesh.jpg" autoplay muted loop playsinline preload="auto">
+              <source src="./assets/videos/13_rubber_duck_clear_water_orbit_mesh.mp4" type="video/mp4" />
+            </video>
+            <div class="demo-body">
+              <h3>Soft duck in water</h3>
+              <p>A soft rubber duck floats and interacts with clear water inside a wooden basin.</p>
+              <div class="tag-row"><span class="tag">Soft body</span><span class="tag">Fluid</span><span class="tag">Water</span></div>
+            </div>
+          </article>
+
+          <article class="demo-card featured-card">
+            <video controls poster="./assets/images/video_thumbs/scale_2_65_slide_fast_orbit.jpg" autoplay muted loop playsinline preload="auto">
+              <source src="./assets/videos/scale_2_65_slide_fast_orbit.mp4" type="video/mp4" />
+            </video>
+            <div class="demo-body">
+              <h3>Cloth on captured statue</h3>
+              <p>A patterned cloth drapes and slides over complex non-convex captured geometry.</p>
+              <div class="tag-row"><span class="tag">PBD cloth</span><span class="tag">Captured geometry</span><span class="tag">Scene collision</span></div>
+            </div>
+          </article>
+
+          <article class="demo-card featured-card">
+            <video controls poster="./assets/images/video_thumbs/omniverse_3dgs_donut_chocolate_best_512spp_orbit.jpg" autoplay muted loop playsinline preload="auto">
+              <source src="./assets/videos/omniverse_3dgs_donut_chocolate_best_512spp_orbit.mp4" type="video/mp4" />
+            </video>
+            <div class="demo-body">
+              <h3>Chocolate on soft donut</h3>
+              <p>Viscous chocolate sauce collides with and settles on a deformable donut.</p>
+              <div class="tag-row"><span class="tag">Viscous fluid</span><span class="tag">Soft body</span><span class="tag">3DGS asset</span></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="method">
+      <div class="container">
+        <div class="section-title">
+          <div>
+            <h2>Representation Abstraction Framework</h2>
+          </div>
+        </div>
+        <div class="card card-pad">
+          <div class="media-frame light-frame">
+            <img src="./assets/images/method_overview_from_paper.png" alt="RAF method overview" />
+          </div>
+          <div class="method-steps">
+            <div><span>A</span><strong>Abstract</strong><p>Prepare static scene boundaries and unified simulation particles.</p></div>
+            <div><span>B</span><strong>Simulate</strong><p>Couple MPM, SPH, PBD, rigid-body, and articulated-body solvers.</p></div>
+            <div><span>C</span><strong>Recouple</strong><p>Map physical states back to 3DGS, mesh, and particle visual outputs.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="qualitative-results">
+      <div class="container">
+        <div class="section-title compact single-title">
+          <h2>Qualitative results</h2>
+          <p class="section-note">Rendered using Unreal Engine.</p>
+        </div>
+
+        <div class="demo-grid core-grid">
+          <article class="demo-card compact-card">
+            <video controls poster="./assets/images/video_thumbs/water_output.jpg" autoplay muted loop playsinline preload="auto"><source src="./assets/videos/water_output.mp4" type="video/mp4" /></video>
+            <div class="demo-body"><h3>Fluid in a virtual bowl</h3><p>SPH fluid interacts with a mesh bowl and a captured 3DGS garden scene.</p></div>
+          </article>
+          <article class="demo-card compact-card">
+            <video controls poster="./assets/images/video_thumbs/donut_output.jpg" autoplay muted loop playsinline preload="auto"><source src="./assets/videos/donut_output.mp4" type="video/mp4" /></video>
+            <div class="demo-body"><h3>Sauce on GS soft body</h3><p>Viscous fluid couples with a captured 3DGS donut soft body.</p></div>
+          </article>
+          <article class="demo-card compact-card">
+            <video controls poster="./assets/images/video_thumbs/franka_output.jpg" autoplay muted loop playsinline preload="auto"><source src="./assets/videos/franka_output.mp4" type="video/mp4" /></video>
+            <div class="demo-body"><h3>Robot-arm manipulation</h3><p>An articulated robot manipulates a rigid object in a captured scene.</p></div>
+          </article>
+          <article class="demo-card compact-card">
+            <video controls poster="./assets/images/video_thumbs/clothes_output.jpg" autoplay muted loop playsinline preload="auto"><source src="./assets/videos/clothes_output.mp4" type="video/mp4" /></video>
+            <div class="demo-body"><h3>Cloth on statue</h3><p>PBD cloth follows complex captured statue geometry.</p></div>
+          </article>
+          <article class="demo-card compact-card">
+            <video controls poster="./assets/images/video_thumbs/fruit_output.jpg" autoplay muted loop playsinline preload="auto"><source src="./assets/videos/fruit_output.mp4" type="video/mp4" /></video>
+            <div class="demo-body"><h3>Rigid bodies in 3DGS basket</h3><p>Virtual fruits collide with each other and an imported 3DGS container.</p></div>
+          </article>
+        </div>
+
+        <div class="section-title compact single-title qualitative-subsection-title">
+          <h2>Additional qualitative examples</h2>
+          <p class="section-note">Rendered with a pure 3DGS renderer.</p>
+        </div>
+        <div class="demo-grid extra-grid">
+          <article class="demo-card compact-card">
+            <video controls poster="./assets/images/video_thumbs/garden_plant.jpg" autoplay muted loop playsinline preload="auto"><source src="./assets/videos/garden_plant.mp4" type="video/mp4" /></video>
+            <div class="demo-body"><h3>Heterogeneous materials</h3><p>Material variation inside a captured environment.</p></div>
+          </article>
+          <article class="demo-card compact-card">
+            <video controls poster="./assets/images/video_thumbs/lego_wolf.jpg" autoplay muted loop playsinline preload="auto"><source src="./assets/videos/lego_wolf.mp4" type="video/mp4" /></video>
+            <div class="demo-body"><h3>Granular-soft interaction</h3><p>Particle-like dynamics coupled with deformable visual assets.</p></div>
+          </article>
+          <article class="demo-card compact-card">
+            <video controls poster="./assets/images/video_thumbs/tongs_fruit.jpg" autoplay muted loop playsinline preload="auto"><source src="./assets/videos/tongs_fruit.mp4" type="video/mp4" /></video>
+            <div class="demo-body"><h3>Tool manipulation</h3><p>A tool interacts with physically simulated objects.</p></div>
+          </article>
+          <article class="demo-card compact-card">
+            <video controls poster="./assets/images/video_thumbs/viscous_elastic.jpg" autoplay muted loop playsinline preload="auto"><source src="./assets/videos/viscous_elastic.mp4" type="video/mp4" /></video>
+            <div class="demo-body"><h3>Viscous coupling</h3><p>High-viscosity fluid coupled with an elastic object.</p></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="bibtex">
+      <div class="container">
+        <div class="card card-pad">
+          <div class="section-title compact">
+            <div><h2>BibTeX</h2></div>
+            <button class="copy-btn" data-copy-target="bibtex-code">Copy</button>
+          </div>
+<pre id="bibtex-code" class="bibtex">@inproceedings{liu2026raf,
+  title     = {Scene-Level Heterogeneous Physics Simulation with 3D Gaussian Splats},
+  author    = {Liu, Xiaoyang and Wu, Shangzhe and Han, Kai},
+  booktitle = {CVPR Findings},
+  year      = {2026}
+}</pre>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">Scene-Level Heterogeneous Physics Simulation with 3D Gaussian Splats</div>
+  </footer>
+  <script src="./assets/js/main.js"></script>
+</body>
+</html>
