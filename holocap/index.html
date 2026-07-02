@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="Holo-Captioning: A Comprehensive Textual View of 3D Scenes">
+  <meta property="og:title" content="Holo-Captioning">
+  <meta property="og:description" content="A Comprehensive Textual View of 3D Scenes">
+  <meta property="og:url" content="https://visual-ai.github.io/holocap/">
+  <meta property="og:image" content="static/images/teaser.png">
+  <meta property="og:image:width" content="1145">
+  <meta property="og:image:height" content="1187">
+
+  <meta name="twitter:title" content="Holo-Captioning">
+  <meta name="twitter:description" content="A Comprehensive Textual View of 3D Scenes">
+  <meta name="twitter:image" content="static/images/teaser.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="keywords" content="HoloCap, Holo-Captioning, 3D Scene Captioning, 3D Large Language Models">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Holo-Captioning: A Comprehensive Textual View of 3D Scenes</title>
+  <link rel="icon" type="image/png" href="static/images/teaser.png">
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script src="static/js/bulma-carousel.min.js"></script>
+  <script src="static/js/bulma-slider.min.js"></script>
+  <script src="static/js/index.js"></script>
+
+  <style>
+    .publication-title {
+      line-height: 1.125;
+    }
+
+    .more-research {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 1.35rem;
+      text-align: center;
+      font-family: 'Google Sans', sans-serif;
+    }
+
+    .more-research-trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      border: 0;
+      background: transparent;
+      color: hsl(220, 72%, 62%);
+      cursor: pointer;
+      font-family: 'Google Sans', sans-serif;
+      font-size: 1.35rem;
+      line-height: 1.2;
+      padding: 0.45rem 0.7rem;
+    }
+
+    .more-research-trigger:hover,
+    .more-research-trigger:focus {
+      color: hsl(220, 72%, 55%);
+      outline: none;
+    }
+
+    .more-research-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      z-index: 20;
+      min-width: 230px;
+      padding: 0.75rem 0;
+      background: #fff;
+      border-radius: 0 0 8px 8px;
+      box-shadow: 0 12px 28px rgba(10, 10, 10, 0.12);
+      text-align: left;
+    }
+
+    .more-research:hover .more-research-menu,
+    .more-research:focus-within .more-research-menu {
+      display: block;
+    }
+
+    .more-research-menu a {
+      display: block;
+      padding: 0.7rem 1.5rem;
+      color: #363636 !important;
+      font-size: 1.05rem;
+      line-height: 1.25;
+      white-space: nowrap;
+    }
+
+    .more-research-menu a:hover,
+    .more-research-menu a:focus {
+      background: #f5f5f5;
+      text-decoration: underline;
+    }
+
+    .section .content p,
+    .section .content li,
+    .section p.content {
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+
+    .project-figure {
+      display: block;
+      margin: 0 auto 1rem;
+      max-width: 100%;
+      height: auto;
+    }
+
+    .dimension-list li {
+      margin-bottom: 0.55rem;
+    }
+
+    #leaderboardTable td,
+    #leaderboardTable th {
+      font-size: 0.87em;
+      line-height: 1.0;
+      padding: 9px 6px;
+      word-break: normal;
+    }
+
+    #leaderboardTable {
+      table-layout: fixed;
+      max-width: 1080px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    #leaderboardTable th:first-child,
+    #leaderboardTable td:first-child {
+      width: 15%;
+    }
+
+    #leaderboardTable th:nth-child(2),
+    #leaderboardTable td:nth-child(2) {
+      width: 10%;
+    }
+
+    #leaderboardTable td.numeric {
+      vertical-align: middle !important;
+    }
+
+    #leaderboardTable th:first-child,
+    #leaderboardTable td.model-name {
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    .validation-header {
+      background-color: #e3f2fd;
+    }
+
+    .test-header {
+      background-color: #e8f5e9;
+    }
+
+    .validation-bg {
+      background-color: #F4FAFE !important;
+    }
+
+    .test-bg {
+      background-color: #F7FBF7 !important;
+    }
+  </style>
+</head>
+
+<body>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <div class="more-research">
+            <button class="more-research-trigger" type="button" aria-haspopup="true">
+              <span>More Research</span>
+              <span class="icon is-small"><i class="fas fa-chevron-down"></i></span>
+            </button>
+            <div class="more-research-menu" role="menu">
+              <a href="https://visual-ai.github.io/pancap/" target="_blank" role="menuitem">Panoptic Captioning</a>
+            </div>
+          </div>
+          <h1 class="title is-1 publication-title">Holo-Captioning: A Comprehensive Textual View of 3D Scenes</h1>
+          <h2 class="title is-3 publication-title" style="margin-top: 0.5rem;">
+            ECCV 2026
+          </h2>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><a href="https://kunyulin.github.io/" target="_blank">Kun-Yu Lin</a><sup>1</sup>,</span>
+            <span class="author-block"><a href="https://openreview.net/profile?id=%7EChengke_Bu1" target="_blank">Chengke Bu</a><sup>1</sup>,</span>
+            <span class="author-block"><a href="https://zhenguol.github.io/" target="_blank">Zhenguo Li</a><sup>2</sup>,</span>
+            <span class="author-block"><a href="https://www.kaihan.org/" target="_blank">Kai Han</a><sup>1</sup></span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>Visual AI Lab, The University of Hong Kong</span><br>
+            <span class="author-block"><sup>2</sup>Frontier Robotics</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <span class="link-block">
+                <a href="https://visual-ai.github.io/holocap/" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://visual-ai.github.io/holocap/" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fab fa-github"></i></span>
+                  <span>Code (coming soon)</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://visual-ai.github.io/holocap/" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="ai ai-arxiv"></i></span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column has-text-centered">
+        <img class="project-figure" src="static/images/teaser.png" alt="Holo-captioning task example" style="max-width: 900px;">
+        <h2 class="title is-2">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            This work introduces <strong>holo-captioning</strong>, a novel task that strives to seek the text equivalent of 3D scenes. As an initial step, we formulate holo-captioning as generating a structured textual description that comprehensively depicts all entities within a 3D scene, including their semantic tags, spatial locations, attributes, and inter-entity relations.
+          </p>
+          <p>
+            To tackle this challenging task, we develop <strong>HoloEngine</strong>, an effective captioning engine for producing detailed descriptions of individual entity instances and instance pairs, and contribute <strong>HoloScan</strong>, a large-scale benchmark comprising over 15K scenes for training and evaluation. Building upon this foundation, we propose <strong>HoloScribe</strong>, a model with an instance-aware decoupled pipeline for generating structured holo-captions, together with anchor-aware instance linking for relational instance pairs. We further introduce <strong>HoloScore</strong>, a comprehensive metric with a human-curated test set for reliable assessment. Experiments show that HoloScribe significantly outperforms state-of-the-art 3D dense captioners and 3D LLM generalists.
+          </p>
+          <div class="content has-text-justified">
+            <p>Our <strong>contributions</strong> are listed as follows:</p>
+            <ul class="dimension-list">
+              <li>We introduce the novel task of holo-captioning, which strives to seek the textual equivalent of 3D scenes. We formulate it as generating comprehensive structured textual descriptions that cover four fundamental dimensions, and contribute a reliable metric named HoloScore for evaluation.</li>
+              <li>We propose an effective instance-centric captioning engine named HoloEngine to produce high-quality holo-captions, and contribute HoloScan, a large-scale benchmark of over 15K indoor scenes spanning diverse categories for training and evaluation.</li>
+              <li>We propose HoloScribe, a novel model that follows an instance-aware decoupled pipeline to generate comprehensive textual descriptions element by element. To the best of our knowledge, HoloScribe is the first 3D LLM capable of jointly localizing entity instances and generating detailed descriptions in pure text form without extra detectors.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column has-text-centered">
+        <h2 class="title is-2">Background and Conception</h2>
+        <div class="content has-text-justified">
+          <p>
+            Describing the 3D world with natural language is a fundamental topic in computer vision and natural language processing, benefiting diverse 3D applications such as scene modeling, vision navigation, and robotic manipulation. As a pivotal task in this field, 3D dense captioning aims to simultaneously detect and describe object instances within a 3D scene. However, existing 3D dense captioning methods are constrained by a limited range of object categories and typically produce short, coarse textual descriptions.
+          </p>
+          <p>
+            Driven by the rapid advances in Large Language Models, recent studies have explored structured linguistic sequences for describing 3D scenes and covering broader categories in an open-vocabulary paradigm. Nevertheless, they primarily focus on detecting architectural layouts and salient objects, overlooking fine-grained entity attributes and inter-entity relations. Motivated by these limitations, this work conceives of finding the <i>text equivalent of a 3D scene</i>, an ambitious yet challenging goal that aims to develop a comprehensive textual description capturing all essential elements within a 3D scene.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column has-text-centered">
+        <h2 class="title is-2">Task Formulation of Holo-Captioning</h2>
+        <div class="content has-text-justified">
+          <p>
+            In this work, we formulate holo-captioning as generating a structured textual description that <i>comprehensively</i> depicts all entity instances within a 3D scene, including their semantic tags, spatial locations, attributes, and the relations between entities. Unlike previous 3D captioning approaches, our formulation encodes these four dimensions purely in text, resulting in a unified textual description that fully encapsulates the 3D scene. In principle, holo-captioning considers four dimensions as follows:
+          </p>
+          <ul class="dimension-list">
+            <li><strong>Semantic tag</strong> refers to the category label assigned to each entity instance in a 3D scene. We define entities as both architectural elements, such as floor, wall and window, and free-standing objects, such as table, bag and cabinet. </li>
+            <li><strong>Spatial location</strong> refers to the position and extent of an entity instance, represented by a 3D oriented bounding box. Specifically, each box is represented as a 9-DoF vector that describes the center, size and Euler-angle orientation of the instance. By using oriented bounding boxes, a holo-caption can accurately describe instance locations and spatial extents in pure text, avoiding vague expressions such as "at the center of the scene".</li>
+            <li><strong>Attribute</strong> refers to characteristics or properties that describe the appearance or state of an entity instance. This dimension encompasses a wide range of attribute types, including color, shape, material, texture and constituent parts. </li>
+            <li><strong>Relation</strong> refers to the connections or interactions between two entity instances within a scene. This dimension covers a wide range of relation types, and our work focuses on those between nearby instances, as meaningful relations in static indoor scenes usually occur among spatially adjacent entities. Typical examples include spatial relations, such as "A is placed on B", and state relations, such as "A is leaning against B".</li>
+          </ul>
+          <p>
+            By considering these four fundamental dimensions, holo-captioning leads to a comprehensive textual description of a 3D scene. Compared to previous structured textual representations, holo-captions not only capture entity categories and locations, but also describe entity attributes and inter-entity relations, thereby enabling comprehensive 3D scene understanding. Notably, holo-captioning requires a single model to directly predict all scene elements in pure text form without relying on additional detectors or segmenters, fostering a more intrinsic alignment between 3D scenes and text.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column">
+        <h2 class="title is-2">Evaluation Metric: HoloScore</h2>
+        <img class="project-figure" src="static/images/metric.png" alt="HoloScore overview" style="max-width: 900px;">
+        <div class="content has-text-justified">
+          <p>
+            HoloScore evaluates holo-captions across four dimensions: semantic tagging, spatial localization, entity attributes, and inter-entity relations. It first performs grounded instance matching to align predicted and reference instances, then decomposes long descriptions into granular descriptors, and finally compares attribute and relation descriptors through dual descriptor matching.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column">
+        <h2 class="title is-2">Captioning Engine and Benchmark</h2>
+        <div class="content has-text-justified">
+          <p>
+            <strong>HoloEngine</strong> is an instance-centric captioning engine that produces structured holo-captions. It projects 3D oriented bounding boxes into multi-view images, prompts MLLMs to describe target instances and instance pairs, and consolidates view-specific descriptions into holistic captions with LLMs.
+            Based on HoloEngine, we construct <strong>HoloScan</strong>, a large-scale benchmark spanning real and synthetic indoor scenes from ScanNet, 3RScan, Matterport3D, ARKitScenes, and Structured3D. HoloScan contains over 13K training scenes, 619 validation scenes, and 83 human-curated test scenes, covering 734 entity categories across more than 15K scenes.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column">
+        <h2 class="title is-2">The Proposed Model: HoloScribe</h2>
+        <img class="project-figure" src="static/images/method.png" alt="HoloScribe overview" style="max-width: 900px;">
+        <div class="content has-text-justified">
+          <p>
+            HoloScribe follows an instance-aware decoupled pipeline. Given a 3D scene in point cloud format, it first discovers grounded entity instances, then identifies relational instance pairs through anchor-aware instance linking, and finally generates grounded attribute and relation descriptions conditioned on the discovered instances.
+            This decomposition lets the model generate long, information-dense holo-captions element by element, while keeping entity localization, attribute description, and relation modeling grounded in a shared textual structure.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="column has-text-centered">
+    <h2 class="title is-2 mb-4">Leaderboard on the HoloScan Benchmark</h2>
+    <p class="content">(Note: Model names with the suffix "-Tuned" denote models tuned on the training set of HoloScan)</p>
+  </div>
+  <div class="container">
+    <table id="leaderboardTable">
+      <thead>
+      <tr>
+        <th class="has-text-centered" rowspan="2" style="vertical-align: middle;">Model</th>
+        <th class="has-text-centered" rowspan="2" style="vertical-align: middle;">LLM</th>
+        <th class="has-text-centered validation-header" colspan="5">Validation Set</th>
+        <th class="has-text-centered test-header" colspan="5">Test Set</th>
+      </tr>
+      <tr>
+        <th class="has-text-centered validation-header">Tagging</th>
+        <th class="has-text-centered validation-header">Location</th>
+        <th class="has-text-centered validation-header">Attribute</th>
+        <th class="has-text-centered validation-header">Relation</th>
+        <th class="has-text-centered validation-header">Overall</th>
+        <th class="has-text-centered test-header">Tagging</th>
+        <th class="has-text-centered test-header">Location</th>
+        <th class="has-text-centered test-header">Attribute</th>
+        <th class="has-text-centered test-header">Relation</th>
+        <th class="has-text-centered test-header">Overall</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td class="model-name">Vote2Cap-DETR</td>
+        <td class="numeric has-text-centered">-</td>
+        <td class="numeric has-text-centered validation-bg">32.87</td>
+        <td class="numeric has-text-centered validation-bg">17.00</td>
+        <td class="numeric has-text-centered validation-bg">2.49</td>
+        <td class="numeric has-text-centered validation-bg">-</td>
+        <td class="numeric has-text-centered validation-bg">-</td>
+        <td class="numeric has-text-centered test-bg">32.50</td>
+        <td class="numeric has-text-centered test-bg">17.71</td>
+        <td class="numeric has-text-centered test-bg">2.70</td>
+        <td class="numeric has-text-centered test-bg">-</td>
+        <td class="numeric has-text-centered test-bg">-</td>
+      </tr>
+      <tr>
+        <td class="model-name">Vote2Cap-DETR++</td>
+        <td class="numeric has-text-centered">-</td>
+        <td class="numeric has-text-centered validation-bg">30.84</td>
+        <td class="numeric has-text-centered validation-bg">16.70</td>
+        <td class="numeric has-text-centered validation-bg">2.38</td>
+        <td class="numeric has-text-centered validation-bg">-</td>
+        <td class="numeric has-text-centered validation-bg">-</td>
+        <td class="numeric has-text-centered test-bg">31.39</td>
+        <td class="numeric has-text-centered test-bg">17.04</td>
+        <td class="numeric has-text-centered test-bg">2.67</td>
+        <td class="numeric has-text-centered test-bg">-</td>
+        <td class="numeric has-text-centered test-bg">-</td>
+      </tr>
+      <tr>
+        <td class="model-name">LEO</td>
+        <td class="numeric has-text-centered">Vicuna-7B</td>
+        <td class="numeric has-text-centered validation-bg">23.34</td>
+        <td class="numeric has-text-centered validation-bg">14.25</td>
+        <td class="numeric has-text-centered validation-bg">1.53</td>
+        <td class="numeric has-text-centered validation-bg">-</td>
+        <td class="numeric has-text-centered validation-bg">-</td>
+        <td class="numeric has-text-centered test-bg">25.91</td>
+        <td class="numeric has-text-centered test-bg">14.93</td>
+        <td class="numeric has-text-centered test-bg">1.60</td>
+        <td class="numeric has-text-centered test-bg">-</td>
+        <td class="numeric has-text-centered test-bg">-</td>
+      </tr>
+      <tr>
+        <td class="model-name">LL3DA</td>
+        <td class="numeric has-text-centered">OPT-1.3B</td>
+        <td class="numeric has-text-centered validation-bg">31.28</td>
+        <td class="numeric has-text-centered validation-bg">16.50</td>
+        <td class="numeric has-text-centered validation-bg">2.99</td>
+        <td class="numeric has-text-centered validation-bg">-</td>
+        <td class="numeric has-text-centered validation-bg">-</td>
+        <td class="numeric has-text-centered test-bg">31.28</td>
+        <td class="numeric has-text-centered test-bg">16.89</td>
+        <td class="numeric has-text-centered test-bg">3.27</td>
+        <td class="numeric has-text-centered test-bg">-</td>
+        <td class="numeric has-text-centered test-bg">-</td>
+      </tr>
+      <tr>
+        <td class="model-name">SpatialLM-Tuned</td>
+        <td class="numeric has-text-centered">Qwen2.5-0.5B</td>
+        <td class="numeric has-text-centered validation-bg">51.73</td>
+        <td class="numeric has-text-centered validation-bg">9.94</td>
+        <td class="numeric has-text-centered validation-bg">6.74</td>
+        <td class="numeric has-text-centered validation-bg">2.60</td>
+        <td class="numeric has-text-centered validation-bg">71.01</td>
+        <td class="numeric has-text-centered test-bg">49.82</td>
+        <td class="numeric has-text-centered test-bg">9.23</td>
+        <td class="numeric has-text-centered test-bg">7.01</td>
+        <td class="numeric has-text-centered test-bg">3.57</td>
+        <td class="numeric has-text-centered test-bg">69.63</td>
+      </tr>
+      <tr>
+        <td class="model-name">LL3DA-Tuned</td>
+        <td class="numeric has-text-centered">Qwen2.5-0.5B</td>
+        <td class="numeric has-text-centered validation-bg">31.25</td>
+        <td class="numeric has-text-centered validation-bg">16.50</td>
+        <td class="numeric has-text-centered validation-bg">10.36</td>
+        <td class="numeric has-text-centered validation-bg">4.83</td>
+        <td class="numeric has-text-centered validation-bg">62.94</td>
+        <td class="numeric has-text-centered test-bg">31.28</td>
+        <td class="numeric has-text-centered test-bg">16.88</td>
+        <td class="numeric has-text-centered test-bg">9.54</td>
+        <td class="numeric has-text-centered test-bg">3.97</td>
+        <td class="numeric has-text-centered test-bg">61.67</td>
+      </tr>
+      <tr>
+        <td class="model-name">HoloScribe (Ours)</td>
+        <td class="numeric has-text-centered">Qwen2.5-0.5B</td>
+        <td class="numeric has-text-centered validation-header"><strong>60.43</strong></td>
+        <td class="numeric has-text-centered validation-header"><strong>22.33</strong></td>
+        <td class="numeric has-text-centered validation-header"><strong>22.52</strong></td>
+        <td class="numeric has-text-centered validation-header"><strong>11.08</strong></td>
+        <td class="numeric has-text-centered validation-header"><strong>116.36</strong></td>
+        <td class="numeric has-text-centered test-header"><strong>61.83</strong></td>
+        <td class="numeric has-text-centered test-header"><strong>22.75</strong></td>
+        <td class="numeric has-text-centered test-header"><strong>23.72</strong></td>
+        <td class="numeric has-text-centered test-header"><strong>8.74</strong></td>
+        <td class="numeric has-text-centered test-header"><strong>117.04</strong></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column has-text-centered">
+        <h2 class="title is-2">3D Scene "Reconstruction" from Captions</h2>
+        <div class="column has-text-centered">
+          <img class="project-figure" src="static/images/reconstruction.png" alt="HoloScribe reconstruction result" style="max-width: 760px;">
+          <div class="content has-text-justified">
+            <p>
+              We conduct a 3D scene reconstruction experiment to qualitatively demonstrate the effectiveness and practical utility of HoloScribe. Given an input 3D scene, HoloScribe first generates a holo-caption as a textual representation of the scene. We then use Hunyuan3D to generate 3D assets from the semantic tags and attributes of entity instances extracted from the holo-caption. The predicted bounding boxes are further used to refine each instance's size and pose before placing the generated assets in 3D space to assemble the reconstructed scene. As shown in the figure, HoloScribe produces reconstructed scenes that resemble the original scenes, especially in semantic tagging and spatial localization. By modifying the generated holo-caption, the same pipeline can also support scene editing operations such as attribute editing, instance deletion, instance relocation, and instance addition.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title is-3">BibTeX</h2>
+    <pre><code>@inproceedings{lin2026holocap,
+    title={Holo-Captioning: A Comprehensive Textual View of 3D Scenes},
+    author={Lin, Kun-Yu and Bu, Chengke and Li, Zhenguo and Han, Kai},
+    booktitle={European Conference on Computer Vision},
+    year={2026}
+}</code></pre>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content has-text-centered">
+          <p>This page is adapted from the project page template used by Visual AI Lab.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+
+</html>
