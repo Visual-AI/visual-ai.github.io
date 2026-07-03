@@ -192,12 +192,13 @@ em { font-style: italic; color: var(--ink-900); }
 }
 .venue-tag {
   display: inline-block;
-  padding: 5px 16px; margin-bottom: var(--s-5);
+  padding: 5px 16px;
   border-radius: var(--radius-pill);
   background: var(--brand-grad); color: #fff;
   font-weight: 650; letter-spacing: 0.06em; font-size: 0.82rem;
   box-shadow: var(--shadow-brand);
 }
+.venue-tag-row { margin-top: var(--s-6); }
 .hero__title {
   font-size: clamp(1.7rem, 1.1rem + 2.3vw, 2.7rem);
   font-weight: 800; letter-spacing: -0.02em; line-height: 1.16;
