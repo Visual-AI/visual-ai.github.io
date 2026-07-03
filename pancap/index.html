@@ -44,6 +44,74 @@
     <script src="static/js/index.js"></script>
     <script src="static/js/sort_panel.js"></script>
 
+    <style>
+        .publication-title {
+            line-height: 1.125;
+        }
+
+        .more-research {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 1.35rem;
+            text-align: center;
+            font-family: "Google Sans", sans-serif;
+        }
+
+        .more-research-trigger {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            border: 0;
+            background: transparent;
+            color: hsl(220, 72%, 62%);
+            cursor: pointer;
+            font-family: "Google Sans", sans-serif;
+            font-size: 1.35rem;
+            line-height: 1.2;
+            padding: 0.45rem 0.7rem;
+        }
+
+        .more-research-trigger:hover,
+        .more-research-trigger:focus {
+            color: hsl(220, 72%, 55%);
+            outline: none;
+        }
+
+        .more-research-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            z-index: 20;
+            min-width: 230px;
+            padding: 0.75rem 0;
+            background: #fff;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 12px 28px rgba(10, 10, 10, 0.12);
+            text-align: left;
+        }
+
+        .more-research:hover .more-research-menu,
+        .more-research:focus-within .more-research-menu {
+            display: block;
+        }
+
+        .more-research-menu a {
+            display: block;
+            padding: 0.7rem 1.5rem;
+            color: #363636 !important;
+            font-size: 1.05rem;
+            line-height: 1.25;
+            white-space: nowrap;
+        }
+
+        .more-research-menu a:hover,
+        .more-research-menu a:focus {
+            background: #f5f5f5;
+            text-decoration: underline;
+        }
+    </style>
+
 </head>
 
 
@@ -57,6 +125,15 @@
                 <div class="column has-text-centered">
                     <!-- <div class="publication-logo">
                         <img src="static/images/coolerbot_nobg.png" alt="GAMEBOT" style="width: 300px; height: 300px; "> -->
+                <div class="more-research">
+                    <button class="more-research-trigger" type="button" aria-haspopup="true">
+                        <span>More Research</span>
+                        <span class="icon is-small"><i class="fas fa-chevron-down"></i></span>
+                    </button>
+                    <div class="more-research-menu" role="menu">
+                        <a href="https://visual-ai.github.io/holocap/" target="_blank" role="menuitem">Holo-Captioning</a>
+                    </div>
+                </div>
                 <h1 class="title is-1 publication-title">Panoptic Captioning: An Equivalence Bridge for Image and Text</h1>
                 <h2 class="title is-3 publication-title" style="margin-top: 0.5rem;">
                 NeurIPS 2025
@@ -280,6 +357,23 @@
 #leaderboardTable th {
     font-size: 0.87em;  /* 调整为原始大小的90% */
     line-height: 1.0;  /* 优化行高 */
+    padding: 10px 8px;
+}
+#leaderboardTable {
+    width: min(100%, 1160px);
+    margin-left: auto;
+    margin-right: auto;
+    table-layout: fixed;
+}
+#leaderboardTable th {
+    text-transform: none;
+    letter-spacing: normal;
+}
+#leaderboardTable th:first-child,
+#leaderboardTable td.model-name {
+    width: 18%;
+    text-align: center;
+    vertical-align: middle;
 }
 /* 新增垂直居中样式 */
 #leaderboardTable td.numeric {
