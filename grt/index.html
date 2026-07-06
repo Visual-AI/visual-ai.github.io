@@ -1,508 +1,1090 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Geometric Reciprocity</title>
-    <link rel="icon" type="image/jpeg" href="icons/visailab.jpeg">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Geometric Reciprocity (GRT) enables self-supervised stereo inpainting for stereoscopic video generation from monocular videos." />
+  <meta name="robots" content="index,follow" />
+  <meta name="theme-color" content="#1f71f6" />
+  <link rel="canonical" href="https://visual-ai.github.io/grt/" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <title>Geometric Reciprocity (GRT)</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #fff;
-        }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #fff;
+    }
 
-        main {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
 
-        #hero {
-            padding: 60px 0;
-            text-align: center;
-            background-color: #ffffff;
-        }
+    a {
+      color: #1f71f6;
+      text-decoration: none;
+    }
 
-        h1 {
-            font-size: 2.8rem;
-            font-weight: 700;
-            margin-bottom: 15px;
-            line-height: 1.2;
-            color: #1a1a1a;
-            text-align: justify;
-            text-align-last: center;
-        }
+    a:hover {
+      text-decoration: underline;
+    }
 
-        .gradient-text {
-            background: linear-gradient(135deg, #4285f4 0%, #34a853 30%, #1ba1e2 60%, #0891b2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            color: transparent;
-            font-weight: 800;
-        }
+    .full-width-section {
+      width: 100vw;
+      margin-left: calc(-50vw + 50%);
+      padding-left: calc(50vw - 50%);
+      padding-right: calc(50vw - 50%);
+    }
 
-        h2 {
-            font-size: 1.6rem;
-            color: #1f71f6;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
+    .section-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
 
-        .contributors {
-            font-size: 1.1rem;
-            margin-bottom: 40px;
-            line-height: 1.8;
-            color: #555;
-        }
+    #hero {
+      padding: 60px 0;
+      text-align: center;
+      background-color: #fff;
+    }
 
-        .contributors a {
-            color: #1f71f6;
-            text-decoration: none;
-        }
+    h1 {
+      max-width: 1080px;
+      margin: 0 auto 15px;
+      color: #1a1a1a;
+      font-size: 2.8rem;
+      font-weight: 700;
+      line-height: 1.2;
+      text-align: justify;
+      text-align-last: center;
+      letter-spacing: 0;
+    }
 
-        .contributors a:hover {
-            text-decoration: underline;
-        }
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
 
-        .contributors .black-name {
-            color: #333;
-            text-decoration: none;
-        }
+    h2 {
+      margin-bottom: 15px;
+      color: #1f71f6;
+      font-size: 1.6rem;
+      font-weight: 600;
+      letter-spacing: 0;
+    }
 
-        .button-container {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 50px;
-        }
+    .gradient-text {
+      color: #1f71f6;
+      font-weight: 800;
+    }
 
-        .button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            width: 152px;
-            padding: 14px 28px;
-            background: #4a5568;
-            color: white;
-            text-decoration: none;
-            border-radius: 50px;
-            border: 1px solid #4a5568;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            position: relative;
-            overflow: visible;
-        }
+    .contributors {
+      margin-bottom: 40px;
+      color: #555;
+      font-size: 1.1rem;
+      line-height: 1.8;
+    }
 
-        .button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-            background: #1f71f6;
-            border-color: #1f71f6;
-        }
+    .title-motion {
+      display: block;
+      width: min(900px, 96vw);
+      margin: 0 auto 18px;
+      background: transparent;
+    }
 
-        .button img {
-            width: 18px;
-            height: 18px;
-            filter: brightness(0) invert(1);
-            transition: opacity 0.3s ease;
-        }
+    .title-subtitle {
+      max-width: 980px;
+      margin: 0 auto 18px;
+      color: #1a1a1a;
+      font-size: 2.05rem;
+      font-weight: 750;
+      line-height: 1.18;
+      text-align: center;
+      letter-spacing: 0;
+    }
 
-        .button.external::after {
-            content: "\2197";
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: #1f71f6;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.7rem;
-            line-height: 1;
-            border: 2px solid #fff;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
-        }
+    .contributors .black-name {
+      color: #333;
+      text-decoration: none;
+    }
 
-        .button.soft-attention {
-            animation: softButtonGlow 4s ease-in-out infinite;
-        }
+    .button-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 50px;
+    }
 
-        .button.code-link {
-            --soft-glow: rgba(31, 113, 246, 0.18);
-        }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 128px;
+      box-sizing: border-box;
+      padding: 14px 28px;
+      border: 1px solid #4a5568;
+      border-radius: 50px;
+      background: #4a5568;
+      color: #fff;
+      font-size: .95rem;
+      font-weight: 600;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, .1);
+      transition: all .3s ease;
+    }
 
-        .button.data-link {
-            --soft-glow: rgba(231, 142, 30, 0.20);
-        }
+    .button[href]:hover,
+    .button[href]:focus-visible {
+      transform: translateY(-3px);
+      border-color: #1f71f6;
+      background: #1f71f6;
+      color: #fff;
+      text-decoration: none;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, .15);
+    }
 
-        @keyframes softButtonGlow {
-            0%, 100% {
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1), 0 0 0 0 var(--soft-glow, rgba(31, 113, 246, 0.14));
-            }
-            50% {
-                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 0 0 7px var(--soft-glow, rgba(31, 113, 246, 0.10));
-            }
-        }
+    .button:not([href]) {
+      opacity: .72;
+      cursor: default;
+    }
 
-        .teaser-container {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 30px;
-        }
+    .button img {
+      width: 18px;
+      height: 18px;
+      transition: opacity .3s ease;
+    }
 
-        .teaser-video {
-            width: 100%;
-            max-width: 900px;
-            border-radius: 12px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-        }
+    .icon {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      flex: 0 0 auto;
+      background: currentColor;
+      -webkit-mask: var(--icon) center / contain no-repeat;
+      mask: var(--icon) center / contain no-repeat;
+    }
 
-        .description {
-            font-size: 1.2rem;
-            line-height: 1.7;
-            color: #555;
-            max-width: 900px;
-            margin: 0 auto;
-            text-align: justify;
-        }
+    .icon-code {
+      --icon: url("icons/github-icon.svg");
+    }
 
-        section {
-            margin-bottom: 0;
-            padding: 80px 0;
-        }
+    .icon-demo {
+      --icon: url("icons/demo-icon.svg");
+    }
 
-        #method {
-            background-color: #fafbfc;
-        }
+    .icon-gallery {
+      --icon: url("icons/gallery-icon.svg");
+    }
 
-        #results {
-            background-color: #ffffff;
-        }
+    .icon-bibtex {
+      --icon: url("icons/bibtex-icon.svg");
+    }
 
-        .bibtex-section {
-            background-color: #fafbfc;
-            padding: 80px 0;
-        }
+    .result-card {
+      max-width: 980px;
+      margin: 0 auto 30px;
+    }
 
-        .full-width-section {
-            width: 100vw;
-            margin-left: calc(-50vw + 50%);
-            padding-left: calc(50vw - 50%);
-            padding-right: calc(50vw - 50%);
-        }
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      background: #fff;
+      box-shadow: 0 5px 18px rgba(0, 0, 0, .07);
+    }
 
-        .section-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
+    table {
+      width: 100%;
+      min-width: 680px;
+      border-collapse: collapse;
+      color: #333;
+      font-size: .96rem;
+    }
 
-        .section-header {
-            text-align: center;
-            margin-bottom: 50px;
-        }
+    th,
+    td {
+      padding: 11px 12px;
+      border-bottom: 1px solid #e5e7eb;
+      text-align: center;
+      white-space: nowrap;
+    }
 
-        .large-header {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-            color: #1a1a1a;
-        }
+    th:first-child,
+    td:first-child {
+      text-align: left;
+    }
 
-        .small-text {
-            font-size: 1.1rem;
-            color: #666;
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: justify;
-        }
+    th {
+      background: #f3f7ff;
+      color: #1f71f6;
+      font-weight: 700;
+    }
 
-        .media-grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 30px;
-            align-items: start;
-        }
+    tr:last-child td {
+      border-bottom: 0;
+    }
 
-        .media-card {
-            background: #fff;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-            position: relative;
-        }
+    .ours td {
+      background: #f6fbff;
+      color: #1463d8;
+      font-weight: 700;
+    }
 
-        .media-card video,
-        .media-card img {
-            display: block;
-            width: 100%;
-            height: auto;
-        }
+    .yes {
+      color: #2f855a;
+      font-weight: 800;
+    }
 
-        .video-wrap {
-            position: relative;
-        }
+    .no {
+      color: #b94a48;
+      font-weight: 800;
+    }
 
-        .video-wrap video {
-            cursor: pointer;
-        }
+    .description {
+      max-width: 1080px;
+      margin: 0 auto 12px;
+      color: #555;
+      font-size: 1.2rem;
+      line-height: 1.7;
+      text-align: left;
+    }
 
-        .pause-toggle {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            display: inline-grid;
-            place-items: center;
-            width: 34px;
-            height: 34px;
-            border: 1px solid rgba(255, 255, 255, 0.64);
-            border-radius: 50%;
-            background: rgba(18, 26, 44, 0.54);
-            color: #fff;
-            cursor: pointer;
-            opacity: 0.76;
-            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.14);
-            transition: opacity 0.18s ease, transform 0.18s ease, background 0.18s ease;
-        }
+    .resource-badges {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-left: 10px;
+      vertical-align: middle;
+    }
 
-        .pause-toggle:hover,
-        .pause-toggle:focus-visible {
-            opacity: 0.96;
-            transform: translateY(-1px);
-            background: rgba(18, 26, 44, 0.70);
-        }
+    .resource-badge,
+    .inline-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: auto;
+      min-width: 38px;
+      height: 38px;
+      padding: 0 12px;
+      overflow: visible;
+      border: 1px solid var(--badge-border, #c7daf4);
+      border-radius: 999px;
+      background: var(--badge-bg, #f1f6ff);
+      color: var(--badge-fg, #355f92);
+      font-size: .84rem;
+      font-weight: 700;
+      line-height: 1;
+      white-space: nowrap;
+      text-decoration: none;
+      box-shadow: 0 6px 18px var(--badge-shadow, rgba(31, 113, 246, .08));
+      animation: badgeGlow 3.8s ease-in-out infinite;
+      transition: transform .22s ease, border-color .22s ease, background .22s ease, color .22s ease, box-shadow .22s ease;
+    }
 
-        .pause-toggle::before {
-            content: "";
-            width: 11px;
-            height: 14px;
-            border-right: 3px solid currentColor;
-            border-left: 3px solid currentColor;
-            box-sizing: border-box;
-        }
+    .resource-badge.resource-masks {
+      --badge-bg: #fff7eb;
+      --badge-border: #ffd7a3;
+      --badge-fg: #8a5518;
+      --badge-shadow: rgba(231, 142, 30, .12);
+      --badge-ring: rgba(231, 142, 30, .07);
+      --badge-hover-border: #e78e1e;
+      --badge-hover-shadow: rgba(231, 142, 30, .18);
+    }
 
-        .pause-toggle.is-paused::before {
-            width: 0;
-            height: 0;
-            border-top: 7px solid transparent;
-            border-bottom: 7px solid transparent;
-            border-left: 11px solid currentColor;
-            border-right: 0;
-        }
+    .inline-badge {
+      --badge-bg: #eef5ff;
+      --badge-border: #c5dafa;
+      --badge-fg: #275a9b;
+      --badge-shadow: rgba(31, 113, 246, .10);
+      --badge-ring: rgba(31, 113, 246, .07);
+      --badge-hover-border: #1f71f6;
+      --badge-hover-shadow: rgba(31, 113, 246, .16);
+      margin-left: 8px;
+      vertical-align: middle;
+    }
 
-        .media-caption {
-            padding: 18px 20px;
-            color: #555;
-            font-size: 1rem;
-        }
+    .resource-badge:hover,
+    .resource-badge:focus-visible,
+    .inline-badge:hover,
+    .inline-badge:focus-visible {
+      transform: translateY(-2px);
+      border-color: var(--badge-hover-border, #1f71f6);
+      text-decoration: none;
+      box-shadow: 0 10px 26px var(--badge-hover-shadow, rgba(31, 113, 246, .16));
+    }
 
-        .title-center {
-            text-align: center;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 40px;
-            color: #1a1a1a;
-        }
+    .resource-badge::after,
+    .inline-badge::after {
+      content: "↗";
+      font-size: .76rem;
+      line-height: 1;
+      opacity: .64;
+      transform: translateY(-1px);
+    }
 
-        .bibtex-container {
-            margin-bottom: 60px;
-            max-width: 1100px;
-            margin-left: auto;
-            margin-right: auto;
-        }
+    .resource-label {
+      max-width: 250px;
+      opacity: 1;
+      transform: translateX(0);
+    }
 
-        .bibtex-wrapper {
-            position: relative;
-            background: #2d3748;
-            border-radius: 12px;
-            padding: 30px;
-            border: 1px solid #4a5568;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
+    .resource-badge .icon,
+    .inline-badge .icon {
+      width: 18px;
+      height: 18px;
+    }
 
-        .bibtex-entry {
-            color: #e2e8f0;
-            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-            font-size: 0.9rem;
-            line-height: 1.6;
-            overflow-x: auto;
-            margin: 0;
-            white-space: pre;
-        }
+    @keyframes badgeGlow {
+      0%, 100% {
+        box-shadow: 0 6px 18px var(--badge-shadow, rgba(31, 113, 246, .08)), 0 0 0 0 var(--badge-ring, rgba(31, 113, 246, .10));
+      }
+      50% {
+        box-shadow: 0 10px 24px var(--badge-shadow, rgba(31, 113, 246, .12)), 0 0 0 6px var(--badge-ring, rgba(31, 113, 246, .10));
+      }
+    }
 
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2.2rem;
-                text-align: center;
-                text-align-last: center;
-            }
+    @media (prefers-reduced-motion: reduce) {
+      .resource-badge,
+      .inline-badge {
+        animation: none;
+      }
+    }
 
-            .button {
-                width: 152px;
-                justify-content: center;
-                padding: 12px 20px;
-                font-size: 0.9rem;
-            }
+    .method-section {
+      padding: 72px 0 62px;
+      background: #fafbfc;
+    }
 
-            .media-grid {
-                grid-template-columns: 1fr;
-            }
+    .method-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+      max-width: 980px;
+      margin: 0 auto;
+    }
 
-            .bibtex-wrapper {
-                padding: 20px;
-            }
-        }
-    </style>
+    .method-panel {
+      position: relative;
+      background: transparent;
+      overflow: hidden;
+    }
+
+    .method-panel video {
+      display: block;
+      width: 100%;
+      aspect-ratio: 40 / 11;
+      border-radius: 6px;
+      background: #f4f7f6;
+      object-fit: contain;
+      cursor: pointer;
+    }
+
+    .method-video-toggle {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: inline-grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border: 1px solid rgba(255, 255, 255, .64);
+      border-radius: 999px;
+      background: rgba(18, 26, 44, .54);
+      color: #fff;
+      cursor: pointer;
+      opacity: .76;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, .14);
+      transition: opacity .18s ease, transform .18s ease, background .18s ease;
+    }
+
+    .method-video-toggle:hover,
+    .method-video-toggle:focus-visible {
+      opacity: .96;
+      transform: translateY(-1px);
+      background: rgba(18, 26, 44, .70);
+    }
+
+    .method-video-toggle::before {
+      content: "";
+      width: 11px;
+      height: 14px;
+      border-right: 3px solid currentColor;
+      border-left: 3px solid currentColor;
+      box-sizing: border-box;
+    }
+
+    .method-video-toggle.is-paused::before {
+      width: 0;
+      height: 0;
+      border-top: 7px solid transparent;
+      border-bottom: 7px solid transparent;
+      border-left: 11px solid currentColor;
+      border-right: 0;
+    }
+
+    .method-copy {
+      padding: 10px 0 4px;
+      text-align: left;
+    }
+
+    .method-copy h3 {
+      display: none;
+    }
+
+    .method-copy p {
+      color: #555;
+      font-size: .98rem;
+      line-height: 1.55;
+    }
+
+    .gallery-control {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .gallery-arrow {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border: 1px solid #d9e2ec;
+      border-radius: 50%;
+      background: #fff;
+      color: #334155;
+      font-size: 1.05rem;
+      line-height: 1;
+      cursor: pointer;
+      transition: border-color .2s ease, background .2s ease, color .2s ease;
+    }
+
+    .gallery-arrow:hover {
+      border-color: #1f71f6;
+      background: #1f71f6;
+      color: #fff;
+    }
+
+    .sample-count {
+      min-width: 56px;
+      color: #4b5563;
+      font-size: .86rem;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .sample-title {
+      display: none;
+    }
+
+    .dataset-section {
+      padding: 72px 0 78px;
+      background: #fafbfc;
+    }
+
+    .section-note {
+      max-width: 1080px;
+      margin: -12px auto 16px;
+      color: #555;
+      font-size: 1.05rem;
+      line-height: 1.65;
+      text-align: center;
+    }
+
+    .sample-browser {
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    .sample-stage {
+      transition: opacity .28s cubic-bezier(.22, .61, .36, 1), transform .28s cubic-bezier(.22, .61, .36, 1);
+      will-change: opacity, transform;
+    }
+
+    .sample-stage.is-leaving-left,
+    .sample-stage.is-entering-right {
+      opacity: .62;
+      transform: translateX(-18px);
+    }
+
+    .sample-stage.is-leaving-right,
+    .sample-stage.is-entering-left {
+      opacity: .62;
+      transform: translateX(18px);
+    }
+
+    .media-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .media-grid.three-up {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .media-grid.two-up {
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+      align-items: start;
+    }
+
+    .media-block {
+      min-width: 0;
+    }
+
+    .media-block video {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 5px;
+      background: #f4f7f6;
+      object-fit: contain;
+    }
+
+    .media-block.is-wide video {
+      aspect-ratio: 40 / 11;
+    }
+
+    .media-label {
+      display: block;
+      margin-top: 7px;
+      color: #667085;
+      font-size: .8rem;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .sample-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      aspect-ratio: 16 / 9;
+      border: 1px dashed #c8d4e3;
+      border-radius: 6px;
+      background:
+        linear-gradient(135deg, rgba(31, 113, 246, .08), rgba(52, 168, 83, .06)),
+        #f8fbff;
+      color: #6b7280;
+      font-size: .74rem;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+
+    .gallery-section {
+      padding: 72px 0 80px;
+      background: #fff;
+    }
+
+    .bibtex-section {
+      padding: 80px 0;
+      background-color: #fafbfc;
+    }
+
+    .title-center {
+      margin-bottom: 30px;
+      text-align: center;
+      text-align-last: center;
+      font-size: 2.5rem;
+    }
+
+    .bibtex-container {
+      max-width: 1040px;
+      margin: 0 auto;
+    }
+
+    .bibtex-wrapper {
+      padding: 25px;
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, .08);
+      overflow-x: auto;
+    }
+
+    .bibtex-entry {
+      color: #333;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: .92rem;
+      line-height: 1.55;
+      white-space: pre;
+    }
+
+    @media (max-width: 768px) {
+      #hero {
+        padding: 42px 0 54px;
+      }
+
+      h1 {
+        font-size: 2rem;
+        text-align: center;
+      }
+
+      .title-subtitle {
+        font-size: 1.55rem;
+      }
+
+      h2 {
+        font-size: 1.35rem;
+      }
+
+      .button-container {
+        gap: 10px;
+        margin-bottom: 34px;
+      }
+
+      .button {
+        padding: 11px 18px;
+      }
+
+      .resource-badge,
+      .inline-badge {
+        width: auto;
+        max-width: 100%;
+        height: 34px;
+        gap: 8px;
+        padding: 0 12px;
+      }
+
+      .resource-label {
+        max-width: 250px;
+        opacity: 1;
+        transform: none;
+      }
+
+      .result-card {
+        max-width: 100%;
+      }
+
+      table {
+        min-width: 0;
+        table-layout: fixed;
+        font-size: .72rem;
+      }
+
+      th,
+      td {
+        padding: 8px 5px;
+        line-height: 1.25;
+        white-space: normal;
+      }
+
+      th:first-child,
+      td:first-child {
+        width: 42%;
+      }
+
+      .description {
+        text-align: left;
+      }
+
+      .resource-badges {
+        margin-top: 8px;
+        margin-left: 0;
+        vertical-align: middle;
+      }
+
+      .media-grid.three-up,
+      .media-grid.two-up {
+        grid-template-columns: 1fr;
+      }
+
+      .gallery-control {
+        gap: 14px;
+      }
+
+      .section-note {
+        text-align: left;
+      }
+
+      .inline-badge {
+        display: inline-flex;
+        margin-top: 0;
+        margin-left: 4px;
+        vertical-align: middle;
+      }
+
+      .bibtex-entry {
+        font-size: .72rem;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+      }
+    }
+  </style>
 </head>
 <body>
-    <main>
-        <section id="hero" class="full-width-section">
-            <div class="section-content">
-                <h1><span class="gradient-text">Geometric Reciprocity</span>: Unlocking Self-Supervision<br>for Stereoscopic Video Generation</h1>
-                <h2>ICML 2026</h2>
-                <p class="contributors">
-                    <span class="black-name">Jingyi Lu</span>,
-                    <a href="https://www.kaihan.org/" target="_blank" class="text-link">Kai Han</a>
-                    <br>
-                    <span class="affiliation"><a href="https://visailab.github.io/index.html" target="_blank" class="text-link">Visual AI Lab</a>, The University of Hong Kong</span><br>
-                </p>
+  <main>
+    <section id="hero" class="full-width-section">
+      <div class="section-content">
+        <h1 class="visually-hidden">Geometric Reciprocity: Unlocking Self-Supervision for Stereoscopic Video Generation</h1>
+        <video class="title-motion" src="assets/title_motion/geometric_reciprocity_shadow_motion_no_white_border.mp4" autoplay muted loop playsinline preload="auto" aria-label="Geometric Reciprocity title motion"></video>
+        <p class="title-subtitle">Unlocking Self-Supervision for Stereoscopic Video Generation</p>
+        <h2>ICML 2026</h2>
+        <p class="contributors">
+          <span class="black-name">Jingyi Lu</span>,
+          <a href="https://www.kaihan.org/" class="text-link">Kai Han</a>
+          <br>
+          <span class="affiliation"><a href="https://visailab.github.io/index.html" class="text-link">Visual AI Lab</a>, The University of Hong Kong</span>
+        </p>
 
-                <div class="button-container">
-                    <a href="https://openreview.net/pdf/1e6d610be1c563c0e3ebec1c9b866387101c7f2f.pdf" target="_blank" class="button external">
-                        <img src="icons/pdf-icon.svg" alt="Paper Icon">
-                        Paper
-                    </a>
-                    <a href="https://openreview.net/forum?id=c6cEfncR9W" target="_blank" class="button external">
-                        <img src="icons/arxiv-icon.svg" alt="OpenReview Icon">
-                        OpenReview
-                    </a>
-                    <a href="https://github.com/Visual-AI/GRT" target="_blank" class="button external soft-attention code-link">
-                        <img src="icons/github-icon.svg" alt="Code Icon">
-                        Code
-                    </a>
-                    <a href="https://huggingface.co/datasets/LuJingyi/kinetics400-grt-video-masks" target="_blank" class="button external soft-attention data-link">
-                        <img src="icons/data-icon.svg" alt="Data Icon">
-                        Data
-                    </a>
-                    <a href="#bibtex" class="button">
-                        <img src="icons/bibtex-icon.svg" alt="Bibtex Icon">
-                        BibTeX
-                    </a>
-                </div>
-
-                <div class="teaser-container">
-                    <video class="teaser-video" autoplay muted loop playsinline>
-                        <source src="assets/example.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                </div>
-
-                <p class="description">
-                    <span class="gradient-text">Geometric Reciprocity</span> turns geometric consistency in stereo video into self-supervision. It predicts disocclusion regions through reciprocal warping, then learns to complete the missing content for stereoscopic video generation.
-                </p>
-            </div>
-        </section>
-
-        <section id="method" class="full-width-section">
-            <div class="section-content">
-                <div class="section-header">
-                    <h2 class="large-header">Reciprocal Geometry for Stereo Video</h2>
-                    <p class="small-text">The method estimates where pixels become invisible under view synthesis and uses those regions as supervision for video inpainting.</p>
-                </div>
-                <div class="media-grid">
-                    <div class="media-card">
-                        <img src="assets/grt_visualization.gif" alt="GRT visualization">
-                        <p class="media-caption">Geometric reciprocity exposes disocclusion masks from paired warping directions.</p>
-                    </div>
-                    <div class="media-card">
-                        <div class="video-wrap">
-                            <video class="pausable-video" autoplay muted loop playsinline>
-                                <source src="assets/l2r_warp_fly.mp4" type="video/mp4">
-                                Your browser does not support the video tag.
-                            </video>
-                            <button class="pause-toggle" type="button" aria-label="Pause video"></button>
-                        </div>
-                        <p class="media-caption">Left-to-right warping reveals the missing regions that need stereo-aware completion.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="results" class="full-width-section">
-            <div class="section-content">
-                <div class="section-header">
-                    <h2 class="large-header">Self-Supervised Completion</h2>
-                    <p class="small-text">GRT provides a scalable training signal for stereoscopic video generation without requiring ground-truth stereo videos.</p>
-                </div>
-                <div class="teaser-container">
-                    <video class="teaser-video" autoplay muted loop playsinline>
-                        <source src="assets/grt_cycle_pixel_lost.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                </div>
-            </div>
-        </section>
-
-        <div class="bibtex-section full-width-section" id="bibtex">
-            <div class="section-content">
-                <h1 class="title-center">BibTeX</h1>
-                <div class="bibtex-container">
-                    <div class="bibtex-wrapper">
-                        <pre class="bibtex-entry">@inproceedings{lu2026grt,
-    author    = {Jingyi Lu and Kai Han},
-    title     = {Geometric Reciprocity: Unlocking Self-Supervision for Stereoscopic Video Generation},
-    booktitle = {International Conference on Machine Learning (ICML)},
-    year      = {2026},
-}</pre>
-                    </div>
-                </div>
-            </div>
+        <div class="button-container">
+          <a href="https://github.com/Visual-AI/GRT" class="button"><img src="icons/github-icon.svg" alt="Code Icon">Code</a>
+          <a href="https://colab.research.google.com/drive/1hDS54UVpPmM4_knV8Pt5bwrvq0h9ko3K?usp=sharing" class="button"><img src="icons/demo-icon.svg" alt="Demo Icon">Demo</a>
+          <a href="#dataset-gallery" class="button"><img src="icons/gallery-icon.svg" alt="Gallery Icon">Gallery</a>
+          <a href="#bibtex" class="button"><img src="icons/bibtex-icon.svg" alt="BibTeX Icon">BibTeX</a>
         </div>
-    </main>
-    <script>
-        document.querySelectorAll('.video-wrap').forEach((wrap) => {
-            const video = wrap.querySelector('video');
-            const button = wrap.querySelector('.pause-toggle');
-            if (!video || !button) {
-                return;
-            }
 
-            function renderButton() {
-                const paused = video.paused;
-                button.classList.toggle('is-paused', paused);
-                button.setAttribute('aria-label', paused ? 'Play video' : 'Pause video');
-            }
+        <div class="result-card" aria-label="Training data construction comparison">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Scalability</th>
+                  <th>Real-World</th>
+                  <th>Quality</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Real Stereo Pairs</td><td><span class="no">✗</span></td><td><span class="yes">✓</span></td><td><span class="no">✗</span></td></tr>
+                <tr><td>Synthetic Data</td><td><span class="yes">✓</span></td><td><span class="no">✗</span></td><td><span class="yes">✓</span></td></tr>
+                <tr class="ours"><td>Geometric Reciprocity (Ours)</td><td><span class="yes">✓</span></td><td><span class="yes">✓</span></td><td><span class="yes">✓</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
 
-            function togglePlayback() {
-                if (video.paused) {
-                    video.play().catch(() => {});
-                } else {
-                    video.pause();
-                }
-            }
+        <p class="description">
+          <span class="gradient-text">Geometric Reciprocity</span> constructs scalable, high-quality stereo inpainting data from real-world monocular videos, using inference-time consistent masks without relying on paired stereo videos.
+          <span class="resource-badges" aria-label="Project resources">
+            <a class="resource-badge resource-masks" href="https://huggingface.co/datasets/LuJingyi/kinetics400-grt-video-masks" aria-label="Kinetics-GRT Masks">
+              <span class="icon icon-gallery" aria-hidden="true"></span>
+              <span class="resource-label">~300K Kinetics-GRT Masks</span>
+            </a>
+          </span>
+        </p>
+      </div>
+    </section>
 
-            video.addEventListener('click', togglePlayback);
-            button.addEventListener('click', togglePlayback);
-            video.addEventListener('play', renderButton);
-            video.addEventListener('pause', renderButton);
-            renderButton();
+    <section class="method-section full-width-section" id="method">
+      <div class="section-content">
+        <h1 class="title-center">Method Insight</h1>
+        <div class="method-grid">
+          <article class="method-panel">
+            <video src="assets/method_videos_h264/l2r_warp_fly.mp4" autoplay muted loop playsinline></video>
+            <button class="method-video-toggle" type="button" aria-label="Pause method videos"></button>
+            <div class="method-copy">
+              <p>Depth-image-based rendering (DIBR) uses monocular depth estimates to warp the left view into the right view, but newly exposed regions lack ground-truth supervision.</p>
+            </div>
+          </article>
+          <article class="method-panel">
+            <video src="assets/method_videos_h264/grt_cycle_pixel_lost.mp4" autoplay muted loop playsinline></video>
+            <button class="method-video-toggle" type="button" aria-label="Pause method videos"></button>
+            <div class="method-copy">
+              <p>Starting from cycle consistency, GRT shows that pixels failing to complete the target-to-source-to-target round trip exactly reveal the target-view disocclusions, yielding supervision masks for stereo inpainting.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="dataset-section full-width-section" id="dataset-gallery">
+      <div class="section-content">
+        <h1 class="title-center">Dataset Gallery</h1>
+        <p class="section-note">
+          Kinetics videos paired with GRT-derived masks form training samples for stereo video inpainting.
+          <a class="inline-badge" href="https://github.com/Visual-AI/GRT" aria-label="Compute masks for your own videos">
+            <span class="icon icon-code" aria-hidden="true"></span>
+            <span class="resource-label">Compute masks for your own videos</span>
+          </a>
+        </p>
+        <div class="sample-browser" id="dataset-browser" aria-label="Kinetics training sample selector"></div>
+      </div>
+    </section>
+
+    <section class="gallery-section full-width-section" id="gallery">
+      <div class="section-content">
+        <h1 class="title-center">Results Gallery</h1>
+        <p class="section-note">Results after training a stereo video inpainting model with GRT-constructed data.</p>
+        <div class="sample-browser" id="results-browser" aria-label="Stereo video result selector"></div>
+      </div>
+    </section>
+
+    <div class="bibtex-section full-width-section" id="bibtex">
+      <div class="section-content">
+        <h1 class="title-center">BibTeX</h1>
+        <div class="bibtex-container">
+          <div class="bibtex-wrapper">
+            <pre class="bibtex-entry">@inproceedings{lu2026grt,
+  author    = {Jingyi Lu and Kai Han},
+  title     = {Geometric Reciprocity: Unlocking Self-Supervision for Stereoscopic Video Generation},
+  booktitle = {International Conference on Machine Learning (ICML)},
+  year      = {2026},
+}</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script>
+    const datasetSamples = Array.from({ length: 10 }, (_, index) => {
+      const id = String(index + 1).padStart(2, "0");
+      return {
+        name: `Sample ${id}`,
+        videos: [
+          { label: "Original", src: `assets/cases/dataset/sample${id}_original.mp4` },
+          { label: "Mask", src: `assets/cases/dataset/sample${id}_mask.mp4` },
+          { label: "Masked Input", src: `assets/cases/dataset/sample${id}_masked_input.mp4` },
+        ],
+      };
+    });
+
+    const resultSamples = [
+      ["Night Race", "night-race"],
+      ["Drift Chicane", "drift-chicane"],
+      ["Motorbike", "motorbike"],
+      ["Planes Water", "planes-water"],
+      ["Boat", "boat"],
+      ["Dogs Jump", "dogs-jump"],
+      ["Miami Surf", "miami-surf"],
+      ["Motocross Jump", "motocross-jump"],
+      ["Rollerblade", "rollerblade"],
+      ["Dog Agility", "dog-agility"],
+    ].map(([name, slug]) => ({
+      name,
+      videos: [
+        { label: "Side-by-side", src: `assets/cases/results/${slug}_sbs.mp4`, wide: true },
+        { label: "Anaglyph", src: `assets/cases/results/${slug}_anaglyph.mp4` },
+      ],
+    }));
+
+    function createVideo({ label, src, wide }) {
+      return `
+        <div class="media-block${wide ? " is-wide" : ""}">
+          <video src="${src}" muted playsinline preload="metadata"></video>
+          <span class="media-label">${label}</span>
+        </div>
+      `;
+    }
+
+    function createSampleBrowser(rootId, samples, columnsClass) {
+      const root = document.getElementById(rootId);
+      let activeIndex = 0;
+      let isVisible = false;
+      let isAnimating = false;
+
+      function playVisibleVideos() {
+        root.querySelectorAll("video").forEach((video) => {
+          if (isVisible) {
+            video.play().catch(() => {});
+          } else {
+            video.pause();
+          }
         });
-    </script>
+      }
+
+      function pauseVideos() {
+        root.querySelectorAll("video").forEach((video) => video.pause());
+      }
+
+      function render(enterClass = "") {
+        const active = samples[activeIndex];
+        const indexLabel = `${activeIndex + 1} / ${samples.length}`;
+        root.innerHTML = `
+          <div class="gallery-control" aria-label="Sample navigation">
+            <button class="gallery-arrow" type="button" data-action="prev" aria-label="Previous sample">‹</button>
+            <span class="sample-count">${indexLabel}</span>
+            <button class="gallery-arrow" type="button" data-action="next" aria-label="Next sample">›</button>
+          </div>
+          <div class="sample-stage">
+            <div class="sample-title">${indexLabel}</div>
+            <div class="media-grid ${columnsClass}">
+              ${active.videos.map(createVideo).join("")}
+            </div>
+          </div>
+        `;
+
+        const stage = root.querySelector(".sample-stage");
+        if (enterClass) {
+          stage.classList.add(enterClass);
+          requestAnimationFrame(() => {
+            stage.classList.remove(enterClass);
+          });
+        }
+
+        root.querySelectorAll(".gallery-arrow").forEach((button) => {
+          button.addEventListener("click", () => {
+            const direction = button.dataset.action === "next" ? 1 : -1;
+            goToSample(direction);
+          });
+        });
+
+        let didAdvance = false;
+        root.querySelectorAll("video").forEach((video) => {
+          video.addEventListener("ended", () => {
+            if (didAdvance) {
+              return;
+            }
+            didAdvance = true;
+            goToSample(1);
+          });
+          video.load();
+        });
+
+        playVisibleVideos();
+      }
+
+      function goToSample(direction) {
+        if (isAnimating) {
+          return;
+        }
+        isAnimating = true;
+        pauseVideos();
+
+        const stage = root.querySelector(".sample-stage");
+        const leavingClass = direction > 0 ? "is-leaving-left" : "is-leaving-right";
+        const enteringClass = direction > 0 ? "is-entering-right" : "is-entering-left";
+        if (stage) {
+          stage.classList.add(leavingClass);
+        }
+
+        window.setTimeout(() => {
+          activeIndex = (activeIndex + direction + samples.length) % samples.length;
+          render(enteringClass);
+          isAnimating = false;
+        }, 260);
+      }
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          isVisible = entry.isIntersecting && entry.intersectionRatio >= 0.2;
+          playVisibleVideos();
+        });
+      }, { threshold: [0, 0.2, 0.5] });
+
+      render();
+      observer.observe(root);
+    }
+
+    function syncMethodVideos() {
+      const videos = [...document.querySelectorAll(".method-panel video")];
+      const buttons = [...document.querySelectorAll(".method-video-toggle")];
+      if (videos.length < 2) {
+        return;
+      }
+
+      const leader = videos[0];
+      let syncing = false;
+      let isVisible = false;
+      let userPaused = false;
+
+      function renderButtons() {
+        const paused = leader.paused || userPaused;
+        buttons.forEach((button) => {
+          button.classList.toggle("is-paused", paused);
+          button.setAttribute("aria-label", paused ? "Play method videos" : "Pause method videos");
+        });
+      }
+
+      function alignFollowers(force = false) {
+        if (syncing) {
+          return;
+        }
+        syncing = true;
+        videos.slice(1).forEach((video) => {
+          if (force || Math.abs(video.currentTime - leader.currentTime) > 0.08) {
+            video.currentTime = leader.currentTime;
+          }
+          if (!leader.paused && video.paused) {
+            video.play().catch(() => {});
+          }
+          if (leader.paused && !video.paused) {
+            video.pause();
+          }
+        });
+        syncing = false;
+      }
+
+      function updatePlayback() {
+        if (isVisible && !userPaused) {
+          videos.forEach((video) => video.play().catch(() => {}));
+        } else {
+          videos.forEach((video) => video.pause());
+        }
+        renderButtons();
+      }
+
+      videos.forEach((video) => {
+        video.muted = true;
+        video.loop = true;
+        video.addEventListener("click", () => {
+          userPaused = !userPaused;
+          updatePlayback();
+        });
+      });
+
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          userPaused = !userPaused;
+          updatePlayback();
+        });
+      });
+
+      leader.addEventListener("play", () => {
+        alignFollowers(true);
+        renderButtons();
+      });
+      leader.addEventListener("pause", () => {
+        alignFollowers(true);
+        renderButtons();
+      });
+      leader.addEventListener("seeking", () => alignFollowers(true));
+      leader.addEventListener("timeupdate", () => alignFollowers(false));
+
+      Promise.all(videos.map((video) => new Promise((resolve) => {
+        if (video.readyState >= 1) {
+          resolve();
+        } else {
+          video.addEventListener("loadedmetadata", resolve, { once: true });
+        }
+      }))).then(() => {
+        leader.currentTime = 0;
+        videos.slice(1).forEach((video) => {
+          video.currentTime = 0;
+        });
+        updatePlayback();
+      });
+
+      const methodObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          isVisible = entry.isIntersecting && entry.intersectionRatio >= 0.2;
+          updatePlayback();
+        });
+      }, { threshold: [0, 0.2, 0.5] });
+
+      methodObserver.observe(document.getElementById("method"));
+    }
+
+    createSampleBrowser("dataset-browser", datasetSamples, "three-up");
+    createSampleBrowser("results-browser", resultSamples, "two-up");
+    syncMethodVideos();
+  </script>
 </body>
 </html>
