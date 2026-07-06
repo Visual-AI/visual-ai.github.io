@@ -89,7 +89,9 @@
         .button {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 10px;
+            width: 152px;
             padding: 14px 28px;
             background: #4a5568;
             color: white;
@@ -135,6 +137,27 @@
             line-height: 1;
             border: 2px solid #fff;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+        }
+
+        .button.soft-attention {
+            animation: softButtonGlow 4s ease-in-out infinite;
+        }
+
+        .button.code-link {
+            --soft-glow: rgba(31, 113, 246, 0.18);
+        }
+
+        .button.data-link {
+            --soft-glow: rgba(231, 142, 30, 0.20);
+        }
+
+        @keyframes softButtonGlow {
+            0%, 100% {
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1), 0 0 0 0 var(--soft-glow, rgba(31, 113, 246, 0.14));
+            }
+            50% {
+                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 0 0 7px var(--soft-glow, rgba(31, 113, 246, 0.10));
+            }
         }
 
         .teaser-container {
@@ -222,6 +245,7 @@
             border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
         }
 
         .media-card video,
@@ -229,6 +253,57 @@
             display: block;
             width: 100%;
             height: auto;
+        }
+
+        .video-wrap {
+            position: relative;
+        }
+
+        .video-wrap video {
+            cursor: pointer;
+        }
+
+        .pause-toggle {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            display: inline-grid;
+            place-items: center;
+            width: 34px;
+            height: 34px;
+            border: 1px solid rgba(255, 255, 255, 0.64);
+            border-radius: 50%;
+            background: rgba(18, 26, 44, 0.54);
+            color: #fff;
+            cursor: pointer;
+            opacity: 0.76;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.14);
+            transition: opacity 0.18s ease, transform 0.18s ease, background 0.18s ease;
+        }
+
+        .pause-toggle:hover,
+        .pause-toggle:focus-visible {
+            opacity: 0.96;
+            transform: translateY(-1px);
+            background: rgba(18, 26, 44, 0.70);
+        }
+
+        .pause-toggle::before {
+            content: "";
+            width: 11px;
+            height: 14px;
+            border-right: 3px solid currentColor;
+            border-left: 3px solid currentColor;
+            box-sizing: border-box;
+        }
+
+        .pause-toggle.is-paused::before {
+            width: 0;
+            height: 0;
+            border-top: 7px solid transparent;
+            border-bottom: 7px solid transparent;
+            border-left: 11px solid currentColor;
+            border-right: 0;
         }
 
         .media-caption {
@@ -279,7 +354,7 @@
             }
 
             .button {
-                min-width: 120px;
+                width: 152px;
                 justify-content: center;
                 padding: 12px 20px;
                 font-size: 0.9rem;
@@ -317,11 +392,11 @@
                         <img src="icons/arxiv-icon.svg" alt="OpenReview Icon">
                         OpenReview
                     </a>
-                    <a href="https://github.com/Visual-AI/GRT" target="_blank" class="button external">
+                    <a href="https://github.com/Visual-AI/GRT" target="_blank" class="button external soft-attention code-link">
                         <img src="icons/github-icon.svg" alt="Code Icon">
                         Code
                     </a>
-                    <a href="https://huggingface.co/datasets/LuJingyi/kinetics400-grt-video-masks" target="_blank" class="button external">
+                    <a href="https://huggingface.co/datasets/LuJingyi/kinetics400-grt-video-masks" target="_blank" class="button external soft-attention data-link">
                         <img src="icons/data-icon.svg" alt="Data Icon">
                         Data
                     </a>
@@ -356,10 +431,13 @@
                         <p class="media-caption">Geometric reciprocity exposes disocclusion masks from paired warping directions.</p>
                     </div>
                     <div class="media-card">
-                        <video autoplay muted loop playsinline>
-                            <source src="assets/l2r_warp_fly.mp4" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
+                        <div class="video-wrap">
+                            <video class="pausable-video" autoplay muted loop playsinline>
+                                <source src="assets/l2r_warp_fly.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                            <button class="pause-toggle" type="button" aria-label="Pause video"></button>
+                        </div>
                         <p class="media-caption">Left-to-right warping reveals the missing regions that need stereo-aware completion.</p>
                     </div>
                 </div>
@@ -397,5 +475,34 @@
             </div>
         </div>
     </main>
+    <script>
+        document.querySelectorAll('.video-wrap').forEach((wrap) => {
+            const video = wrap.querySelector('video');
+            const button = wrap.querySelector('.pause-toggle');
+            if (!video || !button) {
+                return;
+            }
+
+            function renderButton() {
+                const paused = video.paused;
+                button.classList.toggle('is-paused', paused);
+                button.setAttribute('aria-label', paused ? 'Play video' : 'Pause video');
+            }
+
+            function togglePlayback() {
+                if (video.paused) {
+                    video.play().catch(() => {});
+                } else {
+                    video.pause();
+                }
+            }
+
+            video.addEventListener('click', togglePlayback);
+            button.addEventListener('click', togglePlayback);
+            video.addEventListener('play', renderButton);
+            video.addEventListener('pause', renderButton);
+            renderButton();
+        });
+    </script>
 </body>
 </html>
