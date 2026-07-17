@@ -1,0 +1,298 @@
+{
+  "Object Rel Distance": [
+    {
+      "question": "Measuring from the closest point of each object, which of these objects (fireplace, tv, sofa, chair) is the closest to the stove?",
+      "options": "A. fireplace; B. tv; C. sofa; D. chair",
+      "model_answer": "D",
+      "gt_answer": "D",
+      "video_src": "assets/sample_video/arkitscenes/42898849.mp4"
+    },
+    {
+      "question": "Measuring from the closest point of each object, which of these objects (monitor, trash can, door, computer mouse) is the closest to the whiteboard?",
+      "options": "A. monitor; B. trash can; C. door; D. computer mouse",
+      "model_answer": "A",
+      "gt_answer": "A",
+      "video_src": "assets/sample_video/scannetpp/ac48a9b736.mp4"
+    },
+    {
+      "question": "Measuring from the closest point of each object, which of these objects (printer, laptop, door, table) is the closest to the shoes?",
+      "options": "A. printer; B. laptop; C. door; D. table",
+      "model_answer": "D",
+      "gt_answer": "D",
+      "video_src": "assets/sample_video/scannetpp/d755b3d9d8.mp4"
+    },
+    {
+      "question": "Measuring from the closest point of each object, which of these objects (pillow, refrigerator, nightstand, door) is the closest to the monitor?",
+      "options": "A. pillow; B. refrigerator; C. nightstand; D. door",
+      "model_answer": "C",
+      "gt_answer": "C",
+      "video_src": "assets/sample_video/scannet/scene0207_02.mp4"
+    },
+    {
+      "question": "Measuring from the closest point of each object, which of these objects (window, table, keyboard, trash bin) is the closest to the door?",
+      "options": "A. window; B. table; C. keyboard; D. trash bin",
+      "model_answer": "B",
+      "gt_answer": "B",
+      "video_src": "assets/sample_video/scannet/scene0653_00.mp4"
+    }
+  ],
+  "Object Counting": [
+    {
+      "question": "How many window(s) are in this room?",
+      "options": "",
+      "model_answer": "2",
+      "gt_answer": "2",
+      "video_src": "assets/sample_video/scannet/scene0697_01.mp4"
+    },
+    {
+      "question": "How many table(s) are in this room?",
+      "options": "",
+      "model_answer": "2",
+      "gt_answer": "2",
+      "video_src": "assets/sample_video/arkitscenes/45260928.mp4"
+    },
+    {
+      "question": "How many table(s) are in this room?",
+      "options": "",
+      "model_answer": "2",
+      "gt_answer": "2",
+      "video_src": "assets/sample_video/arkitscenes/45662943.mp4"
+    },
+    {
+      "question": "How many sofa(s) are in this room?",
+      "options": "",
+      "model_answer": "2",
+      "gt_answer": "2",
+      "video_src": "assets/sample_video/arkitscenes/42898869.mp4"
+    },
+    {
+      "question": "How many trash can(s) are in this room?",
+      "options": "",
+      "model_answer": "2",
+      "gt_answer": "2",
+      "video_src": "assets/sample_video/scannetpp/acd95847c5.mp4"
+    }
+  ],
+  "Object Rel Direction": [
+    {
+      "question": "If I am standing by the toilet and facing the bed, is the tv to my front-left, front-right, back-left, or back-right?\nThe directions refer to the quadrants of a Cartesian plane (if I am standing at the origin and facing along the positive y-axis).",
+      "options": "A. front-right; B. front-left; C. back-left; D. back-right",
+      "model_answer": "B",
+      "gt_answer": "B",
+      "video_src": "assets/sample_video/arkitscenes/42446167.mp4"
+    },
+    {
+      "question": "If I am standing by the ceiling light and facing the toilet, is the door to my left, right, or back?\nAn object is to my back if I would have to turn at least 135 degrees in order to face it.",
+      "options": "A. left; B. back; C. right",
+      "model_answer": "C",
+      "gt_answer": "C",
+      "video_src": "assets/sample_video/scannetpp/31a2c91c43.mp4"
+    },
+    {
+      "question": "If I am standing by the door and facing the computer tower, is the telephone to my left, right, or back?\nAn object is to my back if I would have to turn at least 135 degrees in order to face it.",
+      "options": "A. left; B. right; C. back",
+      "model_answer": "B",
+      "gt_answer": "B",
+      "video_src": "assets/sample_video/scannetpp/5eb31827b7.mp4"
+    },
+    {
+      "question": "If I am standing by the door and facing the laptop, is the bookshelf to my left, right, or back?\nAn object is to my back if I would have to turn at least 135 degrees in order to face it.",
+      "options": "A. back; B. left; C. right",
+      "model_answer": "C",
+      "gt_answer": "C",
+      "video_src": "assets/sample_video/scannetpp/acd95847c5.mp4"
+    },
+    {
+      "question": "If I am standing by the window and facing the trash bin, is the door to my left, right, or back?\nAn object is to my back if I would have to turn at least 135 degrees in order to face it.",
+      "options": "A. right; B. back; C. left",
+      "model_answer": "A",
+      "gt_answer": "A",
+      "video_src": "assets/sample_video/scannet/scene0693_00.mp4"
+    }
+  ],
+  "Route Planning": [
+    {
+      "question": "You are a robot beginning at the door and facing the window. You want to navigate to the monitor. You will perform the following actions (Note: for each [please fill in], choose either 'turn back,' 'turn left,' or 'turn right.'): 1. Go forward until the heater 2. [please fill in] 3. Go forward until the monitor. You have reached the final destination.",
+      "options": "A. Turn Left; B. Turn Back; C. Turn Right",
+      "model_answer": "C",
+      "gt_answer": "C",
+      "video_src": "assets/sample_video/scannetpp/c49a8c6cff.mp4"
+    },
+    {
+      "question": "You are a robot beginning at the door and facing into the room. You want to navigate to the backpack. You will perform the following actions (Note: for each [please fill in], choose either 'turn back,' 'turn left,' or 'turn right.'): 1. Go forward until the corner of the sofa 2. [please fill in] 3. Go forward until the corner of the desk 4. [please fill in] 5. Go forward until the backpack. You have reached the final destination.",
+      "options": "A. Turn Back, Turn Right; B. Turn Right, Turn Right; C. Turn Right, Turn Left; D. Turn Left, Turn Left",
+      "model_answer": "C",
+      "gt_answer": "C",
+      "video_src": "assets/sample_video/scannet/scene0474_04.mp4"
+    },
+    {
+      "question": "You are a robot beginning at the window and facing the window. You want to navigate to the door. You will perform the following actions (Note: for each [please fill in], choose either 'turn back,' 'turn left,' or 'turn right.'): 1. [please fill in] 2. Go forward until the wall 3. [please fill in] 4. Go forward until the door. You have reached the final destination.",
+      "options": "A. Turn Right, Turn Right; B. Turn Back, Turn Right; C. Turn Left, Turn Right; D. Turn Right, Turn Left",
+      "model_answer": "B",
+      "gt_answer": "B",
+      "video_src": "assets/sample_video/scannet/scene0695_00.mp4"
+    },
+    {
+      "question": "You are a robot beginning at the red candles and facing the window. You want to navigate to the door. You will perform the following actions (Note: for each [please fill in], choose either 'turn back,' 'turn left,' or 'turn right.'): 1. [please fill in] 2. Go forward until the sofa with heaters positioned behind it. 3. [please fill in] 4. Go forward until the door. You have reached the final destination.",
+      "options": "A. Turn Right, Turn Right; B. Turn Back, Turn Right; C. Turn Left, Turn Right; D. Turn Right, Turn Left",
+      "model_answer": "B",
+      "gt_answer": "B",
+      "video_src": "assets/sample_video/arkitscenes/42898869.mp4"
+    },
+    {
+      "question": "You are a robot beginning at the door and facing the stool. You want to navigate to the bed. You will perform the following actions (Note: for each [please fill in], choose either 'turn back,' 'turn left,' or 'turn right.'): 1. Go forward until the stool 2. [please fill in] 3. Go forward until the bed. You have reached the final destination.",
+      "options": "A. Turn Left; B. Turn Back; C. Turn Right",
+      "model_answer": "C",
+      "gt_answer": "C",
+      "video_src": "assets/sample_video/arkitscenes/47429922.mp4"
+    }
+  ],
+  "Object Size Estimation": [
+    {
+      "question": "What is the length of the longest dimension (length, width, or height) of the washer, measured in centimeters?",
+      "options": "",
+      "model_answer": "85",
+      "gt_answer": "87",
+      "video_src": "assets/sample_video/arkitscenes/47332908.mp4"
+    },
+    {
+      "question": "What is the length of the longest dimension (length, width, or height) of the dishwasher, measured in centimeters?",
+      "options": "",
+      "model_answer": "90",
+      "gt_answer": "91",
+      "video_src": "assets/sample_video/arkitscenes/42444976.mp4"
+    },
+    {
+      "question": "What is the length of the longest dimension (length, width, or height) of the towel, measured in centimeters?",
+      "options": "",
+      "model_answer": "71",
+      "gt_answer": "73",
+      "video_src": "assets/sample_video/scannet/scene0246_00.mp4"
+    },
+    {
+      "question": "What is the length of the longest dimension (length, width, or height) of the sofa, measured in centimeters?",
+      "options": "",
+      "model_answer": "175",
+      "gt_answer": "182",
+      "video_src": "assets/sample_video/scannet/scene0593_00.mp4"
+    },
+    {
+      "question": "What is the length of the longest dimension (length, width, or height) of the toilet, measured in centimeters?",
+      "options": "",
+      "model_answer": "82",
+      "gt_answer": "84",
+      "video_src": "assets/sample_video/arkitscenes/47332005.mp4"
+    }
+  ],
+  "Room Size Estimation": [
+    {
+      "question": "What is the size of this room (in square meters)? \nIf multiple rooms are shown, estimate the size of the combined space.",
+      "options": "",
+      "model_answer": "15.2",
+      "gt_answer": "14.8",
+      "video_src": "assets/sample_video/arkitscenes/42898826.mp4"
+    },
+    {
+      "question": "What is the size of this room (in square meters)? \nIf multiple rooms are shown, estimate the size of the combined space.",
+      "options": "",
+      "model_answer": "17.6",
+      "gt_answer": "18.1",
+      "video_src": "assets/sample_video/scannetpp/acd95847c5.mp4"
+    },
+    {
+      "question": "What is the size of this room (in square meters)? \nIf multiple rooms are shown, estimate the size of the combined space.",
+      "options": "",
+      "model_answer": "11.0",
+      "gt_answer": "10.6",
+      "video_src": "assets/sample_video/scannet/scene0149_00.mp4"
+    },
+    {
+      "question": "What is the size of this room (in square meters)? \nIf multiple rooms are shown, estimate the size of the combined space.",
+      "options": "",
+      "model_answer": "15.2",
+      "gt_answer": "14.8",
+      "video_src": "assets/sample_video/arkitscenes/42446116.mp4"
+    },
+    {
+      "question": "What is the size of this room (in square meters)? \nIf multiple rooms are shown, estimate the size of the combined space.",
+      "options": "",
+      "model_answer": "21.8",
+      "gt_answer": "22.6",
+      "video_src": "assets/sample_video/arkitscenes/47115525.mp4"
+    }
+  ],
+  "Object Abs Distance": [
+    {
+      "question": "Measuring from the closest point of each object, what is the distance between the telephone and the pillow (in meters)?",
+      "options": "",
+      "model_answer": "3.4",
+      "gt_answer": "3.3",
+      "video_src": "assets/sample_video/scannet/scene0025_01.mp4"
+    },
+    {
+      "question": "Measuring from the closest point of each object, what is the distance between the tv and the refrigerator (in meters)?",
+      "options": "",
+      "model_answer": "2.2",
+      "gt_answer": "2.1",
+      "video_src": "assets/sample_video/arkitscenes/42897538.mp4"
+    },
+    {
+      "question": "Measuring from the closest point of each object, what is the distance between the ceiling light and the suitcase (in meters)?",
+      "options": "",
+      "model_answer": "2.3",
+      "gt_answer": "2.4",
+      "video_src": "assets/sample_video/scannetpp/cc5237fd77.mp4"
+    },
+    {
+      "question": "Measuring from the closest point of each object, what is the distance between the radiator and the counter (in meters)?",
+      "options": "",
+      "model_answer": "3.4",
+      "gt_answer": "3.5",
+      "video_src": "assets/sample_video/scannet/scene0207_02.mp4"
+    },
+    {
+      "question": "Measuring from the closest point of each object, what is the distance between the table and the tv (in meters)?",
+      "options": "",
+      "model_answer": "2.8",
+      "gt_answer": "2.7",
+      "video_src": "assets/sample_video/arkitscenes/42445031.mp4"
+    }
+  ],
+  "Obj Appearance Order": [
+    {
+      "question": "What will be the first-time appearance order of the following categories in the video: door, refrigerator, ceiling light, printer?",
+      "options": "A. printer, door, ceiling light, refrigerator; B. ceiling light, door, printer, refrigerator; C. door, refrigerator, ceiling light, printer; D. door, ceiling light, refrigerator, printer",
+      "model_answer": "B",
+      "gt_answer": "B",
+      "video_src": "assets/sample_video/scannetpp/5f99900f09.mp4"
+    },
+    {
+      "question": "What will be the first-time appearance order of the following categories in the video: chair, monitor, kettle, door?",
+      "options": "A. chair, monitor, door, kettle; B. kettle, monitor, door, chair; C. chair, monitor, kettle, door; D. door, chair, monitor, kettle",
+      "model_answer": "A",
+      "gt_answer": "A",
+      "video_src": "assets/sample_video/scannetpp/578511c8a9.mp4"
+    },
+    {
+      "question": "What will be the first-time appearance order of the following categories in the video: door, guitar, lamp, sofa?",
+      "options": "A. door, sofa, guitar, lamp; B. guitar, sofa, door, lamp; C. door, guitar, lamp, sofa; D. lamp, guitar, door, sofa",
+      "model_answer": "B",
+      "gt_answer": "B",
+      "video_src": "assets/sample_video/scannet/scene0608_00.mp4"
+    },
+    {
+      "question": "What will be the first-time appearance order of the following categories in the video: sofa, refrigerator, blanket, kettle?",
+      "options": "A. sofa, blanket, kettle, refrigerator; B. sofa, blanket, refrigerator, kettle; C. sofa, refrigerator, blanket, kettle; D. sofa, kettle, blanket, refrigerator",
+      "model_answer": "B",
+      "gt_answer": "B",
+      "video_src": "assets/sample_video/scannetpp/09c1414f1b.mp4"
+    },
+    {
+      "question": "What will be the first-time appearance order of the following categories in the video: window, lamp, pillow, chair?",
+      "options": "A. window, pillow, lamp, chair; B. pillow, chair, window, lamp; C. pillow, chair, lamp, window; D. window, lamp, pillow, chair",
+      "model_answer": "C",
+      "gt_answer": "C",
+      "video_src": "assets/sample_video/scannet/scene0426_00.mp4"
+    }
+  ]
+}
