@@ -6,7 +6,7 @@
         content="LooC: Effective Low-Dimensional Codebook for Compositional Vector Quantization">
   <meta name="keywords" content="Vector Quantization, Effective Codebook, Visual Representation">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>LooC: Effective Low-Dimentional Codebook for Compositional Vector Quantization</title>
+  <title>LooC: Effective Low-Dimensional Codebook for Compositional Vector Quantization</title>
 
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script> -->
@@ -34,6 +34,70 @@
   <link rel="stylesheet" href="./static/css/index.css">
   <link rel="icon" href="./static/images/visailab.jpeg">
 
+  <style>
+    .fig-caption {
+      background: #f6f8fa;
+      border: 1px solid #e6eaf0;
+      border-radius: 10px;
+      padding: 14px 22px;
+      margin: 20px auto 8px;
+      max-width: 880px;
+      font-size: 0.92rem;
+      color: #4a4a4a;
+      line-height: 1.65;
+      text-align: left;
+    }
+    .fig-caption .cap-label { font-weight: 700; color: #1a1a1a; }
+    .fig-caption b { color: #1a1a1a; font-weight: 600; }
+
+    .venue-badge {
+      display: inline-block;
+      background: #eef2ff;
+      color: #3730a3;
+      font-weight: 700;
+      font-size: 0.95rem;
+      letter-spacing: 0.02em;
+      padding: 5px 18px;
+      border-radius: 999px;
+      border: 1px solid #d7ddfb;
+    }
+
+    .bibtex-box {
+      position: relative;
+      background: #282c34;
+      border-radius: 12px;
+      padding: 22px 24px;
+      box-shadow: 0 8px 26px rgba(0, 0, 0, 0.14);
+      overflow: hidden;
+    }
+    .bibtex-box pre { background: transparent; padding: 0; margin: 0; overflow-x: auto; }
+    .bibtex-box code {
+      background: transparent;
+      color: #e6e9ef;
+      font-family: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.9rem;
+      line-height: 1.65;
+    }
+    .copy-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 36px;
+      height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.10);
+      color: #e6e9ef;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .copy-btn:hover { background: rgba(255, 255, 255, 0.22); }
+    .copied-msg { color: #57d68a; font-size: 0.85rem; margin-left: 10px; }
+  </style>
+
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script defer src="./static/js/fontawesome.all.min.js"></script>
   <script src="./static/js/bulma-carousel.min.js"></script>
@@ -48,19 +112,23 @@
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">LooC: Effective Low-Dimentional Codebook for Compositional Vector Quantization</h1>
+          <h1 class="title is-1 publication-title">LooC: Effective Low-Dimensional Codebook for Compositional Vector Quantization</h1>
           <div class="is-size-5 publication-authors">
             <span class="author-block">
-              <a href="https://github.com/waterljwant/">Jie Li</a><sup>1</sup>,</span>
+              <a href="https://github.com/waterljwant/">Jie Li</a>,</span>
             <span class="author-block">
-              <a href="https://i.cs.hku.hk/~kykwong/">Kwan-Yee K. Wong</a><sup>1</sup>,</span>
+              <a href="https://i.cs.hku.hk/~kykwong/">Kwan-Yee K. Wong</a>,</span>
             <span class="author-block">
-              <a href="https://www.kaihan.org/">Kai Han</a><sup>1</sup>
+              <a href="https://www.kaihan.org/">Kai Han</a>
             </span>
           </div>
 
           <div class="is-size-5 publication-authors">
-            <span class="author-block"><sup>1</sup>The University of Hong Kong</span>
+            <span class="author-block">The University of Hong Kong</span>
+          </div>
+
+          <div class="is-size-5 publication-authors" style="margin-top: 10px;">
+            <span class="venue-badge">WACV 2026</span>
           </div>
 
           <div class="column has-text-centered">
@@ -136,9 +204,12 @@
 <div class="col justify-content-center text-center">
   <div class="col-sm-12">
       <center>
-      <img src="static/images/teaser.png" style="width:30%">
+      <img src="static/images/teaser.png" style="width:62%">
       </center>
   </div>
+  <p class="fig-caption">
+    <span class="cap-label">LooC achieves state-of-the-art reconstruction with a far more compact codebook.</span> <b>Left:</b> codebook configurations — number of codevectors K versus code dimension d<sup>*</sup> — where LooC operates in a highly compact regime (red) unreachable by prior methods. <b>Right:</b> reconstruction quality (SSIM) versus codebook size K; LooC variants consistently surpass CVQ and VQ-VAE while using a fraction of the parameters.
+  </p>
 </div>
 
 <section class="section">
@@ -188,16 +259,9 @@
                 <img src="static/images/pipeline.png" style="width:100%">
             </div>
           </div>
-          <div class="content has-text-justified">
-            <br>
-            <p>
-              Framework of Low-dimensional codebook for C ompositional vector quantization (LooC). The encoder transforms the input
-              image into a continuous latent feature map z. z is then upsampled using bilinear interpolation with scale factor β. Simultaneously, each
-              feature vector in z is divided into m units and quantized using a shared codebook C containing K codevectors of dimension d∗ = d/m. The
-              quantized units are then reassembled and smoothed using average pooling to restore the shape as z. Finally, the decoder converts the feature
-              map back to the image.
-            </p>
-          </div>
+          <p class="fig-caption">
+            <span class="cap-label">Framework of LooC.</span> The encoder transforms the input image into a continuous latent feature map z, which is then upsampled using bilinear interpolation with scale factor β. Simultaneously, each feature vector in z is divided into m units and quantized using a shared codebook C containing K codevectors of dimension d∗ = d/m. The quantized units are then reassembled and smoothed using average pooling to restore the shape of z. Finally, the decoder converts the feature map back to the image.
+          </p>
         </div>
       </div>
     </div>
@@ -211,9 +275,9 @@
           <h2 class="title is-3">Performance</h2>
           <div class="col justify-content-center text-center">
           </div>
-          <div class="content has-text-justified">
-            <p>
-              Image reconstruction results on low-resolution datasets of MNIST [27] and CIFAR10 [25]. LooC outperforms other SOTA methods with a significantly reduced codebook size of 32 × 4, which is 1024× smaller than 1024 × 128 used by most SOTAs.. 
+          <div class="content">
+            <p class="fig-caption">
+              <span class="cap-label">Table 1.</span> Image reconstruction results on low-resolution datasets <b>MNIST</b> and <b>CIFAR10</b>. LooC outperforms other SOTA methods with a significantly reduced codebook size of <b>32 × 4</b> — <b>1024× smaller</b> than the 1024 × 128 used by most SOTAs.
             </p>
             <div class="col justify-content-center text-center">
                 <div class="col-sm-12">
@@ -222,8 +286,8 @@
                     </center>
                 </div>
             </div>
-            <p>
-              mage reconstruction on high-resolution datasets of FFHQ [ 22 ] and ImageNet [4]. LooC has a compact code-book size of 256 × 4, which is 256× smaller than most SOTA methods’1024 × 256.
+            <p class="fig-caption">
+              <span class="cap-label">Table 2.</span> Image reconstruction on high-resolution datasets <b>FFHQ</b> and <b>ImageNet</b>. LooC has a compact codebook size of <b>256 × 4</b> — <b>256× smaller</b> than the 1024 × 256 used by most SOTA methods.
             </p>
             <div class="col justify-content-center text-center">
                 <div class="col-sm-12">
@@ -244,10 +308,16 @@
       <div class="columns is-centered has-text-centered">
         <div class="column is-four-fifths">
           <h2 class="title is-3">Visualization</h2>
-          <div class="content has-text-justified">
-            <p>
-              Qualitative results. Reconstructed images using VQGAN [7], CVQ [53], and LooC. LooC significantly enhances reconstruction
-              quality by preserving image details and restoring texture structures, as highlighted in the red boxes (best viewed in PDF with zoom).
+          <div class="content">
+            <div class="col justify-content-center text-center">
+                <div class="col-sm-12">
+                    <center>
+                    <img src="static/images/Fig-reconstruction.png" style="width:70%">
+                    </center>
+                </div>
+            </div>
+            <p class="fig-caption">
+              <span class="cap-label">Qualitative results.</span> Reconstructed images using <b>VQGAN</b>, <b>CVQ</b>, and <b>LooC</b>. LooC significantly enhances reconstruction quality by preserving image details and restoring texture structures, as highlighted in the red boxes (best viewed zoomed in).
             </p>
             <div class="col justify-content-center text-center">
                 <div class="col-sm-12">
@@ -256,16 +326,9 @@
                     </center>
                 </div>
             </div>
-            <p>
-              Unconditional image generation on LSUN [48] and class-conditional image generation on Imagenet [4].
+            <p class="fig-caption">
+              <span class="cap-label">Image generation.</span> Unconditional image generation on <b>LSUN</b> and class-conditional image generation on <b>ImageNet</b>.
             </p>
-            <div class="col justify-content-center text-center">
-                <div class="col-sm-12">
-                    <center>
-                    <img src="static/images/Fig-generation.png" style="width:70%">
-                    </center>
-                </div>
-            </div>
           </div>
         </div>
       </div>
@@ -275,17 +338,16 @@
   <section class="section" id="Bib">
     <div class="container is-max-desktop content">
       <h2 class="title">BibTeX</h2>
+      <div class="bibtex-box">
+        <button class="copy-btn" onclick="copyToClipboard('BibTeX','BibTeX_cop')" aria-label="Copy BibTeX"><i class="fa fa-copy"></i></button>
 <pre><code id="BibTeX">@inproceedings{li26wacv,
     author    = {Li, Jie and Wong, Kwan-Yee~K. and Han, Kai},
     title     = {LooC: Effective Low-Dimensional Codebook for Compositional Vector Quantization},
-    booktitle = {Proc. Winter Conference on Applications of Computer Vision},
-    volume    = {},
-    pages     = {},
-    address   = {Tucson, Arizona, USA},
-    month     = {March},
+    booktitle = {Proc. Winter Conference on Applications of Computer Vision (WACV)},
     year      = {2026}
-}
-</code><button class="copy-button" style="--button-hover-background: var(--example-color-alt); --button-color: var(--white); --button-background: var(--example-color-alt); --button-margin-bottom: 0;" class="copyButton btn" onclick="copyToClipboard('BibTeX','BibTeX_cop')"><i class="fa fa-copy"></i></button><p id="BibTeX_cop" style="display:none;color: #a0a0a0">Copied!</p></pre>
+}</code></pre>
+      </div>
+      <span id="BibTeX_cop" class="copied-msg" style="display:none">Copied!</span>
     </div>
   </section>
 
