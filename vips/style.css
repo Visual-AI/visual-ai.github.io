@@ -1,0 +1,353 @@
+:root {
+    --text-color: #333;
+    --bg-color: #fff;
+    --link-color: #007bff;
+    --accent-color: #0056b3;
+    --caption-color: #555;
+    --code-bg: #f4f4f4;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    line-height: 1.3;
+}
+
+.authors {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.author {
+    margin: 0 0.4rem;
+}
+
+.affiliations {
+    font-size: 1.1rem;
+    color: var(--caption-color);
+    margin-bottom: 0.5rem;
+    font-style: italic;
+}
+
+.author-note {
+    font-size: 0.9rem;
+    color: var(--caption-color);
+    margin-bottom: 1.5rem;
+}
+
+.corresp {
+    font-weight: normal;
+    margin-left: 2px;
+}
+
+.links {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.btn {
+    display: inline-block;
+    padding: 0.6rem 1.5rem;
+    background-color: #2c3e50;
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn:hover {
+    background-color: #1a252f;
+    transform: translateY(-1px);
+}
+
+section {
+    margin-bottom: 3rem;
+}
+
+h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid #eaeaea;
+    padding-bottom: 0.5rem;
+}
+
+p {
+    font-size: 1.1rem;
+    text-align: justify;
+    margin-bottom: 1rem;
+}
+
+img, video {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    background-color: #f8f9fa; /* 添加了浅色背景 */
+}
+
+.caption {
+    font-size: 0.95rem;
+    color: var(--caption-color);
+    text-align: left;
+    margin-top: 0.8rem;
+    line-height: 1.5;
+}
+
+.citation pre {
+    background-color: var(--code-bg);
+    padding: 1.2rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: 0.95rem;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    border: 1px solid #e0e0e0;
+}
+
+/* Visualization Section Styles */
+.category-selector {
+    margin-bottom: 2rem;
+}
+
+.category-label {
+    font-size: 0.95rem;
+    color: var(--caption-color);
+    margin-bottom: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.category-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .category-buttons {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.cat-btn {
+    padding: 0.8rem 0.5rem;
+    background-color: #ffffff;
+    border: 1px solid #dcdcdc;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    color: #444;
+    font-family: inherit;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.cat-btn:hover {
+    background-color: #f0f4f8;
+    border-color: #c0c4c8;
+    transform: translateY(-1px);
+}
+
+.cat-btn.active {
+    background-color: #f0f4f8 !important;
+    color: #2c3e50 !important;
+    border-color: #2c3e50 !important;
+    border-width: 2px !important;
+    box-shadow: 0 4px 8px rgba(44, 62, 80, 0.1) !important;
+    font-weight: 600;
+}
+
+.sample-selector {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.8rem;
+    background: #f8f9fa;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    border: 1px solid #e9ecef;
+}
+
+.sample-label {
+    font-size: 0.9rem;
+    color: #666;
+    font-weight: 500;
+    margin-right: 0.5rem;
+}
+
+.sample-btn {
+    padding: 0.4rem 0.8rem;
+    background-color: transparent;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    color: #555;
+    font-family: inherit;
+    font-weight: 500;
+}
+
+.sample-btn:hover {
+    background-color: #e9ecef;
+}
+
+.sample-btn.active {
+    background-color: #2c3e50 !important;
+    color: white !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.qa-container {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    border: 1px solid #f0f0f0;
+    display: flex !important; /* 改为 flex 布局 */
+    gap: 2rem;
+    align-items: stretch;
+    min-height: 400px; /* 给整个卡片一个最小高度，避免频繁抖动 */
+}
+
+.qa-video {
+    flex: 0 0 50%; /* 固定视频区域占一半宽度 */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #f8f9fa; /* 给视频容器一个底色 */
+    border-radius: 8px;
+    overflow: hidden; /* 确保内部视频不会超出圆角 */
+    aspect-ratio: 4 / 3; /* 强制锁定一个长宽比，比如 4:3 或 16:9，彻底解决大小跳动 */
+}
+
+.qa-video video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* 保证视频完整显示，且不会改变容器大小 */
+    background-color: transparent; /* 移除 video 标签自带的背景色 */
+    margin: 0;
+    box-shadow: none; /* 移除之前可能加在 video 上的阴影 */
+}
+
+.qa-text {
+    flex: 1; /* 文字区域占据剩下空间 */
+    font-size: 1.05rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* 响应式：在小屏幕上退回到上下布局 */
+@media (max-width: 768px) {
+    .qa-container {
+        flex-direction: column;
+    }
+    .qa-video {
+        flex: 0 0 auto;
+    }
+}
+
+.qa-question {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    color: #1a252f;
+    line-height: 1.6;
+}
+
+.qa-answers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px dashed #eee;
+}
+
+.badge-gt {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    padding: 0.3rem 0.8rem;
+    border-radius: 6px;
+    font-weight: 600;
+    display: inline-block;
+    margin-left: 0.5rem;
+}
+
+.badge-pred {
+    background-color: #e3f2fd;
+    color: #1565c0;
+    padding: 0.3rem 0.8rem;
+    border-radius: 6px;
+    font-weight: 600;
+    display: inline-block;
+    margin-left: 0.5rem;
+}
+
+.video-container {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 1rem;
+    cursor: pointer;
+}
+
+.video-container video {
+    margin-bottom: 0;
+}
+
+.replay-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    width: 64px;
+    height: 64px;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 50%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.video-container:hover .replay-overlay {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beyond Single Expert: Harmonizing Diverse Visual Priors in MLLMs for Spatial Understanding</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="title">Beyond Single Expert: Harmonizing Diverse Visual Priors in MLLMs for Spatial Understanding</h1>
+            <div class="authors">
+                <span class="author">Xiao Lin</span>, 
+                <span class="author">Xiaohu Huang</span>, 
+                <span class="author">Kai Han<sup class="corresp">*</sup></span>
+            </div>
+            <div class="affiliations">
+                <span class="affiliation">The University of Hong Kong</span>
+            </div>
+            <div class="author-note">
+                <sup>*</sup> Corresponding Author
+            </div>
+            <div class="links">
+                <a href="https://arxiv.org/abs/2607.15054" class="btn" target="_blank" rel="noopener noreferrer">
+                    <span class="icon">📄</span>
+                    Paper
+                </a>
+                <a href="#" class="btn">Code (Coming Soon)</a>
+            </div>
+        </header>
+
+        <section class="teaser" style="margin-top: 2rem;">
+            <div class="video-container" id="teaserVideoContainer" style="max-width: 800px; margin: 0 auto;">
+                <video id="teaserVideo" autoplay muted playsinline style="width:100%; display:block; margin:0 auto; cursor:pointer;" title="Click to replay">
+                    <source src="assets/figure1_v2.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <div id="teaserReplayOverlay" class="replay-overlay">
+                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left: -2px;">
+                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                </div>
+            </div>
+            <script>
+                const teaserVideo = document.getElementById('teaserVideo');
+                const teaserReplayOverlay = document.getElementById('teaserReplayOverlay');
+                const teaserContainer = document.getElementById('teaserVideoContainer');
+
+                // Force continuous playback to prevent auto-pause when scrolling out of view
+                teaserVideo.addEventListener('pause', () => {
+                    if (!teaserVideo.ended) {
+                        teaserVideo.play();
+                    }
+                });
+
+                // Show replay overlay when ended (combined with CSS hover)
+                teaserVideo.addEventListener('ended', () => {
+                    teaserReplayOverlay.style.display = 'flex';
+                });
+
+                // Hide replay overlay when playing
+                teaserVideo.addEventListener('play', () => {
+                    teaserReplayOverlay.style.display = 'none';
+                });
+
+                // Click to replay
+                teaserContainer.addEventListener('click', () => {
+                    if (teaserVideo.ended || teaserVideo.paused) {
+                        teaserVideo.currentTime = 0;
+                        teaserVideo.play();
+                    }
+                });
+            </script>
+            <p class="caption">
+                <strong>Our Multi-Prior Framework:</strong> Instead of relying on a single external encoder, our approach integrates diverse knowledge from multiple expert models into the MLLM, achieving state-of-the-art performance across multiple spatial understanding benchmarks.
+            </p>
+        </section>
+
+        <!-- Visualization Section Moved to Right Below Teaser -->
+        <section class="visualization" style="max-width: 900px; margin: 0 auto; padding-top: 1rem; padding-bottom: 2rem;">
+            <div class="category-selector">
+                <div class="category-label">Task Category</div>
+                <div class="category-buttons" id="categoryButtons">
+                    <!-- Categories will be injected here -->
+                </div>
+            </div>
+
+            <div class="sample-selector" id="sampleSelector">
+                <div class="sample-label">Select Sample:</div>
+                <!-- Sample 1-5 buttons will be injected here -->
+            </div>
+
+            <div class="qa-container" id="qaContainer" style="display: none;">
+                <div class="qa-video">
+                    <video id="sampleVideo" controls autoplay muted playsinline>
+                        <source id="sampleVideoSrc" src="" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <div class="qa-text">
+                    <div class="qa-question"><strong>Question:</strong> <span id="sampleQ"></span></div>
+                    
+                    <div class="qa-answer-block">
+                        <div class="qa-gt"><strong>Ground Truth:</strong> <span id="sampleGT" class="badge-gt"></span></div>
+                        <div class="qa-pred"><strong>Model Prediction:</strong> <span id="samplePred" class="badge-pred"></span></div>
+                    </div>
+                </div>
+            </div>
+            
+            <p style="text-align: center; color: var(--caption-color); font-size: 0.95rem; margin-top: 1.5rem; font-style: italic;">
+                * The qualitative results are from the <strong>VSI-Bench</strong> dataset.
+            </p>
+
+            <script>
+                // Load JSON data and initialize the visualization component
+                fetch('assets/qa_data.json')
+                    .then(response => response.json())
+                    .then(data => {
+                        const categories = Object.keys(data);
+                        let currentCategory = categories[0];
+                        let currentSampleIdx = 0;
+
+                        const catContainer = document.getElementById('categoryButtons');
+                        const sampleContainer = document.getElementById('sampleSelector');
+                        const qaContainer = document.getElementById('qaContainer');
+                        
+                        const sampleVideo = document.getElementById('sampleVideo');
+                        const sampleQ = document.getElementById('sampleQ');
+                        const sampleGT = document.getElementById('sampleGT');
+                        const samplePred = document.getElementById('samplePred');
+
+                        // 1. Render Category Buttons
+                        categories.forEach((cat, idx) => {
+                            const btn = document.createElement('button');
+                            btn.className = 'cat-btn';
+                            btn.innerText = cat;
+                            btn.onclick = () => {
+                                document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+                                btn.classList.add('active');
+                                currentCategory = cat;
+                                currentSampleIdx = 0; // Reset to sample 1 on category change
+                                renderSampleButtons();
+                                renderContent();
+                            };
+                            catContainer.appendChild(btn);
+                        });
+
+                        // 2. Render Sample Selector Buttons
+                        function renderSampleButtons() {
+                            // 保留 Label，清除旧按钮
+                            const labelHtml = '<div class="sample-label">Select Sample:</div>';
+                            sampleContainer.innerHTML = labelHtml;
+                            const samples = data[currentCategory];
+                            samples.forEach((_, idx) => {
+                                const btn = document.createElement('button');
+                                btn.className = 'sample-btn';
+                                btn.innerText = `Sample ${idx + 1}`;
+                                if (idx === currentSampleIdx) btn.classList.add('active');
+                                btn.onclick = () => {
+                                    document.querySelectorAll('.sample-btn').forEach(b => b.classList.remove('active'));
+                                    btn.classList.add('active');
+                                    currentSampleIdx = idx;
+                                    renderContent();
+                                };
+                                sampleContainer.appendChild(btn);
+                            });
+                        }
+
+                        // 3. Render Content (Video & QA)
+                        function renderContent() {
+                            const sample = data[currentCategory][currentSampleIdx];
+                            
+                            // Build the final question string
+                            let fullQuestion = sample.question;
+                            if (sample.options && sample.options.trim() !== '') {
+                                // Add options right after the question, properly formatted
+                                const formattedOptions = sample.options.split(';').map(opt => opt.trim()).join('<br>');
+                                fullQuestion += '<br><br>' + formattedOptions;
+                            }
+                            
+                            sampleQ.innerHTML = fullQuestion;
+                            
+                            sampleGT.innerText = sample.gt_answer;
+                            samplePred.innerText = sample.model_answer;
+                            
+                            // 统一使用相同的蓝色样式，不再进行正误判断
+                            samplePred.className = 'badge-pred';
+
+                            // Update video source and reload
+                            sampleVideo.src = sample.video_src;
+                            sampleVideo.load();
+                            sampleVideo.play();
+                            qaContainer.style.display = 'flex'; // Changed from 'block' to 'flex'
+                        }
+
+                        // Initialize first view
+                        // Add a small delay to ensure DOM is ready
+                        setTimeout(() => {
+                            // 强制找到第一个按钮并触发点击
+                            const firstCatBtn = document.querySelector('.cat-btn');
+                            if (firstCatBtn) {
+                                firstCatBtn.click();
+                            }
+                        }, 100); // 稍微增加一点延迟，确保渲染完全
+                    })
+                    .catch(err => console.error("Failed to load QA data:", err));
+            </script>
+        </section>
+
+        <div class="content">
+            <section class="abstract">
+                <h2>Abstract</h2>
+            <p>
+                Multimodal Large Language Models (MLLMs) have demonstrated substantial promise in spatial understanding. Existing works typically incorporate prior knowledge extracted from a pre-trained foundation model to further enhance the spatial awareness of MLLMs. In this paper, we first reveal that when integrating diverse foundation models into MLLMs, each model provides complementary spatial priors that benefit different tasks. Motivated by this, we propose <strong>ViPS</strong>, a novel multi-model prior framework designed to fully unleash the potential of incorporating multiple <strong>Vi</strong>sual <strong>P</strong>riors from diverse models into MLLMs for <strong>S</strong>patial understanding. Specifically, ViPS introduces an Efficient Prior Proxy to generate multiple foundational priors with minimal inference overhead, and a Dynamic Prior Fusion mechanism to achieve harmonious and context-aware prior fusion and injection from the prior proxies. Extensive experiments demonstrate that ViPS successfully harmonizes diverse visual priors, establishing new state-of-the-art performance across multiple complex spatial reasoning and 3D spatial understanding benchmarks.
+            </p>
+        </section>
+
+        <section class="motivation">
+            <h2>Motivation</h2>
+            <img src="assets/figure2.svg" alt="Motivation Figure">
+            <p class="caption">
+                <strong>Relative Performance of Diverse Foundation Models:</strong> Evaluating various foundation models as priors across spatial tasks reveals that no single model dominates all metrics, highlighting the necessity of integrating diverse multi-model priors.
+            </p>
+        </section>
+
+        <section class="method">
+            <h2>Method</h2>
+            <div class="video-container" id="methodVideoContainer">
+                <video id="methodVideo" autoplay muted playsinline>
+                    <source src="assets/figure3.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <div id="replayOverlay" class="replay-overlay">
+                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-left: -2px;">
+                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                </div>
+            </div>
+            <script>
+                const methodVideo = document.getElementById('methodVideo');
+                const replayOverlay = document.getElementById('replayOverlay');
+                const container = document.getElementById('methodVideoContainer');
+
+                // 强制视频持续播放，防止浏览器在滚动出可视区域时自动暂停
+                methodVideo.addEventListener('pause', () => {
+                    if (!methodVideo.ended) {
+                        methodVideo.play();
+                    }
+                });
+
+                // 播放结束时显示重播按钮
+                methodVideo.addEventListener('ended', () => {
+                    replayOverlay.style.display = 'flex';
+                });
+
+                // 播放开始时隐藏重播按钮
+                methodVideo.addEventListener('play', () => {
+                    replayOverlay.style.display = 'none';
+                });
+
+                // 点击整个视频区域都可以重播
+                container.addEventListener('click', () => {
+                    if (methodVideo.ended || methodVideo.paused) {
+                        methodVideo.currentTime = 0;
+                        methodVideo.play();
+                    }
+                });
+            </script>
+            <p class="caption">
+                <strong>Overview of the Proposed ViPS Framework.</strong> The framework integrates distinct prior knowledge from multiple foundation models via the Efficient Prior Proxy and coordinates them using Dynamic Prior Fusion for comprehensive spatial reasoning.
+            </p>
+        </section>
+
+        <section class="results">
+            <h2>Experimental Results</h2>
+            <img src="assets/results1.png" alt="Results on VSI-Bench">
+            <img src="assets/results2.png" alt="Results on ScanNet-Series">
+            <p class="caption">
+                <strong>Performance Comparison:</strong> ViPS achieves state-of-the-art results on both VSI-Bench and ScanNet-series benchmarks, surpassing existing spatial-enhanced MLLMs across a wide range of complex spatial reasoning and 3D understanding tasks.
+            </p>
+        </section>
+
+        <section class="bibtex">
+            <h2>BibTeX</h2>
+            <div class="code-block">
+                <pre><code>@misc{lin2026singleexpertharmonizingdiverse, 
+      title={Beyond Single Expert: Harmonizing Diverse Visual Priors in MLLMs for Spatial Understanding}, 
+      author={Xiao Lin and Xiaohu Huang and Kai Han}, 
+      year={2026}, 
+      eprint={2607.15054}, 
+      archivePrefix={arXiv}, 
+      primaryClass={cs.CV}, 
+      url={https://arxiv.org/abs/2607.15054}, 
+}</code></pre>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
