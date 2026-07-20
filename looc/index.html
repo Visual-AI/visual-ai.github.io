@@ -95,7 +95,14 @@
       transition: background 0.2s ease;
     }
     .copy-btn:hover { background: rgba(255, 255, 255, 0.22); }
-    .copied-msg { color: #57d68a; font-size: 0.85rem; margin-left: 10px; }
+    .copied-msg {
+      position: absolute;
+      top: 20px;
+      right: 58px;
+      color: #57d68a;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
   </style>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -339,6 +346,7 @@
     <div class="container is-max-desktop content">
       <h2 class="title">BibTeX</h2>
       <div class="bibtex-box">
+        <span id="BibTeX_cop" class="copied-msg" style="display:none">Copied!</span>
         <button class="copy-btn" onclick="copyToClipboard('BibTeX','BibTeX_cop')" aria-label="Copy BibTeX"><i class="fa fa-copy"></i></button>
 <pre><code id="BibTeX">@inproceedings{li26wacv,
     author    = {Li, Jie and Wong, Kwan-Yee~K. and Han, Kai},
@@ -347,7 +355,6 @@
     year      = {2026}
 }</code></pre>
       </div>
-      <span id="BibTeX_cop" class="copied-msg" style="display:none">Copied!</span>
     </div>
   </section>
 
