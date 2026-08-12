@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>SCoPE: Sightline-Coordinate Positional Encoding for Video Diffusion Transformers</title>
+<meta name="description" content="SCoPE gives every video token its camera ray as a second positional coordinate, enabling precise camera control in pretrained video diffusion transformers."/>
+<link rel="canonical" href="https://visual-ai.github.io/scope/"/>
+<meta property="og:title" content="SCoPE: Sightline-Coordinate Positional Encoding for Video Diffusion Transformers"/>
+<meta property="og:description" content="Camera control as a property of the coordinate system for video diffusion transformers."/>
+<meta property="og:url" content="https://visual-ai.github.io/scope/"/>
+<meta property="og:image" content="https://visual-ai.github.io/scope/figs/scope_teaser.png"/>
+<style>
+:root{
+  --bg:#0c0e13;--fg:#eef1f6;--muted:#9aa3b2;--accent:#4ecdff;--rec:#ff5d5d;
+  --frame:#181c24;--frame-edge:#2b3140;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;background:radial-gradient(1200px 600px at 50% -10%,#1a1f2b 0%,var(--bg) 55%) fixed;
+  color:var(--fg);line-height:1.65;
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;}
+a{color:var(--accent);text-decoration:none;}
+.hero{max-width:920px;margin:0 auto;padding:72px 24px 6px;text-align:center;}
+.hero h1{font-size:clamp(26px,4vw,40px);font-weight:800;letter-spacing:-.02em;line-height:1.22;margin:0 0 16px;
+  background:linear-gradient(180deg,#fff,#b9c4d6);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.venue{color:var(--muted);font-size:15px;margin:0 0 14px;}
+.tagline{color:var(--muted);font-size:15px;max-width:700px;margin:0 auto;}
+.authors{display:flex;justify-content:center;gap:7px 22px;flex-wrap:wrap;margin:18px auto 8px;
+  max-width:880px;color:#e3e8f1;font-size:16px;font-weight:650;line-height:1.45;}
+.authors span{white-space:nowrap;}
+.authors sup,.affiliations sup{color:var(--accent);font-size:.7em;vertical-align:super;}
+.affiliations{display:flex;justify-content:center;gap:4px 20px;flex-wrap:wrap;max-width:900px;
+  margin:0 auto;color:#aeb7c6;font-size:13.5px;line-height:1.55;}
+.contrib{color:#727d8f;font-size:12px;margin:7px auto 15px;}
+.switch{display:inline-flex;gap:4px;margin-top:18px;padding:4px;border:1px solid #2b3140;
+  border-radius:999px;background:#12151c;}
+.switch a{padding:6px 18px;border-radius:999px;font-size:13px;font-weight:650;color:var(--muted);
+  transition:background .18s ease,color .18s ease;}
+.switch a:hover{color:#e7ecf5;}
+.switch a.on{background:var(--accent);color:#0a0c10;}
+.wrap{max-width:1500px;margin:0 auto;padding:0 24px 110px;}
+.abstract{max-width:860px;margin:40px auto 0;}
+.abstract h2{font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);text-align:center;margin:0 0 14px;}
+.abstract p{font-size:16px;color:#c8cedb;margin:0;text-align:justify;}
+.links{display:flex;justify-content:center;gap:12px;margin-top:20px;flex-wrap:wrap;}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 18px;border-radius:999px;
+  border:1px solid var(--frame-edge);background:linear-gradient(180deg,#1c212b,#13161d);
+  color:#eef1f6;font-size:14px;font-weight:650;
+  transition:border-color .18s ease,background .18s ease,transform .12s ease;}
+.btn:hover{border-color:var(--accent);background:linear-gradient(180deg,#222a38,#161a22);}
+.btn:active{transform:scale(.97);}
+.btn .ico{font-size:15px;line-height:1;}
+.teaser{max-width:860px;margin:34px auto 0;padding:14px;border-radius:14px;
+  background:#fff;border:1px solid #2b3140;box-shadow:0 12px 34px rgba(0,0,0,.42);}
+.teaser>a{display:block;border-radius:6px;cursor:zoom-in;}
+.teaser>a:focus-visible{outline:3px solid var(--accent);outline-offset:3px;}
+.teaser img{width:100%;height:auto;display:block;border-radius:6px;}
+.teaser .cap{color:#4f5968;font-size:13px;line-height:1.55;margin:12px 4px 1px;text-align:justify;}
+.idea{max-width:860px;margin:30px auto 0;}
+.idea h2{font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);text-align:center;margin:0 0 14px;}
+.idea ul{margin:0;padding:0;list-style:none;display:grid;gap:12px;}
+.idea li{position:relative;padding-left:22px;font-size:15.5px;color:#c8cedb;}
+.idea li::before{content:"";position:absolute;left:2px;top:9px;width:8px;height:8px;border-radius:2px;
+  background:var(--accent);transform:rotate(45deg);}
+.idea li strong{color:#eef1f6;font-weight:680;}
+.divider{max-width:860px;margin:54px auto 0;border:none;border-top:1px solid #232838;}
+.section{margin-top:64px;}
+.section-head{max-width:1500px;margin:0 auto 26px;}
+.section-head h2{font-size:26px;font-weight:780;letter-spacing:-.01em;margin:0 0 4px;}
+.section-head .desc{color:var(--muted);font-size:15px;margin:0;}
+.kicker{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--accent);margin:0 0 8px;}
+.wrap{max-width:1640px;}        /* deck 无视频框, 整体放大一点 */
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:40px 34px;}
+
+/* ── 牌组 (点击翻牌, 可拖拽抛出) ── */
+.gallery{position:relative;}
+.stack{position:relative;margin:0 4px;perspective:1300px;padding-bottom:54px;  /* 刚好包住探头卡, 控制条紧贴卡堆 */
+  touch-action:pan-y;}
+.stack::before{content:"";display:block;padding-top:57.69%;}   /* 顶卡高度 832:480 */
+.stack.no-anim .card{transition:none !important;}
+.card{position:absolute;left:0;right:0;top:0;aspect-ratio:832/480;border-radius:16px;overflow:hidden;
+  background:#000;border:1px solid rgba(255,255,255,.08);transform-origin:50% 60%;
+  box-shadow:0 22px 45px rgba(0,0,0,.55),0 2px 6px rgba(0,0,0,.4);
+  transition:transform .52s cubic-bezier(.22,.61,.36,1),opacity .42s ease,filter .42s ease;
+  will-change:transform,opacity;backface-visibility:hidden;pointer-events:none;}
+.card:not(.back){cursor:pointer;pointer-events:auto;}
+.card video{width:100%;height:100%;object-fit:cover;display:block;background:#000;pointer-events:none;}
+.card .vstatus{position:absolute;left:50%;top:50%;z-index:7;display:none;transform:translate(-50%,-50%);
+  width:max-content;max-width:80%;padding:9px 13px;border:1px solid rgba(255,255,255,.2);border-radius:9px;
+  background:rgba(12,14,19,.88);color:#e7ecf5;font:600 12px/1.3 inherit;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.35);}
+.card .vstatus.show{display:block;}
+.card .cveil{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .42s ease;
+  background:linear-gradient(180deg,rgba(8,10,14,.05) 40%,rgba(8,10,14,.45));}
+.card.back .cveil{opacity:1;}
+/* 字幕放到顶部, 避开底部 WASD/HUD; 弱化不抢眼 */
+.card .cinfo{position:absolute;left:0;right:0;top:0;padding:11px 14px 22px;pointer-events:none;
+  background:linear-gradient(180deg,rgba(8,10,14,.5),rgba(8,10,14,0));
+  opacity:0;transition:opacity .3s ease;}
+.card:not(.back) .cinfo{opacity:1;}
+.card .ctag{font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;
+  color:rgba(228,233,242,.66);text-shadow:0 1px 3px rgba(0,0,0,.55);}
+.card .expand{position:absolute;top:8px;right:8px;z-index:5;width:30px;height:30px;border-radius:8px;
+  border:1px solid rgba(255,255,255,.16);background:rgba(12,14,19,.5);backdrop-filter:blur(6px);
+  color:#dfe6f2;font-size:15px;cursor:pointer;display:none;align-items:center;justify-content:center;
+  opacity:0;transition:opacity .2s ease,background .2s ease;}
+.card:not(.back) .expand{display:flex;}
+.gallery:hover .card:not(.back) .expand{opacity:.85;}
+.card .expand:hover{background:rgba(30,40,60,.9);opacity:1;}
+.deckbar{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:6px;}
+.nav{width:46px;height:46px;border-radius:50%;border:1px solid var(--frame-edge);
+  background:linear-gradient(180deg,#1c212b,#13161d);color:#eef1f6;font-size:24px;line-height:1;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;flex:none;
+  box-shadow:0 4px 14px rgba(0,0,0,.4);transition:transform .12s ease,background .18s ease,border-color .18s ease;}
+.nav:hover{border-color:var(--accent);background:linear-gradient(180deg,#222a38,#161a22);}
+.nav:active{transform:scale(.9);}
+.count{font-variant-numeric:tabular-nums;font-size:12.5px;color:var(--muted);
+  background:#0c0e13;border:1px solid #262c39;border-radius:999px;padding:4px 12px;min-width:54px;text-align:center;}
+.hint{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:#586074;
+  white-space:nowrap;opacity:.55;transition:opacity .3s ease;}
+.gallery:hover .hint{opacity:.85;}
+@media(max-width:980px){.hint{display:none;}}
+
+footer{max-width:860px;margin:80px auto 0;text-align:center;color:var(--muted);font-size:13px;}
+.citation{max-width:860px;margin:72px auto 0;}
+.citation h2{font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);text-align:center;margin:0 0 14px;}
+.citation pre{margin:0;padding:20px 22px;overflow-x:auto;border:1px solid var(--frame-edge);border-radius:12px;
+  background:#10131a;color:#cbd3df;font:13px/1.65 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+  box-shadow:0 10px 28px rgba(0,0,0,.25);white-space:pre;}
+.lightbox{position:fixed;inset:0;z-index:90;display:none;align-items:center;justify-content:center;
+  background:rgba(6,8,12,.92);backdrop-filter:blur(6px);cursor:zoom-out;padding:32px;}
+.lightbox.open{display:flex;}
+.lightbox video{max-width:94vw;max-height:92vh;width:auto;height:auto;border-radius:12px;
+  box-shadow:0 20px 60px rgba(0,0,0,.6);background:#000;}
+@media(max-width:880px){.grid{grid-template-columns:1fr;gap:24px;}}
+@media(max-width:620px){
+  .hero{padding-top:48px;}
+  .authors{gap:5px 14px;font-size:14.5px;}
+  .affiliations{display:block;font-size:12.5px;}
+  .affiliations span{display:block;}
+  .teaser{padding:8px;margin-top:26px;}
+  .teaser .cap{font-size:11.5px;text-align:left;}
+  .citation pre{padding:15px 16px;font-size:11px;white-space:pre-wrap;overflow-wrap:anywhere;}
+}
+</style>
+</head>
+<body>
+<header class="hero">
+  <h1>SCoPE: Sightline-Coordinate Positional Encoding for Video Diffusion Transformers</h1>
+  <div class="authors" aria-label="Authors">
+    <span>Minghao Yin<sup>1*</sup></span>
+    <span>Jiahao Lu<sup>2*</sup></span>
+    <span>Wenbo Hu<sup>3&dagger;</sup></span>
+    <span>Wang Zhao<sup>3</sup></span>
+    <span>Ying Shan<sup>3</sup></span>
+    <span>Kai Han<sup>1&ddagger;</sup></span>
+  </div>
+  <div class="affiliations" aria-label="Affiliations">
+    <span><sup>1</sup>The University of Hong Kong</span>
+    <span><sup>2</sup>The Hong Kong University of Science and Technology</span>
+    <span><sup>3</sup>ARC Lab, Tencent</span>
+  </div>
+  <p class="contrib">* Equal contribution &nbsp;&middot;&nbsp; &dagger; Project lead &nbsp;&middot;&nbsp; &Dagger; Corresponding author</p>
+  <p class="tagline">Each clip is generated from a single input frame and a target camera trajectory; the inset shows the camera motion. Use the arrows to browse different controls of the same scene.</p>
+  <div class="links">
+    <a class="btn" href="https://arxiv.org/abs/2606.27345" target="_blank" rel="noopener noreferrer">
+      <span class="ico">&#128196;</span> ArXiv
+    </a>
+    <a class="btn" href="scope_pdf.pdf" target="_blank" rel="noopener">
+      <span class="ico">&#128196;</span> Paper (PDF)
+    </a>
+    <a class="btn" href="https://github.com/TencentARC/SCoPE" target="_blank" rel="noopener noreferrer">
+      <span class="ico">&#128187;</span> Code
+    </a>
+    <a class="btn" href="https://huggingface.co/TencentARC/SCoPE" target="_blank" rel="noopener noreferrer">
+      <span class="ico">&#129303;</span> Model
+    </a>
+  </div>
+  
+</header>
+<main class="wrap">
+  <section class="abstract">
+    <h2>Abstract</h2>
+    <p>Video diffusion transformers address their tokens by position on the pixel-time grid: an address in the tensor, not in the world. The address we would want, the world point a token depicts, lies on a surface not yet generated, while its camera ray is fixed once the user specifies a trajectory. <strong>SCoPE</strong> therefore treats the ray as a second positional coordinate, and camera control becomes a property of the coordinate system, not an added module. The ray is added to the pretrained attention's queries and keys, and the score gains a term that reads the two rays alone. Its canonical form, the reciprocal product of line geometry, measures how nearly two lines of sight meet. Normalize-Gate-Inject makes a single encoding trainable across metric and up-to-scale pose sources. The retrofit keeps RoPE bit-exact, starts from the unchanged pretrained DiT, and adds under 0.1% new parameters. On Wan2.2 at 5B and 14B under matched data and budget, SCoPE improves every camera-controllability and fidelity metric, and the margins widen with model size. At 14B, rotation error falls 29% and FVD 43% below the strongest baseline on each metric.</p>
+  </section>
+  <figure class="teaser">
+    <a href="figs/scope_teaser.png" target="_blank" rel="noopener" aria-label="Open the SCoPE teaser at full resolution">
+      <img src="figs/scope_teaser.png" alt="SCoPE gives each token its camera ray as a second coordinate, using ray geometry inside attention to resolve appearance ambiguity and follow a target camera trajectory."/>
+    </a>
+    <figcaption class="cap"><strong>Camera control as a property of the coordinate system.</strong> SCoPE gives every token a second address, its camera ray (left). Rays are fixed by the user's trajectory while the scene, dashed, is not yet generated (center). Appearance cannot choose between the two identical windows in frame t+1. Only one of their rays meets the ray from frame t. Added to the pretrained queries and keys, the ray gives the score exactly this test, zero when rays meet, growing with the miss (right). Content identifies, cross terms arbitrate, geometry filters.</figcaption>
+  </figure>
+  <section class="idea">
+    <h2>Key Ideas</h2>
+    <ul>
+      <li><strong>A second positional coordinate.</strong> The world point a token will depict is unknown before generation, but its camera ray is fixed by the user's trajectory. SCoPE uses that ray as the token's second address.</li>
+      <li><strong>Geometry inside attention.</strong> Adding ray features to pretrained queries and keys gives the attention score a ray-only term. Its canonical form is the reciprocal product of line geometry, which measures how nearly two lines of sight meet.</li>
+      <li><strong>A minimal, stable retrofit.</strong> Normalize-Gate-Inject works across metric and up-to-scale poses while preserving RoPE bit-exactly. SCoPE starts from the unchanged pretrained DiT, adds under 0.1% parameters, and improves both 5B and 14B models.</li>
+    </ul>
+  </section>
+  <hr class="divider"/>
+  <section class="section">
+    <div class="section-head">
+      <span class="kicker">Same scene · many cameras</span>
+      <h2>Scenes</h2>
+      <p class="desc">One generated scene browsed under six different camera trajectories. The inset visualizes the commanded camera path.</p>
+    </div>
+    <div class="grid">
+      <div class="gallery" data-title="Aerial Mountains">
+        <div class="stack">
+          <div class="card"><video data-src="videos/airmountains__env_scenic_grand_tour_22_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Grand Tour</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/airmountains__env_scenic_spiral_climb_20_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Spiral Climb</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/airmountains__env_scenic_pullback_rise_18_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Pullback & Rise</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/airmountains__env_scenic_push_sweep_15_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Push Sweep</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/airmountains__env_scenic_s_curve_reveal_21_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">S-Curve Reveal</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/airmountains__env_scenic_wide_orbit_16_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Wide Orbit</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+        </div>
+        <div class="deckbar">
+          <button class="nav prev" aria-label="previous">&#8249;</button>
+          <span class="hint">click card to flip &middot; drag to toss</span>
+          <span class="count">1 / 6</span>
+          <button class="nav next" aria-label="next">&#8250;</button>
+        </div>
+      </div>
+      <div class="gallery" data-title="Misty Valley">
+        <div class="stack">
+          <div class="card"><video data-src="videos/valley__env_scenic_crane_arc_17_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Crane Arc</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/valley__env_scenic_wide_orbit_16_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Wide Orbit</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/c69bf557af05_split1_000041__greek_spiral_rise_13_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Spiral Rise</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/valley__env_scenic_s_curve_reveal_21_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">S-Curve Reveal</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/valley__env_scenic_pullback_rise_18_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Pullback & Rise</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/valley__env_scenic_flyover_left_19_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Flyover Left</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+        </div>
+        <div class="deckbar">
+          <button class="nav prev" aria-label="previous">&#8249;</button>
+          <span class="hint">click card to flip &middot; drag to toss</span>
+          <span class="count">1 / 6</span>
+          <button class="nav next" aria-label="next">&#8250;</button>
+        </div>
+      </div>
+      <div class="gallery" data-title="Medieval Town">
+        <div class="stack">
+          <div class="card"><video data-src="videos/middleages__env_scenic_grand_tour_22_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Grand Tour</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/middleages__env_scenic_push_sweep_15_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Push Sweep</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/middleages__env_scenic_pullback_rise_18_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Pullback & Rise</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/middleages__env_scenic_crane_arc_17_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Crane Arc</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/c69bf557af05_split1_000041__greek_rise_small_09_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Rise Small</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/middleages__greek_spiral_rise_13_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Spiral Rise</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+        </div>
+        <div class="deckbar">
+          <button class="nav prev" aria-label="previous">&#8249;</button>
+          <span class="hint">click card to flip &middot; drag to toss</span>
+          <span class="count">1 / 6</span>
+          <button class="nav next" aria-label="next">&#8250;</button>
+        </div>
+      </div>
+      <div class="gallery" data-title="Greek City">
+        <div class="stack">
+          <div class="card"><video data-src="videos/c69bf557af05_split1_000041__real_split2_000963_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Real Trajectory</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/c69bf557af05_split1_000041__real_split7_001343_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Real Trajectory</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/c69bf557af05_split1_000041__real_split11_000846_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Real Trajectory</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/c69bf557af05_split1_000041__truck_right_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Truck Right</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/c69bf557af05_split1_000041__greek_pullback_rise_10_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Pullback & Rise</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/c69bf557af05_split1_000041__greek_push_large_08_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Push In</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+        </div>
+        <div class="deckbar">
+          <button class="nav prev" aria-label="previous">&#8249;</button>
+          <span class="hint">click card to flip &middot; drag to toss</span>
+          <span class="count">1 / 6</span>
+          <button class="nav next" aria-label="next">&#8250;</button>
+        </div>
+      </div>
+      <div class="gallery" data-title="Game World">
+        <div class="stack">
+          <div class="card"><video data-src="videos/aacef0a798ec_split0_000001__crane_up_fwd_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Crane Up</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/aacef0a798ec_split0_000001__dolly_in_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Dolly In</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/aacef0a798ec_split0_000001__dolly_out_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Dolly Out</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/aacef0a798ec_split0_000001__orbit_left_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Orbit Left</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/aacef0a798ec_split0_000001__real_split2_000442_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Real Trajectory</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/aacef0a798ec_split0_000001__truck_right_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Truck Right</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+        </div>
+        <div class="deckbar">
+          <button class="nav prev" aria-label="previous">&#8249;</button>
+          <span class="hint">click card to flip &middot; drag to toss</span>
+          <span class="count">1 / 6</span>
+          <button class="nav next" aria-label="next">&#8250;</button>
+        </div>
+      </div>
+      <div class="gallery" data-title="Game World">
+        <div class="stack">
+          <div class="card"><video data-src="videos/ae98e8849eef_split0_000001__crane_up_fwd_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Crane Up</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/ae98e8849eef_split0_000001__dolly_in_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Dolly In</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/ae98e8849eef_split0_000001__dolly_out_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Dolly Out</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/ae98e8849eef_split0_000001__orbit_left_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Orbit Left</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/ae98e8849eef_split0_000001__real_split0_000041_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Real Trajectory</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/ae98e8849eef_split0_000001__truck_right_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Truck Right</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+        </div>
+        <div class="deckbar">
+          <button class="nav prev" aria-label="previous">&#8249;</button>
+          <span class="hint">click card to flip &middot; drag to toss</span>
+          <span class="count">1 / 6</span>
+          <button class="nav next" aria-label="next">&#8250;</button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="section-head">
+      <span class="kicker">WASD · third-person control</span>
+      <h2>Motions</h2>
+      <p class="desc">WASD inputs drive the camera trajectory that moves the third-person subject. Overlay keys reflect the per-frame motion.</p>
+    </div>
+    <div class="grid">
+      <div class="gallery" data-title="Game World">
+        <div class="stack">
+          <div class="card"><video data-src="videos/135f09dd0200_split0_000001__car_forward_small_08_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Ease Forward</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/135f09dd0200_split0_000001__car_gentle_right_02_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Gentle Right</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/135f09dd0200_split0_000001__car_reverse_back_07_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Reverse</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/135f09dd0200_split0_000001__car_s_curve_city_05_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">City S-Curve</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/135f09dd0200_split0_000001__car_forward_right_curve_04_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Right Curve</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/135f09dd0200_split0_000001__car_slow_push_lane_change_06_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Lane Change</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+        </div>
+        <div class="deckbar">
+          <button class="nav prev" aria-label="previous">&#8249;</button>
+          <span class="hint">click card to flip &middot; drag to toss</span>
+          <span class="count">1 / 6</span>
+          <button class="nav next" aria-label="next">&#8250;</button>
+        </div>
+      </div>
+      <div class="gallery" data-title="City Airspace">
+        <div class="stack">
+          <div class="card"><video data-src="videos/0b3caf48b79d_split3_000414__airspace_big_s_curve_13_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Big S-Curve</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/airspace__airspace_wasd_long_forward_18_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Hold Forward</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/airspace__airspace_wasd_forward_sweep_15_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Forward Sweep</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/airspace__airspace_wasd_left_sweep_16_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Left Sweep</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/0b3caf48b79d_split3_000414__airspace_strafe_left_09_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Strafe Left</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/airspace__airspace_wasd_wide_s_curve_22_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Wide S-Curve</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+        </div>
+        <div class="deckbar">
+          <button class="nav prev" aria-label="previous">&#8249;</button>
+          <span class="hint">click card to flip &middot; drag to toss</span>
+          <span class="count">1 / 6</span>
+          <button class="nav next" aria-label="next">&#8250;</button>
+        </div>
+      </div>
+      <div class="gallery" data-title="Game World">
+        <div class="stack">
+          <div class="card"><video data-src="videos/d55850928ed4_split0_000001__wasd_combo_route_01_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">WASD Combo</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/d55850928ed4_split0_000001__wasd_simple_right_09_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Strafe Right</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/d55850928ed4_split0_000001__wasd_simple_left_08_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Strafe Left</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/d55850928ed4_split0_000001__wasd_patrol_backtrack_04_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Patrol & Back</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/d55850928ed4_split0_000001__wasd_evade_recover_05_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Evade & Recover</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/d55850928ed4_split0_000001__wasd_step_search_06_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Step Search</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+        </div>
+        <div class="deckbar">
+          <button class="nav prev" aria-label="previous">&#8249;</button>
+          <span class="hint">click card to flip &middot; drag to toss</span>
+          <span class="count">1 / 6</span>
+          <button class="nav next" aria-label="next">&#8250;</button>
+        </div>
+      </div>
+      <div class="gallery" data-title="Game World">
+        <div class="stack">
+          <div class="card"><video data-src="videos/0b3caf48b79d_split3_000414__wasd_evade_recover_05_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Evade & Recover</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/0b3caf48b79d_split3_000414__dolly_in_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Dolly In</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/0b3caf48b79d_split3_000414__wasd_patrol_backtrack_04_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Patrol & Back</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/0b3caf48b79d_split3_000414__wasd_step_search_06_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Step Search</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/0b3caf48b79d_split3_000414__wasd_combo_route_01_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">WASD Combo</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/0b3caf48b79d_split3_000414__truck_right_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Truck Right</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+        </div>
+        <div class="deckbar">
+          <button class="nav prev" aria-label="previous">&#8249;</button>
+          <span class="hint">click card to flip &middot; drag to toss</span>
+          <span class="count">1 / 6</span>
+          <button class="nav next" aria-label="next">&#8250;</button>
+        </div>
+      </div>
+      <div class="gallery" data-title="Game World">
+        <div class="stack">
+          <div class="card"><video data-src="videos/135f09dd0200_split0_000001__wasd_random_walk_02_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Free Walk</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/135f09dd0200_split0_000001__wasd_step_search_06_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Step Search</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/135f09dd0200_split0_000001__wasd_corner_cut_03_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Corner Cut</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/135f09dd0200_split0_000001__wasd_combo_route_01_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">WASD Combo</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/135f09dd0200_split0_000001__snake_fwd_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Snake Forward</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/135f09dd0200_split0_000001__truck_right_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Truck Right</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+        </div>
+        <div class="deckbar">
+          <button class="nav prev" aria-label="previous">&#8249;</button>
+          <span class="hint">click card to flip &middot; drag to toss</span>
+          <span class="count">1 / 6</span>
+          <button class="nav next" aria-label="next">&#8250;</button>
+        </div>
+      </div>
+      <div class="gallery" data-title="Game World">
+        <div class="stack">
+          <div class="card"><video data-src="videos/135f09dd0200_split3_000594__wasd_combo_route_01_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">WASD Combo</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/135f09dd0200_split3_000594__wasd_simple_back_10_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Move Back</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/135f09dd0200_split3_000594__wasd_simple_right_09_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Strafe Right</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/135f09dd0200_split3_000594__wasd_patrol_backtrack_04_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Patrol & Back</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/135f09dd0200_split3_000594__snake_fwd_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Snake Forward</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+        </div>
+        <div class="deckbar">
+          <button class="nav prev" aria-label="previous">&#8249;</button>
+          <span class="hint">click card to flip &middot; drag to toss</span>
+          <span class="count">1 / 5</span>
+          <button class="nav next" aria-label="next">&#8250;</button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="section-head">
+      <span class="kicker">More results</span>
+      <h2>Real-World Scenes</h2>
+      <p class="desc">Diverse real captures driven along varied camera paths from a single frame.</p>
+    </div>
+    <div class="grid">
+      <div class="gallery" data-title="Dczqgcss9X8-4-0-Linear">
+        <div class="stack">
+          <div class="card"><video data-src="videos/dCzqGcss9x8-4-0-linear_aug_0-fov90-xi0.00__dolly_in_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Dolly In</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/dCzqGcss9x8-4-0-linear_aug_0-fov90-xi0.00__dolly_out_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Dolly Out</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/dCzqGcss9x8-4-0-linear_aug_0-fov90-xi0.00__orbit_left_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Orbit Left</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/dCzqGcss9x8-4-0-linear_aug_0-fov90-xi0.00__real_rot_aug_0-fov110-xi0.00_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Real Trajectory</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+        </div>
+        <div class="deckbar">
+          <button class="nav prev" aria-label="previous">&#8249;</button>
+          <span class="hint">click card to flip &middot; drag to toss</span>
+          <span class="count">1 / 4</span>
+          <button class="nav next" aria-label="next">&#8250;</button>
+        </div>
+      </div>
+      <div class="gallery" data-title="Htdkkiu771G-3-0-Yaw">
+        <div class="stack">
+          <div class="card"><video data-src="videos/HTdKkiu771g-3-0-yaw_aug_0-fov103-xi0.00__crane_up_fwd_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Crane Up</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/HTdKkiu771g-3-0-yaw_aug_0-fov103-xi0.00__dolly_out_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Dolly Out</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/HTdKkiu771g-3-0-yaw_aug_0-fov103-xi0.00__real_3MxSs-22-0-no_rot_aug_0-fov92-xi0.00_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Real Trajectory</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/HTdKkiu771g-3-0-yaw_aug_0-fov103-xi0.00__truck_right_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Truck Right</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+        </div>
+        <div class="deckbar">
+          <button class="nav prev" aria-label="previous">&#8249;</button>
+          <span class="hint">click card to flip &middot; drag to toss</span>
+          <span class="count">1 / 4</span>
+          <button class="nav next" aria-label="next">&#8250;</button>
+        </div>
+      </div>
+      <div class="gallery" data-title="Srw7-Kmdvhq-40-1-Yaw">
+        <div class="stack">
+          <div class="card"><video data-src="videos/SRW7-kmdVhQ-40-1-yaw_pitch_aug_0-fov105-xi0.00__dolly_in_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Dolly In</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/SRW7-kmdVhQ-40-1-yaw_pitch_aug_0-fov105-xi0.00__orbit_left_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Orbit Left</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/SRW7-kmdVhQ-40-1-yaw_pitch_aug_0-fov105-xi0.00__pan_right_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Pan Right</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/SRW7-kmdVhQ-40-1-yaw_pitch_aug_0-fov105-xi0.00__real_aug_0-fov93-xi0.00_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Real Trajectory</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+        </div>
+        <div class="deckbar">
+          <button class="nav prev" aria-label="previous">&#8249;</button>
+          <span class="hint">click card to flip &middot; drag to toss</span>
+          <span class="count">1 / 4</span>
+          <button class="nav next" aria-label="next">&#8250;</button>
+        </div>
+      </div>
+      <div class="gallery" data-title="Zbsyk">
+        <div class="stack">
+          <div class="card"><video data-src="videos/Zbsyk_3MxSs-16-0-yaw_aug_0-fov104-xi0.00__crane_up_fwd_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Crane Up</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/Zbsyk_3MxSs-16-0-yaw_aug_0-fov104-xi0.00__real_gt_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Real Trajectory</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/Zbsyk_3MxSs-16-0-yaw_aug_0-fov104-xi0.00__real_rot_aug_0-fov92-xi0.00_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Real Trajectory</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/Zbsyk_3MxSs-16-0-yaw_aug_0-fov104-xi0.00__dolly_in_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Dolly In</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+        </div>
+        <div class="deckbar">
+          <button class="nav prev" aria-label="previous">&#8249;</button>
+          <span class="hint">click card to flip &middot; drag to toss</span>
+          <span class="count">1 / 4</span>
+          <button class="nav next" aria-label="next">&#8250;</button>
+        </div>
+      </div>
+      <div class="gallery" data-title="Zbsyk">
+        <div class="stack">
+          <div class="card"><video data-src="videos/Zbsyk_3MxSs-22-0-no_rot_aug_0-fov92-xi0.00__dolly_out_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Dolly Out</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/Zbsyk_3MxSs-22-0-no_rot_aug_0-fov92-xi0.00__orbit_left_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Orbit Left</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/Zbsyk_3MxSs-22-0-no_rot_aug_0-fov92-xi0.00__real_gt_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Real Trajectory</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/Zbsyk_3MxSs-22-0-no_rot_aug_0-fov92-xi0.00__real_3MxSs-16-0-yaw_aug_0-fov104-xi0.00_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Real Trajectory</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+        </div>
+        <div class="deckbar">
+          <button class="nav prev" aria-label="previous">&#8249;</button>
+          <span class="hint">click card to flip &middot; drag to toss</span>
+          <span class="count">1 / 4</span>
+          <button class="nav next" aria-label="next">&#8250;</button>
+        </div>
+      </div>
+      <div class="gallery" data-title="Zckpwavuaaa-4-0-Yaw">
+        <div class="stack">
+          <div class="card"><video data-src="videos/ZcKpwAVuAaA-4-0-yaw_aug_0-fov93-xi0.00__dolly_in_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Dolly In</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/ZcKpwAVuAaA-4-0-yaw_aug_0-fov93-xi0.00__real_gt_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Real Trajectory</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/ZcKpwAVuAaA-4-0-yaw_aug_0-fov93-xi0.00__real_pitch_aug_0-fov100-xi0.00_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Real Trajectory</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/ZcKpwAVuAaA-4-0-yaw_aug_0-fov93-xi0.00__snake_fwd_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Snake Forward</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+        </div>
+        <div class="deckbar">
+          <button class="nav prev" aria-label="previous">&#8249;</button>
+          <span class="hint">click card to flip &middot; drag to toss</span>
+          <span class="count">1 / 4</span>
+          <button class="nav next" aria-label="next">&#8250;</button>
+        </div>
+      </div>
+      <div class="gallery" data-title="Zsiibnl4Ufk-55-0-No">
+        <div class="stack">
+          <div class="card"><video data-src="videos/ZSiIBnl4UFk-55-0-no_rot_aug_0-fov109-xi0.00__dolly_in_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Dolly In</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/ZSiIBnl4UFk-55-0-no_rot_aug_0-fov109-xi0.00__orbit_left_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Orbit Left</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/ZSiIBnl4UFk-55-0-no_rot_aug_0-fov109-xi0.00__real_3MxSs-16-0-yaw_aug_0-fov104-xi0.00_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Real Trajectory</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/ZSiIBnl4UFk-55-0-no_rot_aug_0-fov109-xi0.00__truck_left_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Truck Left</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+        </div>
+        <div class="deckbar">
+          <button class="nav prev" aria-label="previous">&#8249;</button>
+          <span class="hint">click card to flip &middot; drag to toss</span>
+          <span class="count">1 / 4</span>
+          <button class="nav next" aria-label="next">&#8250;</button>
+        </div>
+      </div>
+      <div class="gallery" data-title="Scene">
+        <div class="stack">
+          <div class="card"><video data-src="videos/_GZAKEh0grM-5-0-linear_aug_0-fov100-xi0.00__orbit_left_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Orbit Left</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/_GZAKEh0grM-5-0-linear_aug_0-fov100-xi0.00__real_aug_0-fov92-xi0.00_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Real Trajectory</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/_GZAKEh0grM-5-0-linear_aug_0-fov100-xi0.00__real_gt_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Real Trajectory</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/_GZAKEh0grM-5-0-linear_aug_0-fov100-xi0.00__real_rot_aug_0-fov96-xi0.00_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Real Trajectory</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+        </div>
+        <div class="deckbar">
+          <button class="nav prev" aria-label="previous">&#8249;</button>
+          <span class="hint">click card to flip &middot; drag to toss</span>
+          <span class="count">1 / 4</span>
+          <button class="nav next" aria-label="next">&#8250;</button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="section-head">
+      <span class="kicker">More results</span>
+      <h2>In-the-Wild Videos</h2>
+      <p class="desc">Everyday footage re-rendered under controllable camera motion.</p>
+    </div>
+    <div class="grid">
+      <div class="gallery" data-title="A-Man-And-A-Woman-Ride-Sports-Bikes-On-The-Highway-At-Sunset-In-Gear-And-Protective-Gm1170782210-324106554">
+        <div class="stack">
+          <div class="card"><video data-src="videos/a-man-and-a-woman-ride-sports-bikes-on-the-highway-at-sunset-in-gear-and-protective-gm1170782210-324106554_part1_e2868b4ede_0-481__orbit_left_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Orbit Left</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/a-man-and-a-woman-ride-sports-bikes-on-the-highway-at-sunset-in-gear-and-protective-gm1170782210-324106554_part1_e2868b4ede_0-481__crane_up_fwd_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Crane Up</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/a-man-and-a-woman-ride-sports-bikes-on-the-highway-at-sunset-in-gear-and-protective-gm1170782210-324106554_part1_e2868b4ede_0-481__dolly_in_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Dolly In</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/a-man-and-a-woman-ride-sports-bikes-on-the-highway-at-sunset-in-gear-and-protective-gm1170782210-324106554_part1_e2868b4ede_0-481__dolly_out_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Dolly Out</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+        </div>
+        <div class="deckbar">
+          <button class="nav prev" aria-label="previous">&#8249;</button>
+          <span class="hint">click card to flip &middot; drag to toss</span>
+          <span class="count">1 / 4</span>
+          <button class="nav next" aria-label="next">&#8250;</button>
+        </div>
+      </div>
+      <div class="gallery" data-title="Animal-Wildlife-Deer-Run-Park-Field-Flock-Summer-Reserve-Fauna-Gm1336653954-417840028">
+        <div class="stack">
+          <div class="card"><video data-src="videos/animal-wildlife-deer-run-park-field-flock-summer-reserve-fauna-gm1336653954-417840028_part2_ffc211a8b1_0-263__real_part1_e5efc62c68_0-253_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Real Trajectory</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/animal-wildlife-deer-run-park-field-flock-summer-reserve-fauna-gm1336653954-417840028_part2_ffc211a8b1_0-263__crane_up_fwd_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Crane Up</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/animal-wildlife-deer-run-park-field-flock-summer-reserve-fauna-gm1336653954-417840028_part2_ffc211a8b1_0-263__dolly_in_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Dolly In</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+        </div>
+        <div class="deckbar">
+          <button class="nav prev" aria-label="previous">&#8249;</button>
+          <span class="hint">click card to flip &middot; drag to toss</span>
+          <span class="count">1 / 3</span>
+          <button class="nav next" aria-label="next">&#8250;</button>
+        </div>
+      </div>
+      <div class="gallery" data-title="A-Wide-Angle-Male-Skier-Aged-In-Black-Equipment-And-White-Helmet-With-Ski-Poles-Gm1205256266-347124942">
+        <div class="stack">
+          <div class="card"><video data-src="videos/a-wide-angle-male-skier-aged-in-black-equipment-and-white-helmet-with-ski-poles-gm1205256266-347124942_part1_914d782784_0-335__real_part1_4b3e9a9b48_0-185_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Real Trajectory</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/a-wide-angle-male-skier-aged-in-black-equipment-and-white-helmet-with-ski-poles-gm1205256266-347124942_part1_914d782784_0-335__crane_up_fwd_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Crane Up</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/a-wide-angle-male-skier-aged-in-black-equipment-and-white-helmet-with-ski-poles-gm1205256266-347124942_part1_914d782784_0-335__real_part1_d0eed6b5fe_0-241_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Real Trajectory</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/a-wide-angle-male-skier-aged-in-black-equipment-and-white-helmet-with-ski-poles-gm1205256266-347124942_part1_914d782784_0-335__snake_fwd_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Snake Forward</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+        </div>
+        <div class="deckbar">
+          <button class="nav prev" aria-label="previous">&#8249;</button>
+          <span class="hint">click card to flip &middot; drag to toss</span>
+          <span class="count">1 / 4</span>
+          <button class="nav next" aria-label="next">&#8250;</button>
+        </div>
+      </div>
+      <div class="gallery" data-title="Blue-Spotted-Stingray-In-Red-Sea-Close-Up-Gm1212442965-351951197">
+        <div class="stack">
+          <div class="card"><video data-src="videos/blue-spotted-stingray-in-red-sea-close-up-gm1212442965-351951197_part2_0279a949d5_0-327__truck_left_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Truck Left</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/blue-spotted-stingray-in-red-sea-close-up-gm1212442965-351951197_part2_0279a949d5_0-327__dolly_in_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Dolly In</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/blue-spotted-stingray-in-red-sea-close-up-gm1212442965-351951197_part2_0279a949d5_0-327__real_gt_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Real Trajectory</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/blue-spotted-stingray-in-red-sea-close-up-gm1212442965-351951197_part2_0279a949d5_0-327__snake_fwd_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Snake Forward</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+        </div>
+        <div class="deckbar">
+          <button class="nav prev" aria-label="previous">&#8249;</button>
+          <span class="hint">click card to flip &middot; drag to toss</span>
+          <span class="count">1 / 4</span>
+          <button class="nav next" aria-label="next">&#8250;</button>
+        </div>
+      </div>
+      <div class="gallery" data-title="A-Wide-Angle-Male-Skier-Aged-In-Black-Equipment-And-White-Helmet-With-Ski-Poles-Gm1205271596-347131744">
+        <div class="stack">
+          <div class="card"><video data-src="videos/a-wide-angle-male-skier-aged-in-black-equipment-and-white-helmet-with-ski-poles-gm1205271596-347131744_part1_b47c7d10bf_0-481__orbit_left_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Orbit Left</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/a-wide-angle-male-skier-aged-in-black-equipment-and-white-helmet-with-ski-poles-gm1205271596-347131744_part1_b47c7d10bf_0-481__crane_up_fwd_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Crane Up</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/a-wide-angle-male-skier-aged-in-black-equipment-and-white-helmet-with-ski-poles-gm1205271596-347131744_part1_b47c7d10bf_0-481__real_part3_7508dca911_0-259_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Real Trajectory</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/a-wide-angle-male-skier-aged-in-black-equipment-and-white-helmet-with-ski-poles-gm1205271596-347131744_part1_b47c7d10bf_0-481__snake_fwd_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Snake Forward</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+        </div>
+        <div class="deckbar">
+          <button class="nav prev" aria-label="previous">&#8249;</button>
+          <span class="hint">click card to flip &middot; drag to toss</span>
+          <span class="count">1 / 4</span>
+          <button class="nav next" aria-label="next">&#8250;</button>
+        </div>
+      </div>
+      <div class="gallery" data-title="A-Woman-Walks-Along-The-Bank-Of-The-City-Pond-Walks-Along-The-Road-Behind-The-Fence-Gm1345705027-423695997">
+        <div class="stack">
+          <div class="card"><video data-src="videos/a-woman-walks-along-the-bank-of-the-city-pond-walks-along-the-road-behind-the-fence-gm1345705027-423695997_part1_6b0c7b59e0_0-481__orbit_left_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Orbit Left</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/a-woman-walks-along-the-bank-of-the-city-pond-walks-along-the-road-behind-the-fence-gm1345705027-423695997_part1_6b0c7b59e0_0-481__crane_up_fwd_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Crane Up</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/a-woman-walks-along-the-bank-of-the-city-pond-walks-along-the-road-behind-the-fence-gm1345705027-423695997_part1_6b0c7b59e0_0-481__dolly_out_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Dolly Out</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/a-woman-walks-along-the-bank-of-the-city-pond-walks-along-the-road-behind-the-fence-gm1345705027-423695997_part1_6b0c7b59e0_0-481__truck_right_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Truck Right</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+        </div>
+        <div class="deckbar">
+          <button class="nav prev" aria-label="previous">&#8249;</button>
+          <span class="hint">click card to flip &middot; drag to toss</span>
+          <span class="count">1 / 4</span>
+          <button class="nav next" aria-label="next">&#8250;</button>
+        </div>
+      </div>
+      <div class="gallery" data-title="Aerial-Of-Couple-Ride-On-Motorbike-On-Road-Along-Rice-Field-Plantation-Drone-Shot-Of-Gm1677960105-536424086">
+        <div class="stack">
+          <div class="card"><video data-src="videos/aerial-of-couple-ride-on-motorbike-on-road-along-rice-field-plantation-drone-shot-of-gm1677960105-536424086_part1_5a7620d5b5_0-299__real_part2_0279a949d5_0-327_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Real Trajectory</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/aerial-of-couple-ride-on-motorbike-on-road-along-rice-field-plantation-drone-shot-of-gm1677960105-536424086_part1_5a7620d5b5_0-299__dolly_in_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Dolly In</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/aerial-of-couple-ride-on-motorbike-on-road-along-rice-field-plantation-drone-shot-of-gm1677960105-536424086_part1_5a7620d5b5_0-299__dolly_out_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Dolly Out</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/aerial-of-couple-ride-on-motorbike-on-road-along-rice-field-plantation-drone-shot-of-gm1677960105-536424086_part1_5a7620d5b5_0-299__real_gt_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Real Trajectory</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+        </div>
+        <div class="deckbar">
+          <button class="nav prev" aria-label="previous">&#8249;</button>
+          <span class="hint">click card to flip &middot; drag to toss</span>
+          <span class="count">1 / 4</span>
+          <button class="nav next" aria-label="next">&#8250;</button>
+        </div>
+      </div>
+      <div class="gallery" data-title="Aerial-View-Electric-Car-Driving-On-Country-Road-Gm541931272-98295151">
+        <div class="stack">
+          <div class="card"><video data-src="videos/aerial-view-electric-car-driving-on-country-road-gm541931272-98295151_part1_d2ab3cab2d_0-289__truck_left_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Truck Left</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/aerial-view-electric-car-driving-on-country-road-gm541931272-98295151_part1_d2ab3cab2d_0-289__crane_up_fwd_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Crane Up</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/aerial-view-electric-car-driving-on-country-road-gm541931272-98295151_part1_d2ab3cab2d_0-289__dolly_in_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Dolly In</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/aerial-view-electric-car-driving-on-country-road-gm541931272-98295151_part1_d2ab3cab2d_0-289__orbit_left_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Orbit Left</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+        </div>
+        <div class="deckbar">
+          <button class="nav prev" aria-label="previous">&#8249;</button>
+          <span class="hint">click card to flip &middot; drag to toss</span>
+          <span class="count">1 / 4</span>
+          <button class="nav next" aria-label="next">&#8250;</button>
+        </div>
+      </div>
+      <div class="gallery" data-title="Aerial-View-Of-A-Backcountry-Skier-Rides-Freeride-On-A-Steep-Slope-Professional-Ski-Gm1358558239-432140282">
+        <div class="stack">
+          <div class="card"><video data-src="videos/aerial-view-of-a-backcountry-skier-rides-freeride-on-a-steep-slope-professional-ski-gm1358558239-432140282_part1_7d63e84876_0-455__orbit_left_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Orbit Left</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/aerial-view-of-a-backcountry-skier-rides-freeride-on-a-steep-slope-professional-ski-gm1358558239-432140282_part1_7d63e84876_0-455__crane_up_fwd_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Crane Up</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/aerial-view-of-a-backcountry-skier-rides-freeride-on-a-steep-slope-professional-ski-gm1358558239-432140282_part1_7d63e84876_0-455__dolly_in_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Dolly In</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/aerial-view-of-a-backcountry-skier-rides-freeride-on-a-steep-slope-professional-ski-gm1358558239-432140282_part1_7d63e84876_0-455__dolly_out_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Dolly Out</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+        </div>
+        <div class="deckbar">
+          <button class="nav prev" aria-label="previous">&#8249;</button>
+          <span class="hint">click card to flip &middot; drag to toss</span>
+          <span class="count">1 / 4</span>
+          <button class="nav next" aria-label="next">&#8250;</button>
+        </div>
+      </div>
+      <div class="gallery" data-title="Aerial-View-Of-A-Car-Driving-In-The-Snowy-Forest-In-Lapland-Gm1481854142-509019427">
+        <div class="stack">
+          <div class="card"><video data-src="videos/aerial-view-of-a-car-driving-in-the-snowy-forest-in-lapland-gm1481854142-509019427_part1_2184a0f227_0-377__orbit_left_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Orbit Left</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/aerial-view-of-a-car-driving-in-the-snowy-forest-in-lapland-gm1481854142-509019427_part1_2184a0f227_0-377__crane_up_fwd_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Crane Up</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/aerial-view-of-a-car-driving-in-the-snowy-forest-in-lapland-gm1481854142-509019427_part1_2184a0f227_0-377__snake_fwd_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Snake Forward</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/aerial-view-of-a-car-driving-in-the-snowy-forest-in-lapland-gm1481854142-509019427_part1_2184a0f227_0-377__truck_left_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Truck Left</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+        </div>
+        <div class="deckbar">
+          <button class="nav prev" aria-label="previous">&#8249;</button>
+          <span class="hint">click card to flip &middot; drag to toss</span>
+          <span class="count">1 / 4</span>
+          <button class="nav next" aria-label="next">&#8250;</button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="section-head">
+      <span class="kicker">More results</span>
+      <h2>Stylized &amp; Artistic Scenes</h2>
+      <p class="desc">Illustrated and painterly inputs animated with 3D-consistent camera control.</p>
+    </div>
+    <div class="grid">
+      <div class="gallery" data-title="Epoch00">
+        <div class="stack">
+          <div class="card"><video data-src="videos/epoch00_step005000_kishorefuhrmann_A_warrior_fights_a_giant_lizard_monster_fantasy_f3187364-cced-4235-91a4-f9f90d1956d5__traj06_pan_left_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Pan Left</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/epoch00_step005000_kishorefuhrmann_A_warrior_fights_a_giant_lizard_monster_fantasy_f3187364-cced-4235-91a4-f9f90d1956d5__traj09_orbit_right_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Orbit Right</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/epoch00_step005000_kishorefuhrmann_A_warrior_fights_a_giant_lizard_monster_fantasy_f3187364-cced-4235-91a4-f9f90d1956d5__traj01_dolly_back_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Dolly Back</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/epoch00_step005000_kishorefuhrmann_A_warrior_fights_a_giant_lizard_monster_fantasy_f3187364-cced-4235-91a4-f9f90d1956d5__traj12_zoom_in_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Zoom In</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+        </div>
+        <div class="deckbar">
+          <button class="nav prev" aria-label="previous">&#8249;</button>
+          <span class="hint">click card to flip &middot; drag to toss</span>
+          <span class="count">1 / 4</span>
+          <button class="nav next" aria-label="next">&#8250;</button>
+        </div>
+      </div>
+      <div class="gallery" data-title="Epoch00">
+        <div class="stack">
+          <div class="card"><video data-src="videos/epoch00_step005000_kishorefuhrmann_Four_people_a_mage_and_a_warrior_walking_on_a_m_42303275-14a2-40bf-8d3e-50f170b1e494__traj01_dolly_back_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Dolly Back</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/epoch00_step005000_kishorefuhrmann_Four_people_a_mage_and_a_warrior_walking_on_a_m_42303275-14a2-40bf-8d3e-50f170b1e494__traj06_pan_left_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Pan Left</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/epoch00_step005000_kishorefuhrmann_Four_people_a_mage_and_a_warrior_walking_on_a_m_42303275-14a2-40bf-8d3e-50f170b1e494__traj08_orbit_left_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Orbit Left</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/epoch00_step005000_kishorefuhrmann_Four_people_a_mage_and_a_warrior_walking_on_a_m_42303275-14a2-40bf-8d3e-50f170b1e494__traj11_orbit_center_right_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Orbit Right</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+        </div>
+        <div class="deckbar">
+          <button class="nav prev" aria-label="previous">&#8249;</button>
+          <span class="hint">click card to flip &middot; drag to toss</span>
+          <span class="count">1 / 4</span>
+          <button class="nav next" aria-label="next">&#8250;</button>
+        </div>
+      </div>
+      <div class="gallery" data-title="Epoch00">
+        <div class="stack">
+          <div class="card"><video data-src="videos/epoch00_step005000_kishorefuhrmann_In_the_ancient_library_the_shelves_are_filled_w_d4fbd89a-f2ec-4e4a-8717-3d1667653bee__traj12_zoom_in_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Zoom In</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/epoch00_step005000_kishorefuhrmann_In_the_ancient_library_the_shelves_are_filled_w_d4fbd89a-f2ec-4e4a-8717-3d1667653bee__traj02_truck_left_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Truck Left</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/epoch00_step005000_kishorefuhrmann_In_the_ancient_library_the_shelves_are_filled_w_d4fbd89a-f2ec-4e4a-8717-3d1667653bee__traj07_pan_right_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Pan Right</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/epoch00_step005000_kishorefuhrmann_In_the_ancient_library_the_shelves_are_filled_w_d4fbd89a-f2ec-4e4a-8717-3d1667653bee__traj09_orbit_right_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Orbit Right</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+        </div>
+        <div class="deckbar">
+          <button class="nav prev" aria-label="previous">&#8249;</button>
+          <span class="hint">click card to flip &middot; drag to toss</span>
+          <span class="count">1 / 4</span>
+          <button class="nav next" aria-label="next">&#8250;</button>
+        </div>
+      </div>
+      <div class="gallery" data-title="Epoch00">
+        <div class="stack">
+          <div class="card"><video data-src="videos/epoch00_step005000_kishorefuhrmann_In_the_magicians_laboratory_bottles_of_mysterio_82b83a52-bcd1-45bb-97d8-a3344c363f08__traj00_dolly_forward_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Dolly Forward</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/epoch00_step005000_kishorefuhrmann_In_the_magicians_laboratory_bottles_of_mysterio_82b83a52-bcd1-45bb-97d8-a3344c363f08__traj01_dolly_back_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Dolly Back</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/epoch00_step005000_kishorefuhrmann_In_the_magicians_laboratory_bottles_of_mysterio_82b83a52-bcd1-45bb-97d8-a3344c363f08__traj04_crane_up_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Crane Up</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/epoch00_step005000_kishorefuhrmann_In_the_magicians_laboratory_bottles_of_mysterio_82b83a52-bcd1-45bb-97d8-a3344c363f08__traj06_pan_left_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Pan Left</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+        </div>
+        <div class="deckbar">
+          <button class="nav prev" aria-label="previous">&#8249;</button>
+          <span class="hint">click card to flip &middot; drag to toss</span>
+          <span class="count">1 / 4</span>
+          <button class="nav next" aria-label="next">&#8250;</button>
+        </div>
+      </div>
+      <div class="gallery" data-title="Epoch00">
+        <div class="stack">
+          <div class="card"><video data-src="videos/epoch00_step005000_kishorefuhrmann_Soldiers_and_mages_walk_in_the_fluorescent_mush_4aca0b57-3919-4b9d-9ac1-61112793c9ac__traj00_dolly_forward_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Dolly Forward</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/epoch00_step005000_kishorefuhrmann_Soldiers_and_mages_walk_in_the_fluorescent_mush_4aca0b57-3919-4b9d-9ac1-61112793c9ac__traj01_dolly_back_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Dolly Back</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/epoch00_step005000_kishorefuhrmann_Soldiers_and_mages_walk_in_the_fluorescent_mush_4aca0b57-3919-4b9d-9ac1-61112793c9ac__traj02_truck_left_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Truck Left</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/epoch00_step005000_kishorefuhrmann_Soldiers_and_mages_walk_in_the_fluorescent_mush_4aca0b57-3919-4b9d-9ac1-61112793c9ac__traj09_orbit_right_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Orbit Right</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+        </div>
+        <div class="deckbar">
+          <button class="nav prev" aria-label="previous">&#8249;</button>
+          <span class="hint">click card to flip &middot; drag to toss</span>
+          <span class="count">1 / 4</span>
+          <button class="nav next" aria-label="next">&#8250;</button>
+        </div>
+      </div>
+      <div class="gallery" data-title="Epoch00">
+        <div class="stack">
+          <div class="card"><video data-src="videos/epoch00_step005000_kishorefuhrmann_Soldiers_and_mages_walked_through_the_valley_of_d4019673-d31b-4f88-a481-a45aef964bd0-2__traj03_truck_right_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Truck Right</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/epoch00_step005000_kishorefuhrmann_Soldiers_and_mages_walked_through_the_valley_of_d4019673-d31b-4f88-a481-a45aef964bd0-2__traj04_crane_up_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Crane Up</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/epoch00_step005000_kishorefuhrmann_Soldiers_and_mages_walked_through_the_valley_of_d4019673-d31b-4f88-a481-a45aef964bd0-2__traj06_pan_left_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Pan Left</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/epoch00_step005000_kishorefuhrmann_Soldiers_and_mages_walked_through_the_valley_of_d4019673-d31b-4f88-a481-a45aef964bd0-2__traj12_zoom_in_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Zoom In</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+        </div>
+        <div class="deckbar">
+          <button class="nav prev" aria-label="previous">&#8249;</button>
+          <span class="hint">click card to flip &middot; drag to toss</span>
+          <span class="count">1 / 4</span>
+          <button class="nav next" aria-label="next">&#8250;</button>
+        </div>
+      </div>
+      <div class="gallery" data-title="Epoch00">
+        <div class="stack">
+          <div class="card"><video data-src="videos/epoch00_step005000_kishorefuhrmann_The_mage_is_checking_his_red_gem_staff_fantasy__56ed189c-441d-43c1-b3cb-7bb558487e29__traj00_dolly_forward_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Dolly Forward</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/epoch00_step005000_kishorefuhrmann_The_mage_is_checking_his_red_gem_staff_fantasy__56ed189c-441d-43c1-b3cb-7bb558487e29__traj01_dolly_back_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Dolly Back</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/epoch00_step005000_kishorefuhrmann_The_mage_is_checking_his_red_gem_staff_fantasy__56ed189c-441d-43c1-b3cb-7bb558487e29__traj02_truck_left_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Truck Left</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/epoch00_step005000_kishorefuhrmann_The_mage_is_checking_his_red_gem_staff_fantasy__56ed189c-441d-43c1-b3cb-7bb558487e29__traj07_pan_right_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Pan Right</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+        </div>
+        <div class="deckbar">
+          <button class="nav prev" aria-label="previous">&#8249;</button>
+          <span class="hint">click card to flip &middot; drag to toss</span>
+          <span class="count">1 / 4</span>
+          <button class="nav next" aria-label="next">&#8250;</button>
+        </div>
+      </div>
+      <div class="gallery" data-title="Epoch00">
+        <div class="stack">
+          <div class="card"><video data-src="videos/epoch00_step005000_kishorefuhrmann_The_magicians_sat_around_the_fire_their_wands_f_c1f6af6a-7f97-4a73-aeff-db15925cd77c__traj12_zoom_in_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Zoom In</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/epoch00_step005000_kishorefuhrmann_The_magicians_sat_around_the_fire_their_wands_f_c1f6af6a-7f97-4a73-aeff-db15925cd77c__traj03_truck_right_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Truck Right</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/epoch00_step005000_kishorefuhrmann_The_magicians_sat_around_the_fire_their_wands_f_c1f6af6a-7f97-4a73-aeff-db15925cd77c__traj01_dolly_back_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Dolly Back</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/epoch00_step005000_kishorefuhrmann_The_magicians_sat_around_the_fire_their_wands_f_c1f6af6a-7f97-4a73-aeff-db15925cd77c__traj09_orbit_right_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Orbit Right</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+        </div>
+        <div class="deckbar">
+          <button class="nav prev" aria-label="previous">&#8249;</button>
+          <span class="hint">click card to flip &middot; drag to toss</span>
+          <span class="count">1 / 4</span>
+          <button class="nav next" aria-label="next">&#8250;</button>
+        </div>
+      </div>
+      <div class="gallery" data-title="Epoch00">
+        <div class="stack">
+          <div class="card"><video data-src="videos/epoch00_step005000_kishorefuhrmann_The_mysterious_ice_elf_rides_a_jellyfish_boat_a_56a92849-8ff3-42ca-9475-79665b3a9744__traj02_truck_left_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Truck Left</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/epoch00_step005000_kishorefuhrmann_The_mysterious_ice_elf_rides_a_jellyfish_boat_a_56a92849-8ff3-42ca-9475-79665b3a9744__traj04_crane_up_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Crane Up</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/epoch00_step005000_kishorefuhrmann_The_mysterious_ice_elf_rides_a_jellyfish_boat_a_56a92849-8ff3-42ca-9475-79665b3a9744__traj07_pan_right_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Pan Right</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/epoch00_step005000_kishorefuhrmann_The_mysterious_ice_elf_rides_a_jellyfish_boat_a_56a92849-8ff3-42ca-9475-79665b3a9744-2__traj08_orbit_left_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Orbit Left</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+        </div>
+        <div class="deckbar">
+          <button class="nav prev" aria-label="previous">&#8249;</button>
+          <span class="hint">click card to flip &middot; drag to toss</span>
+          <span class="count">1 / 4</span>
+          <button class="nav next" aria-label="next">&#8250;</button>
+        </div>
+      </div>
+      <div class="gallery" data-title="Epoch00">
+        <div class="stack">
+          <div class="card"><video data-src="videos/epoch00_step005000_kishorefuhrmann_A_peaceful_town_round_low_buildings_grassland_t_ad8ee91a-865c-4f9d-8df8-af4af99be155__traj00_dolly_forward_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Dolly Forward</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/epoch00_step005000_kishorefuhrmann_A_peaceful_town_round_low_buildings_grassland_t_ad8ee91a-865c-4f9d-8df8-af4af99be155__traj01_dolly_back_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Dolly Back</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/epoch00_step005000_kishorefuhrmann_A_peaceful_town_round_low_buildings_grassland_t_ad8ee91a-865c-4f9d-8df8-af4af99be155__traj02_truck_left_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Truck Left</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+          <div class="card"><video data-src="videos/epoch00_step005000_kishorefuhrmann_A_peaceful_town_round_low_buildings_grassland_t_ad8ee91a-865c-4f9d-8df8-af4af99be155__traj03_truck_right_page_pip.mp4" loop muted playsinline preload="none"></video><div class="cinfo"><span class="ctag">Truck Right</span></div><button class="expand" aria-label="enlarge">&#9974;</button><div class="cveil"></div></div>
+        </div>
+        <div class="deckbar">
+          <button class="nav prev" aria-label="previous">&#8249;</button>
+          <span class="hint">click card to flip &middot; drag to toss</span>
+          <span class="count">1 / 4</span>
+          <button class="nav next" aria-label="next">&#8250;</button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="citation" aria-labelledby="citation-heading">
+    <h2 id="citation-heading">Citation</h2>
+    <pre><code>@article{yin2026scope,
+  title   = {SCoPE: Sightline-Coordinate Positional Encoding for Video Diffusion Transformers},
+  author  = {Yin, Minghao and Lu, Jiahao and Hu, Wenbo and Zhao, Wang and Shan, Ying and Han, Kai},
+  journal = {arXiv preprint arXiv:2606.27345},
+  year    = {2026}
+}</code></pre>
+  </section>
+  <footer>
+    Generated results gallery &middot; videos shown with picture-in-picture camera visualization.
+  </footer>
+</main>
+<div class="lightbox" id="lb"><video loop muted playsinline controls></video></div>
+<script>
+(function(){
+  var VIDEO_BASE='https://huggingface.co/datasets/Michaelqaz/SCoPE-Gallery/resolve/main/';
+  // Use ?videoSource=local when testing against the retained local videos/ backup.
+  if(new URLSearchParams(window.location.search).get('videoSource')==='local')VIDEO_BASE='';
+  var OFF=27, SC=0.07, K=3;            // 探头位移 / 缩放 / 可见后排数
+  function videoURL(path){
+    if(!path||/^https?:\/\//i.test(path))return path||'';
+    return VIDEO_BASE+path.split('/').map(encodeURIComponent).join('/');
+  }
+  function setup(g){
+    var stack=g.querySelector('.stack');
+    var cards=Array.prototype.slice.call(g.querySelectorAll('.card'));
+    var count=g.querySelector('.count');
+    var n=cards.length, cur=0, inview=false, flinging=false, prefetchTimer=0;
+    function vid(i){return cards[i]?cards[i].querySelector('video'):null;}
+    function status(i,show){
+      var s=cards[i]&&cards[i].querySelector('.vstatus');
+      if(s)s.classList.toggle('show',!!show);
+    }
+    function ld(i,warm){
+      var v=vid(i);
+      if(!v||!v.dataset.src)return;
+      if(!warm)v.preload='auto';
+      if(v.getAttribute('src'))return;
+      v.preload=warm?'metadata':'auto';
+      v.dataset.loading='1';
+      v.src=videoURL(v.dataset.src);
+      v.load();
+    }
+    function retry(i){
+      var v=vid(i);if(!v)return;
+      status(i,false);v.pause();v.removeAttribute('src');v.removeAttribute('data-loading');v.load();
+      ld(i,false);
+      if(inview&&i===cur)v.play().catch(function(){});
+    }
+    function schedulePrefetch(){
+      clearTimeout(prefetchTimer);
+      var expected=cur,next=(cur+1)%n;
+      prefetchTimer=setTimeout(function(){
+        if(inview&&cur===expected)ld(next,true);
+      },650);
+    }
+    cards.forEach(function(c,i){
+      var v=c.querySelector('video');
+      var s=document.createElement('button');
+      s.type='button';s.className='vstatus';s.textContent='Video unavailable · retry';
+      s.setAttribute('aria-label','Retry video');c.appendChild(s);
+      s.addEventListener('click',function(e){e.stopPropagation();retry(i);});
+      v.addEventListener('canplay',function(){
+        v.removeAttribute('data-loading');status(i,false);
+        if(inview&&i===cur){v.play().catch(function(){});schedulePrefetch();}
+      });
+      v.addEventListener('error',function(){v.removeAttribute('data-loading');status(i,true);});
+    });
+    function topCard(){return cards[cur];}
+    function layout(){
+      for(var i=0;i<n;i++){
+        var c=cards[i], v=c.querySelector('video'), rel=(i-cur+n)%n;
+        if(rel===0){
+          c.style.transform='translateY(0) scale(1) rotate(0deg)';
+          c.style.opacity='1'; c.style.filter='none'; c.style.zIndex=String(n+2);
+          c.classList.remove('back');
+          if(inview){
+            ld(i,false);
+            if(v){v.play().catch(function(){});if(v.readyState>=3)schedulePrefetch();}
+          }                                                     // 进入视口只加载/播放顶卡
+        } else if(rel<=K){
+          var rot=((rel%2)?1:-1)*Math.min(rel,2)*1.5;
+          c.style.transform='translateY('+(rel*OFF)+'px) scale('+(1-rel*SC)+') rotate('+rot+'deg)';
+          c.style.opacity='1'; c.style.filter='brightness('+(1-rel*0.09)+')'; c.style.zIndex=String(n-rel);
+          c.classList.add('back');
+          if(v)v.pause();
+        } else {
+          c.style.transform='translateY('+(K*OFF+12)+'px) scale('+(1-(K+1)*SC)+')';
+          c.style.opacity='0'; c.style.zIndex='0'; c.classList.add('back');
+          if(v)v.pause();
+        }
+      }
+      if(count)count.textContent=(cur+1)+' / '+n;
+    }
+    function fling(dirX,dirY){
+      if(flinging)return; flinging=true;
+      var c=topCard();
+      c.style.transition='transform .46s cubic-bezier(.4,.08,.5,1),opacity .4s ease';
+      c.style.transform='translate('+(dirX*780)+'px,'+(dirY*240+40)+'px) rotate('+(dirX*22)+'deg)';
+      c.style.opacity='0';
+      setTimeout(function(){
+        c.style.transition='none';
+        cur=(cur+1)%n; layout();
+        requestAnimationFrame(function(){c.style.transition='';});
+        flinging=false;
+      },470);
+    }
+    function prev(){
+      if(flinging)return;
+      cur=(cur-1+n)%n; layout();           // 上一张从牌堆底部升回最前
+    }
+    var tossDir=1;
+    function nextToss(){ tossDir=-tossDir; fling(tossDir,0.05); }   // 主交互: 点一下翻一张
+    // ── 指针交互 (仅顶卡): 轻点=翻牌, 也支持拖拽甩飞 ──
+    var sx=0,sy=0,dx=0,dy=0,drag=false;
+    stack.addEventListener('pointerdown',function(e){
+      if(flinging)return; var c=topCard();
+      if(!c.contains(e.target)||e.target.closest('.expand')||e.target.closest('.vstatus'))return;
+      drag=true; sx=e.clientX; sy=e.clientY; dx=dy=0;
+      c.style.transition='none'; try{c.setPointerCapture(e.pointerId);}catch(_){}
+    });
+    stack.addEventListener('pointermove',function(e){
+      if(!drag)return; dx=e.clientX-sx; dy=e.clientY-sy;
+      var c=topCard();
+      c.style.transform='translate('+dx+'px,'+dy+'px) rotate('+(dx*0.06)+'deg)';
+      c.style.opacity=String(Math.max(0.35,1-Math.abs(dx)/440));
+    });
+    function release(e){
+      if(!drag)return; drag=false; var c=topCard(); var dist=Math.hypot(dx,dy);
+      try{c.releasePointerCapture(e.pointerId);}catch(_){}
+      if(dist<6){                                    // 轻点=翻牌, 方向由点击落在视频左/右半边决定
+        c.style.transition=''; c.style.transform=''; c.style.opacity='';
+        var r=c.getBoundingClientRect();
+        var px=(e.clientX!=null?e.clientX:sx);
+        fling(px>r.left+r.width/2?1:-1,0.05);
+        return;
+      }
+      if(dist>92){ fling(dx>=0?1:-1, dy>120?0.5:(dy<-120?-0.5:0.05)); }
+      else{ c.style.transition=''; layout(); }
+    }
+    stack.addEventListener('pointerup',release);
+    stack.addEventListener('pointercancel',release);
+    cards.forEach(function(c){
+      var ex=c.querySelector('.expand');
+      if(ex)ex.addEventListener('click',function(e){e.stopPropagation();openLB(c.querySelector('video'));});
+    });
+    g.querySelector('.next').addEventListener('click',function(e){e.stopPropagation();nextToss();});
+    g.querySelector('.prev').addEventListener('click',function(e){e.stopPropagation();prev();});
+    var api={prev:prev,next:nextToss};
+    g.addEventListener('mouseenter',function(){hovered=api;});
+    g.addEventListener('mouseleave',function(){if(hovered===api)hovered=null;});
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){
+      inview=e.isIntersecting;
+      if(inview){layout();}else{
+        clearTimeout(prefetchTimer);
+        cards.forEach(function(c){var v=c.querySelector('video');if(v)v.pause();});
+      }
+    });},{rootMargin:'80px 0px',threshold:0.15});
+    io.observe(g);
+    stack.classList.add('no-anim'); layout();
+    requestAnimationFrame(function(){requestAnimationFrame(function(){stack.classList.remove('no-anim');});});
+  }
+  var hovered=null;
+  var lb=document.getElementById('lb'),lv=lb.querySelector('video');
+  function openLB(v){if(!v)return;lv.src=v.currentSrc||v.getAttribute('src')||videoURL(v.dataset.src);lb.classList.add('open');lv.play().catch(function(){});}
+  function closeLB(){lb.classList.remove('open');lv.pause();lv.removeAttribute('src');lv.load();}
+  lb.addEventListener('click',closeLB);
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){closeLB();return;}
+    if(!hovered)return;
+    if(e.key==='ArrowRight'||e.key==='ArrowDown'){e.preventDefault();hovered.next();}
+    else if(e.key==='ArrowLeft'||e.key==='ArrowUp'){e.preventDefault();hovered.prev();}
+  });
+  document.querySelectorAll('.gallery').forEach(setup);
+})();
+</script>
+</body>
+</html>
