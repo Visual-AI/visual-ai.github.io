@@ -17,11 +17,45 @@
 }
 *{box-sizing:border-box;}
 html{scroll-behavior:smooth;}
+section[id],header[id],figure[id]{scroll-margin-top:28px;}
 body{margin:0;background:radial-gradient(1200px 600px at 50% -10%,#1a1f2b 0%,var(--bg) 55%) fixed;
   color:var(--fg);line-height:1.65;
   font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
   -webkit-font-smoothing:antialiased;}
 a{color:var(--accent);text-decoration:none;}
+.section-rail{position:fixed;z-index:70;left:8px;top:50%;width:42px;max-height:calc(100vh - 28px);
+  transform:translateY(-50%);padding:10px 5px;border:1px solid rgba(148,163,184,.2);border-radius:15px;
+  background:rgba(14,17,24,.78);box-shadow:0 14px 40px rgba(0,0,0,.38);
+  -webkit-backdrop-filter:blur(16px) saturate(135%);backdrop-filter:blur(16px) saturate(135%);overflow:hidden;
+  transition:width .32s cubic-bezier(.16,1,.3,1),border-color .25s ease,background .25s ease;}
+.section-rail:hover,.section-rail:focus-within{width:160px;
+  border-color:rgba(78,205,255,.38);background:rgba(14,17,24,.96);}
+.rail-track{position:absolute;left:20px;top:20px;bottom:20px;width:1px;border-radius:2px;background:rgba(154,163,178,.18);}
+.rail-fill{position:absolute;left:0;top:0;width:100%;height:var(--page-progress,0%);border-radius:2px;
+  background:linear-gradient(180deg,#8ae1ff,var(--accent));box-shadow:0 0 10px rgba(78,205,255,.5);}
+.rail-links{position:relative;display:grid;gap:1px;}
+.rail-link{height:32px;width:148px;display:flex;align-items:center;gap:9px;border-radius:8px;
+  color:#778195;transition:color .2s ease,background .2s ease;white-space:nowrap;}
+.rail-link:hover{color:#e8edf5;background:rgba(255,255,255,.055);}
+.rail-marker{position:relative;z-index:1;width:28px;flex:0 0 28px;text-align:center;font:600 8px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
+  color:#7d8798;transition:color .2s ease,transform .25s ease;}
+.rail-marker::before{content:"";position:absolute;z-index:-1;left:50%;top:50%;width:17px;height:17px;
+  transform:translate(-50%,-50%) scale(.55);border-radius:50%;background:#11151d;border:1px solid #3a4352;
+  transition:transform .25s ease,border-color .2s ease,background .2s ease,box-shadow .2s ease;}
+.rail-label{font-size:10.5px;font-weight:650;letter-spacing:.025em;opacity:0;transform:translateX(-4px);
+  transition:opacity .2s ease,transform .28s cubic-bezier(.16,1,.3,1);}
+.section-rail:hover .rail-label,.section-rail:focus-within .rail-label{opacity:1;transform:none;}
+.rail-link.is-active{color:#f4f7fb;}
+.rail-link.is-active .rail-marker{color:#061016;transform:scale(1.03);}
+.rail-link.is-active .rail-marker::before{transform:translate(-50%,-50%) scale(1);border-color:var(--accent);
+  background:var(--accent);box-shadow:0 0 0 4px rgba(78,205,255,.1),0 0 16px rgba(78,205,255,.35);}
+.mobile-section{display:none;position:fixed;z-index:70;top:10px;left:50%;transform:translate(-50%,-8px);
+  min-width:132px;padding:7px 13px 8px;border:1px solid rgba(148,163,184,.2);border-radius:999px;
+  background:rgba(14,17,24,.86);box-shadow:0 8px 24px rgba(0,0,0,.3);backdrop-filter:blur(14px);
+  color:#dce3ee;font-size:10px;font-weight:700;letter-spacing:.08em;text-align:center;text-transform:uppercase;
+  opacity:0;pointer-events:none;transition:opacity .2s ease,transform .25s ease;overflow:hidden;}
+.mobile-section.show{opacity:1;transform:translate(-50%,0);}
+.mobile-section::after{content:"";position:absolute;left:0;bottom:0;width:var(--page-progress,0%);height:2px;background:var(--accent);}
 .hero{max-width:920px;margin:0 auto;padding:72px 24px 6px;text-align:center;}
 .hero h1{font-size:clamp(26px,4vw,40px);font-weight:800;letter-spacing:-.02em;line-height:1.22;margin:0 0 16px;
   background:linear-gradient(180deg,#fff,#b9c4d6);-webkit-background-clip:text;background-clip:text;color:transparent;}
@@ -59,6 +93,20 @@ a{color:var(--accent);text-decoration:none;}
 .teaser>a:focus-visible{outline:3px solid var(--accent);outline-offset:3px;}
 .teaser img{width:100%;height:auto;display:block;border-radius:6px;}
 .teaser .cap{color:#4f5968;font-size:13px;line-height:1.55;margin:12px 4px 1px;text-align:justify;}
+.overview-video{max-width:860px;margin:38px auto 0;}
+.overview-video-head{display:flex;align-items:center;gap:12px;margin:0 0 12px;}
+.overview-video-index{color:var(--accent);font:650 10px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.08em;}
+.overview-video h2{margin:0;color:var(--muted);font-size:12px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;}
+.overview-video-rule{height:1px;flex:1;background:linear-gradient(90deg,#303746,transparent);}
+.overview-video-duration{color:#6e788b;font:600 10px/1 ui-monospace,SFMono-Regular,Menlo,monospace;}
+.overview-video-frame{position:relative;overflow:hidden;border:1px solid #303746;border-radius:16px;
+  background:#050608;box-shadow:0 18px 48px rgba(0,0,0,.38),0 0 0 1px rgba(255,255,255,.025) inset;}
+.overview-video-frame::before{content:"";position:absolute;z-index:1;inset:0;pointer-events:none;
+  border-radius:inherit;box-shadow:inset 0 0 0 1px rgba(255,255,255,.035);}
+.overview-video video{display:block;width:100%;aspect-ratio:16/9;background:#050608;}
+.overview-video-note{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;margin:12px 2px 0;
+  color:#7f8999;font-size:12.5px;line-height:1.55;}
+.overview-video-note strong{color:#cbd3df;font-weight:650;white-space:nowrap;}
 .idea{max-width:860px;margin:30px auto 0;}
 .idea h2{font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
   color:var(--muted);text-align:center;margin:0 0 14px;}
@@ -142,6 +190,11 @@ footer{max-width:860px;margin:80px auto 0;text-align:center;color:var(--muted);f
   background:rgba(12,14,19,.72);color:#dfe6f2;font-size:11px;font-weight:650;
   letter-spacing:.08em;text-transform:uppercase;pointer-events:none;}
 @media(max-width:880px){.grid{grid-template-columns:1fr;gap:24px;}}
+@media(min-width:1181px){
+  .grid{width:calc(100% - 80px);margin-left:auto;margin-right:auto;column-gap:28px;}
+  .section-head{width:calc(100% - 80px);padding-left:4px;padding-right:4px;}
+}
+@media(max-width:1180px){.section-rail{display:none;}.mobile-section{display:block;}}
 @media(max-width:620px){
   .hero{padding-top:48px;}
   .authors{gap:5px 14px;font-size:14.5px;}
@@ -149,56 +202,266 @@ footer{max-width:860px;margin:80px auto 0;text-align:center;color:var(--muted);f
   .affiliations span{display:block;}
   .teaser{padding:8px;margin-top:26px;}
   .teaser .cap{font-size:11.5px;text-align:left;}
+  .overview-video{margin-top:30px;}
+  .overview-video-frame{border-radius:11px;}
+  .overview-video-note{display:block;font-size:11.5px;}
+  .overview-video-note strong{display:block;margin-bottom:3px;}
   .citation pre{padding:15px 16px;font-size:11px;white-space:pre-wrap;overflow-wrap:anywhere;}
+}
+
+/* ── SCoPE Design V2 ─────────────────────────────────────────── */
+@font-face{font-family:"Scope Display";src:url("assets/fonts/space-grotesk-variable.woff2") format("woff2");font-weight:300 700;font-display:swap;}
+@font-face{font-family:"Scope Sans";src:url("assets/fonts/manrope-variable.woff2") format("woff2");font-weight:200 800;font-display:swap;}
+@font-face{font-family:"Scope Mono";src:url("assets/fonts/jetbrains-mono-variable.woff2") format("woff2");font-weight:100 800;font-display:swap;}
+:root{--accent-2:#8d7cff;--display:"Scope Display","Avenir Next",sans-serif;--sans:"Scope Sans","Avenir Next",sans-serif;--mono:"Scope Mono",ui-monospace,monospace;}
+body{position:relative;font-family:var(--sans);background:
+  radial-gradient(900px 620px at 76% 2%,rgba(78,205,255,.1),transparent 68%),
+  radial-gradient(720px 520px at 14% 12%,rgba(141,124,255,.075),transparent 72%),#0b0d12;background-attachment:fixed;}
+body::before{content:"";position:fixed;z-index:0;inset:0;pointer-events:none;opacity:.24;
+  background-image:linear-gradient(rgba(139,155,179,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(139,155,179,.055) 1px,transparent 1px);
+  background-size:64px 64px;mask-image:linear-gradient(to bottom,#000 0%,transparent 68%);}
+body::after{content:"";position:fixed;z-index:0;left:54%;top:-22%;width:68vw;height:82vw;pointer-events:none;opacity:.18;
+  background:repeating-conic-gradient(from 196deg at 0 50%,transparent 0deg 2.4deg,rgba(78,205,255,.22) 2.55deg 2.7deg,transparent 2.85deg 6.5deg);
+  mask-image:radial-gradient(ellipse at 0 50%,#000 0%,transparent 68%);}
+.wrap{position:relative;z-index:1;}
+.hero{position:relative;display:grid;grid-template-columns:minmax(0,1.04fr) minmax(420px,.96fr);align-items:center;gap:clamp(48px,7vw,100px);
+  max-width:1320px;min-height:700px;margin:0 auto;padding:90px 64px 76px;text-align:left;}
+.hero::after{content:"";position:absolute;left:64px;right:64px;bottom:0;height:1px;background:linear-gradient(90deg,transparent,#303746 14%,#303746 86%,transparent);}
+.hero-copy{position:relative;z-index:2;}
+.hero-kicker{display:flex;align-items:center;gap:10px;margin:0 0 22px;color:#aeb8c9;font:600 10px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;}
+.hero-kicker::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 5px rgba(78,205,255,.09),0 0 18px rgba(78,205,255,.45);}
+.hero h1{max-width:720px;margin:0;font:560 clamp(42px,5.15vw,74px)/.98 var(--display);letter-spacing:-.055em;color:#eef2f8;background:none;-webkit-text-fill-color:initial;}
+.scope-word{display:block;width:max-content;margin-bottom:9px;font-weight:650;letter-spacing:-.035em;background:linear-gradient(105deg,#dff7ff 0%,var(--accent) 38%,#a596ff 100%);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.hero-title-rest{display:block;}
+.hero-deck{max-width:660px;margin:24px 0 0;color:#aeb7c6;font-size:16px;line-height:1.72;}
+.hero .authors{justify-content:flex-start;max-width:720px;margin:28px 0 9px;gap:6px 18px;font-size:14px;}
+.hero .affiliations{justify-content:flex-start;max-width:730px;margin:0;gap:3px 16px;font-size:11.5px;}
+.hero .contrib{margin:7px 0 0;color:#6f7889;}
+.hero .tagline{max-width:700px;margin:22px 0 0;padding-top:18px;border-top:1px solid #262c38;color:#7e899b;font-size:12.5px;}
+.hero .links{justify-content:flex-start;margin-top:24px;gap:9px;}
+.btn{min-height:46px;padding:5px 6px 5px 14px;gap:10px;border-color:#303747;background:rgba(20,24,33,.74);font-size:12.5px;box-shadow:0 8px 24px rgba(0,0,0,.18);backdrop-filter:blur(12px);}
+.btn:hover{transform:translateY(-2px);border-color:rgba(78,205,255,.65);background:#181e29;box-shadow:0 11px 30px rgba(0,0,0,.3);}
+.btn-mark{min-width:31px;height:31px;display:grid;place-items:center;padding:0 7px;border-radius:999px;background:rgba(255,255,255,.07);color:#bfcaD9;font:650 8px/1 var(--mono);letter-spacing:.04em;transition:background .2s ease,color .2s ease,transform .25s ease;}
+.btn:hover .btn-mark{background:var(--accent);color:#071116;transform:translate(1px,-1px);}
+.hero-visual{position:relative;min-width:0;perspective:1200px;}
+.ray-card{position:relative;min-height:510px;overflow:hidden;border:1px solid rgba(146,164,190,.22);border-radius:28px;
+  background:linear-gradient(145deg,rgba(28,34,47,.92),rgba(12,15,22,.95));box-shadow:0 34px 90px rgba(0,0,0,.46),inset 0 1px rgba(255,255,255,.05);transform:rotateY(-3deg) rotateX(1deg);}
+.ray-card::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 73% 43%,rgba(78,205,255,.12),transparent 34%),linear-gradient(135deg,rgba(141,124,255,.07),transparent 42%);}
+.ray-card-head,.ray-card-foot{position:absolute;z-index:5;left:22px;right:22px;display:flex;justify-content:space-between;align-items:center;color:#768196;font:600 9px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;}
+.ray-card-head{top:21px;padding-bottom:16px;border-bottom:1px solid rgba(144,161,186,.14);}
+.ray-card-head span:first-child{color:#b7c4d6;}
+.ray-card-foot{bottom:20px;padding-top:16px;border-top:1px solid rgba(144,161,186,.14);}
+.ray-card-foot b{color:#cfd8e6;font-weight:550;text-transform:none;letter-spacing:0;}
+.ray-stage{position:absolute;inset:65px 22px 62px;overflow:hidden;border-radius:17px;background:
+  linear-gradient(rgba(129,150,179,.075) 1px,transparent 1px),linear-gradient(90deg,rgba(129,150,179,.075) 1px,transparent 1px),rgba(5,8,13,.45);background-size:32px 32px;}
+.camera-anchor{position:absolute;z-index:4;left:9%;top:50%;width:54px;height:38px;transform:translateY(-50%);border:1px solid rgba(78,205,255,.65);border-radius:9px;background:#111824;box-shadow:0 0 0 7px rgba(78,205,255,.045),0 0 26px rgba(78,205,255,.15);}
+.camera-anchor::before{content:"";position:absolute;right:-15px;top:10px;border-left:15px solid rgba(78,205,255,.5);border-top:9px solid transparent;border-bottom:9px solid transparent;}
+.camera-anchor span{position:absolute;left:8px;bottom:7px;color:#bdeeff;font:650 8px/1 var(--mono);letter-spacing:.08em;}
+.ray{position:absolute;z-index:2;left:18%;top:50%;width:62%;height:1px;transform-origin:0 50%;transform:rotate(var(--angle));background:linear-gradient(90deg,rgba(78,205,255,.75),rgba(141,124,255,.42),transparent);opacity:.58;animation:rayPulse 4.6s ease-in-out infinite;animation-delay:var(--delay);}
+.ray::after{content:"";position:absolute;left:70%;top:-2px;width:5px;height:5px;border-radius:50%;background:#dff8ff;box-shadow:0 0 13px var(--accent);}
+@keyframes rayPulse{0%,100%{opacity:.3;filter:saturate(.8)}50%{opacity:.84;filter:saturate(1.35)}}
+.token-grid{position:absolute;z-index:3;right:10%;top:50%;display:grid;grid-template-columns:repeat(3,34px);gap:13px;transform:translateY(-50%) skewY(-5deg);}
+.token-grid span{width:34px;height:34px;border:1px solid #3c4658;border-radius:6px;background:rgba(17,22,31,.9);box-shadow:inset 0 0 13px rgba(78,205,255,.035);}
+.token-grid span:nth-child(5){border-color:var(--accent);background:rgba(78,205,255,.15);box-shadow:0 0 0 5px rgba(78,205,255,.06),0 0 24px rgba(78,205,255,.18);}
+.ray-equation{position:absolute;z-index:5;left:8%;right:8%;bottom:18px;display:flex;justify-content:center;align-items:center;gap:9px;color:#718095;font:500 8.5px/1 var(--mono);}
+.ray-equation span{padding:7px 9px;border:1px solid #2c3442;border-radius:7px;background:rgba(9,12,18,.82);}
+.ray-equation b{color:var(--accent);font-size:13px;}
+.abstract{display:grid;grid-template-columns:190px minmax(0,1fr);gap:48px;max-width:960px;margin-top:74px;}
+.abstract h2{position:relative;margin-top:6px;text-align:left;color:#e8edf5;font:520 28px/1 var(--display);letter-spacing:-.035em;text-transform:none;}
+.abstract h2::before{content:"02 / PAPER";display:block;margin-bottom:14px;color:var(--accent);font:600 9px/1 var(--mono);letter-spacing:.14em;}
+.abstract p{font-size:15.5px;line-height:1.82;color:#b9c2d0;}
+.teaser{max-width:960px;margin-top:62px;border-radius:20px;padding:11px;border-color:#343c4b;box-shadow:0 24px 60px rgba(0,0,0,.36);}
+.teaser img{border-radius:11px;}
+.teaser .cap{padding:4px 7px 3px;font-family:var(--sans);}
+.overview-video{max-width:960px;margin-top:58px;}
+.overview-video-index,.section-head::before{font-family:var(--mono);}
+.overview-video-frame{border-radius:20px;box-shadow:0 24px 62px rgba(0,0,0,.4);}
+.idea{max-width:960px;margin-top:58px;}
+.idea h2{display:flex;align-items:center;gap:12px;margin-bottom:18px;text-align:left;color:#e8edf5;font:520 27px/1 var(--display);letter-spacing:-.035em;text-transform:none;}
+.idea h2::before{content:"04";color:var(--accent);font:600 9px/1 var(--mono);letter-spacing:.08em;}
+.idea h2::after{content:"";height:1px;flex:1;background:linear-gradient(90deg,#303847,transparent);}
+.idea ul{grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;}
+.idea li{min-height:184px;padding:50px 19px 20px;border:1px solid #293140;border-radius:16px;background:linear-gradient(145deg,rgba(24,29,40,.78),rgba(15,18,25,.72));font-size:13px;line-height:1.68;box-shadow:0 12px 30px rgba(0,0,0,.16);}
+.idea li::before{left:20px;top:23px;width:9px;height:9px;box-shadow:0 0 0 5px rgba(78,205,255,.055);}
+.divider{max-width:960px;margin-top:74px;}
+.section{position:relative;margin-top:92px;padding-top:20px;}
+.section::before{content:"";position:absolute;z-index:-1;left:50%;top:-20px;width:min(1500px,100%);height:420px;transform:translateX(-50%);background:radial-gradient(ellipse at 50% 0,rgba(89,109,142,.06),transparent 68%);pointer-events:none;}
+.section-head{display:grid;grid-template-columns:auto auto minmax(30px,1fr);align-items:center;column-gap:12px;margin-bottom:34px;}
+.section-head::before{content:attr(data-index);color:var(--accent);font-size:9px;font-weight:650;letter-spacing:.08em;}
+.section-head::after{content:"";height:1px;background:linear-gradient(90deg,#303847,transparent);}
+.section-head .kicker{margin:0;color:#8994a7;font:600 9px/1 var(--mono);letter-spacing:.14em;}
+.section-head h2{grid-column:1/-1;margin:17px 0 8px;color:#edf1f7;font:530 clamp(30px,3vw,42px)/1 var(--display);letter-spacing:-.045em;}
+.section-head .desc{grid-column:1/-1;max-width:760px;font-size:13.5px;line-height:1.65;}
+.card{border-radius:19px;border-color:rgba(157,175,202,.12);box-shadow:0 24px 52px rgba(0,0,0,.46),0 2px 7px rgba(0,0,0,.42);}
+.card .expand{font-size:0;}
+.card .expand::before{content:"↗";font:600 14px/1 var(--display);}
+.deckbar{margin-top:10px;}
+.citation{max-width:960px;margin-top:104px;}
+.citation-head{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+.citation h2{margin:0;text-align:left;color:#e8edf5;font:520 28px/1 var(--display);letter-spacing:-.035em;text-transform:none;}
+.citation h2::before{content:"10";margin-right:12px;color:var(--accent);font:600 9px/1 var(--mono);letter-spacing:.08em;vertical-align:middle;}
+.citation-rule{height:1px;flex:1;background:linear-gradient(90deg,#303847,transparent);}
+.copy-bibtex{min-height:36px;padding:0 13px;border:1px solid #303847;border-radius:999px;background:#121720;color:#aeb9c9;font:600 9px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:border-color .2s ease,color .2s ease,transform .15s ease;}
+.copy-bibtex:hover{border-color:var(--accent);color:#eaf8ff;transform:translateY(-1px);}
+.citation pre{border-radius:16px;background:linear-gradient(145deg,#10151e,#0d1118);}
+footer{padding-top:34px;border-top:1px solid #232a36;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .72s cubic-bezier(.16,1,.3,1),transform .72s cubic-bezier(.16,1,.3,1);}
+.reveal.is-visible{opacity:1;transform:none;}
+@media(max-width:1050px){
+  .hero{grid-template-columns:1fr;min-height:0;padding:92px 64px 72px;}
+  .hero h1{max-width:820px;}
+  .hero-visual{max-width:720px;width:100%;margin:0 auto;}
+  .ray-card{min-height:450px;transform:none;}
+}
+@media(max-width:760px){
+  .hero{padding:66px 24px 54px;gap:42px;}
+  .hero::after{left:24px;right:24px;}
+  .hero h1{font-size:clamp(39px,11vw,58px);}
+  .hero-deck{font-size:14px;}
+  .ray-card{min-height:390px;border-radius:20px;}
+  .token-grid{right:5%;transform:translateY(-50%) scale(.84) skewY(-5deg);}
+  .abstract{grid-template-columns:1fr;gap:18px;margin-top:58px;}
+  .abstract h2{margin:0;}
+  .idea ul{grid-template-columns:1fr;}
+  .idea li{min-height:0;}
+  .section{margin-top:70px;}
+}
+@media(max-width:520px){
+  .ray-card{min-height:330px;}
+  .ray-stage{inset:58px 14px 54px;}
+  .camera-anchor{left:5%;transform:translateY(-50%) scale(.78);}
+  .ray{left:17%;width:70%;}
+  .token-grid{right:-3%;transform:translateY(-50%) scale(.68) skewY(-5deg);}
+  .ray-equation{display:none;}
+  .btn{min-height:43px;}
+}
+@media(prefers-reduced-motion:reduce){.ray{animation:none;}.reveal{opacity:1;transform:none;transition:none;}.btn{transition:none;}}
+
+/* ── V2.1: research-first composition ────────────────────────── */
+body::before{opacity:.13;}
+body::after{display:none;}
+.hero{display:block;max-width:1160px;min-height:0;padding:96px 64px 42px;text-align:center;}
+.hero-copy{max-width:1040px;margin:0 auto;}
+.hero-kicker{justify-content:center;margin-bottom:24px;}
+.hero h1{max-width:1040px;margin:0 auto;font-size:clamp(44px,5.7vw,72px);line-height:1.01;}
+.scope-word{margin-left:auto;margin-right:auto;}
+.hero-deck{max-width:760px;margin:25px auto 0;font-size:15.5px;}
+.hero .authors{justify-content:center;max-width:940px;margin:29px auto 9px;}
+.hero .affiliations{justify-content:center;max-width:980px;margin:0 auto;}
+.hero .contrib{margin:7px auto 0;}
+.hero .links{justify-content:center;}
+.hero .tagline{max-width:760px;margin:22px auto 0;}
+.paper-overview{display:grid;grid-template-columns:minmax(0,1.36fr) minmax(330px,.64fr);align-items:stretch;gap:22px;width:calc(100% - 80px);max-width:1180px;margin:44px auto 0;}
+.paper-overview .teaser{max-width:none;height:100%;margin:0;padding:10px;display:flex;flex-direction:column;border-radius:18px;}
+.paper-overview .teaser>a{flex:0 0 auto;}
+.paper-overview .teaser .cap{margin-top:auto;padding-top:12px;font-size:11.5px;line-height:1.55;}
+.paper-overview .abstract{display:flex;flex-direction:column;gap:0;max-width:none;height:100%;margin:0;padding:31px 29px;border:1px solid #2d3544;border-radius:18px;
+  background:linear-gradient(145deg,rgba(24,29,40,.84),rgba(14,18,25,.78));box-shadow:0 20px 52px rgba(0,0,0,.26);}
+.paper-overview .abstract h2{margin:0 0 21px;font-size:30px;}
+.paper-overview .abstract h2::before{content:"02 / ABSTRACT";margin-bottom:13px;}
+.paper-overview .abstract p{margin:0;color:#bac3d1;font-size:13.2px;line-height:1.74;text-align:left;}
+.paper-overview .abstract p+p{margin-top:13px;color:#929daf;}
+.abstract-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:auto;padding-top:24px;}
+.abstract-stats span{min-width:0;padding:10px 8px;border:1px solid #2b3341;border-radius:10px;background:rgba(9,13,19,.52);color:#7f8a9d;font:550 8px/1.35 var(--mono);text-align:center;text-transform:uppercase;letter-spacing:.035em;}
+.abstract-stats strong{display:block;margin-bottom:5px;color:#dff7ff;font:620 16px/1 var(--display);letter-spacing:-.025em;text-transform:none;}
+.overview-video{margin-top:72px;}
+.divider{margin-top:58px;}
+#scenes{margin-top:42px;padding-top:12px;}
+@media(max-width:1050px){
+  .hero{padding:88px 52px 42px;}
+  .paper-overview{grid-template-columns:1fr;width:calc(100% - 48px);max-width:880px;}
+  .paper-overview .abstract{min-height:390px;}
+}
+@media(max-width:620px){
+  .hero{padding:66px 24px 34px;}
+  .paper-overview{width:100%;gap:14px;margin-top:36px;}
+  .paper-overview .abstract{min-height:0;padding:25px 21px;}
+  .abstract-stats{grid-template-columns:1fr;}
+  .abstract-stats span{display:flex;align-items:center;justify-content:space-between;text-align:left;padding:9px 11px;}
+  .abstract-stats strong{display:inline;margin:0;font-size:15px;}
 }
 </style>
 </head>
 <body>
-<header class="hero">
-  <h1>SCoPE: Sightline-Coordinate Positional Encoding for Video Diffusion Transformers</h1>
-  <div class="authors" aria-label="Authors">
-    <span>Minghao Yin<sup>1*</sup></span>
-    <span>Jiahao Lu<sup>2*</sup></span>
-    <span>Wenbo Hu<sup>3&dagger;</sup></span>
-    <span>Wang Zhao<sup>3</sup></span>
-    <span>Ying Shan<sup>3</sup></span>
-    <span>Kai Han<sup>1&ddagger;</sup></span>
+<nav class="section-rail" aria-label="Page sections">
+  <span class="rail-track" aria-hidden="true"><span class="rail-fill"></span></span>
+  <div class="rail-links">
+    <a class="rail-link is-active" href="#top" data-section="top" title="Introduction"><span class="rail-marker">01</span><span class="rail-label">Introduction</span></a>
+    <a class="rail-link" href="#abstract" data-section="abstract" title="Abstract"><span class="rail-marker">02</span><span class="rail-label">Abstract</span></a>
+    <a class="rail-link" href="#video-overview" data-section="video-overview" title="Video overview"><span class="rail-marker">03</span><span class="rail-label">Video overview</span></a>
+    <a class="rail-link" href="#key-ideas" data-section="key-ideas" title="Key ideas"><span class="rail-marker">04</span><span class="rail-label">Key ideas</span></a>
+    <a class="rail-link" href="#scenes" data-section="scenes" title="Scenes"><span class="rail-marker">05</span><span class="rail-label">Scenes</span></a>
+    <a class="rail-link" href="#motions" data-section="motions" title="Motions"><span class="rail-marker">06</span><span class="rail-label">Motions</span></a>
+    <a class="rail-link" href="#real-world" data-section="real-world" title="Real-world scenes"><span class="rail-marker">07</span><span class="rail-label">Real-world</span></a>
+    <a class="rail-link" href="#in-the-wild" data-section="in-the-wild" title="In-the-wild videos"><span class="rail-marker">08</span><span class="rail-label">In the wild</span></a>
+    <a class="rail-link" href="#stylized" data-section="stylized" title="Stylized scenes"><span class="rail-marker">09</span><span class="rail-label">Stylized</span></a>
+    <a class="rail-link" href="#citation" data-section="citation" title="BibTeX"><span class="rail-marker">10</span><span class="rail-label">BibTeX</span></a>
   </div>
-  <div class="affiliations" aria-label="Affiliations">
-    <span><sup>1</sup>The University of Hong Kong</span>
-    <span><sup>2</sup>The Hong Kong University of Science and Technology</span>
-    <span><sup>3</sup>ARC Lab, Tencent</span>
+</nav>
+<div class="mobile-section" aria-live="polite">01 · Introduction</div>
+<header class="hero" id="top">
+  <div class="hero-copy">
+    <p class="hero-kicker">Camera control · Video diffusion</p>
+    <h1><span class="scope-word">SCoPE</span><span class="hero-title-rest">Sightline-Coordinate Positional Encoding for Video Diffusion Transformers</span></h1>
+    <p class="hero-deck">Give every video token its camera ray as a second positional coordinate—so precise camera control becomes part of the coordinate system, not an added control module.</p>
+    <div class="authors" aria-label="Authors">
+      <span>Minghao Yin<sup>1*</sup></span>
+      <span>Jiahao Lu<sup>2*</sup></span>
+      <span>Wenbo Hu<sup>3&dagger;</sup></span>
+      <span>Wang Zhao<sup>3</sup></span>
+      <span>Ying Shan<sup>3</sup></span>
+      <span>Kai Han<sup>1&ddagger;</sup></span>
+    </div>
+    <div class="affiliations" aria-label="Affiliations">
+      <span><sup>1</sup>The University of Hong Kong</span>
+      <span><sup>2</sup>The Hong Kong University of Science and Technology</span>
+      <span><sup>3</sup>ARC Lab, Tencent</span>
+    </div>
+    <p class="contrib">* Equal contribution &nbsp;&middot;&nbsp; &dagger; Project lead &nbsp;&middot;&nbsp; &Dagger; Corresponding author</p>
+    <div class="links">
+      <a class="btn" href="https://arxiv.org/abs/2606.27345" target="_blank" rel="noopener noreferrer">ArXiv <span class="btn-mark">ARX</span></a>
+      <a class="btn" href="scope_pdf.pdf" target="_blank" rel="noopener">Paper <span class="btn-mark">PDF</span></a>
+      <a class="btn" href="https://github.com/TencentARC/SCoPE" target="_blank" rel="noopener noreferrer">Code <span class="btn-mark">&lt;/&gt;</span></a>
+      <a class="btn" href="https://huggingface.co/TencentARC/SCoPE" target="_blank" rel="noopener noreferrer">Model <span class="btn-mark">HF</span></a>
+    </div>
+    <p class="tagline">Each result is generated from a single input frame and a target camera trajectory. The inset visualizes the commanded motion.</p>
   </div>
-  <p class="contrib">* Equal contribution &nbsp;&middot;&nbsp; &dagger; Project lead &nbsp;&middot;&nbsp; &Dagger; Corresponding author</p>
-  <p class="tagline">Each clip is generated from a single input frame and a target camera trajectory; the inset shows the camera motion. Use the arrows to browse different controls of the same scene.</p>
-  <div class="links">
-    <a class="btn" href="https://arxiv.org/abs/2606.27345" target="_blank" rel="noopener noreferrer">
-      <span class="ico">&#128196;</span> ArXiv
-    </a>
-    <a class="btn" href="scope_pdf.pdf" target="_blank" rel="noopener">
-      <span class="ico">&#128196;</span> Paper (PDF)
-    </a>
-    <a class="btn" href="https://github.com/TencentARC/SCoPE" target="_blank" rel="noopener noreferrer">
-      <span class="ico">&#128187;</span> Code
-    </a>
-    <a class="btn" href="https://huggingface.co/TencentARC/SCoPE" target="_blank" rel="noopener noreferrer">
-      <span class="ico">&#129303;</span> Model
-    </a>
-  </div>
-  
 </header>
 <main class="wrap">
-  <section class="abstract">
-    <h2>Abstract</h2>
-    <p>Video diffusion transformers address their tokens by position on the pixel-time grid: an address in the tensor, not in the world. The address we would want, the world point a token depicts, lies on a surface not yet generated, while its camera ray is fixed once the user specifies a trajectory. <strong>SCoPE</strong> therefore treats the ray as a second positional coordinate, and camera control becomes a property of the coordinate system, not an added module. The ray is added to the pretrained attention's queries and keys, and the score gains a term that reads the two rays alone. Its canonical form, the reciprocal product of line geometry, measures how nearly two lines of sight meet. Normalize-Gate-Inject makes a single encoding trainable across metric and up-to-scale pose sources. The retrofit keeps RoPE bit-exact, starts from the unchanged pretrained DiT, and adds under 0.1% new parameters. On Wan2.2 at 5B and 14B under matched data and budget, SCoPE improves every camera-controllability and fidelity metric, and the margins widen with model size. At 14B, rotation error falls 29% and FVD 43% below the strongest baseline on each metric.</p>
+  <section class="paper-overview" id="abstract" aria-labelledby="abstract-heading">
+    <figure class="teaser">
+      <a href="figs/scope_teaser.png" target="_blank" rel="noopener" aria-label="Open the SCoPE teaser at full resolution">
+        <img src="figs/scope_teaser.png" alt="SCoPE gives each token its camera ray as a second coordinate, using ray geometry inside attention to resolve appearance ambiguity and follow a target camera trajectory."/>
+      </a>
+      <figcaption class="cap"><strong>Camera control as a property of the coordinate system.</strong> SCoPE gives each token its camera ray as a second address. Ray geometry inside attention resolves appearance ambiguity and follows the target trajectory.</figcaption>
+    </figure>
+    <div class="abstract">
+      <h2 id="abstract-heading">Abstract</h2>
+      <p>Video diffusion transformers address tokens on the pixel-time grid, not by where they look in the world. <strong>SCoPE</strong> adds each token's camera ray as a second positional coordinate. Injecting ray features into pretrained queries and keys introduces a geometric attention term whose canonical form is the reciprocal product of two sightlines. Normalize-Gate-Inject supports both metric and up-to-scale poses while preserving RoPE bit-exactly.</p>
+      <p>Retrofitted to Wan2.2 with under 0.1% new parameters, SCoPE improves camera controllability and video fidelity at both 5B and 14B scale.</p>
+      <div class="abstract-stats" aria-label="Headline results">
+        <span><strong>&lt;0.1%</strong>new parameters</span>
+        <span><strong>−29%</strong>rotation error</span>
+        <span><strong>−43%</strong>FVD at 14B</span>
+      </div>
+    </div>
   </section>
-  <figure class="teaser">
-    <a href="figs/scope_teaser.png" target="_blank" rel="noopener" aria-label="Open the SCoPE teaser at full resolution">
-      <img src="figs/scope_teaser.png" alt="SCoPE gives each token its camera ray as a second coordinate, using ray geometry inside attention to resolve appearance ambiguity and follow a target camera trajectory."/>
-    </a>
-    <figcaption class="cap"><strong>Camera control as a property of the coordinate system.</strong> SCoPE gives every token a second address, its camera ray (left). Rays are fixed by the user's trajectory while the scene, dashed, is not yet generated (center). Appearance cannot choose between the two identical windows in frame t+1. Only one of their rays meets the ray from frame t. Added to the pretrained queries and keys, the ray gives the score exactly this test, zero when rays meet, growing with the miss (right). Content identifies, cross terms arbitrate, geometry filters.</figcaption>
-  </figure>
-  <section class="idea">
+  <section class="overview-video" id="video-overview" aria-labelledby="video-overview-heading">
+    <div class="overview-video-head">
+      <span class="overview-video-index">03</span>
+      <h2 id="video-overview-heading">Video Overview</h2>
+      <span class="overview-video-rule" aria-hidden="true"></span>
+      <span class="overview-video-duration">02:00</span>
+    </div>
+    <div class="overview-video-frame">
+      <video controls playsinline preload="none" poster="figs/scope_video_poster.jpg" aria-label="Two-minute overview of SCoPE">
+        <source src="https://huggingface.co/datasets/Michaelqaz/SCoPE-Gallery/resolve/main/overview/scope_video.mp4" type="video/mp4"/>
+        Your browser does not support HTML video.
+      </video>
+    </div>
+    <p class="overview-video-note"><strong>SCoPE in two minutes.</strong><span>A concise introduction to the motivation, ray-based positional encoding, qualitative results, and evaluation.</span></p>
+  </section>
+  <section class="idea" id="key-ideas">
     <h2>Key Ideas</h2>
     <ul>
       <li><strong>A second positional coordinate.</strong> The world point a token will depict is unknown before generation, but its camera ray is fixed by the user's trajectory. SCoPE uses that ray as the token's second address.</li>
@@ -207,8 +470,8 @@ footer{max-width:860px;margin:80px auto 0;text-align:center;color:var(--muted);f
     </ul>
   </section>
   <hr class="divider"/>
-  <section class="section">
-    <div class="section-head">
+  <section class="section" id="scenes">
+    <div class="section-head" data-index="05">
       <span class="kicker">Same scene · many cameras</span>
       <h2>Scenes</h2>
       <p class="desc">One generated scene browsed under six different camera trajectories. The inset visualizes the commanded camera path.</p>
@@ -312,8 +575,8 @@ footer{max-width:860px;margin:80px auto 0;text-align:center;color:var(--muted);f
       </div>
     </div>
   </section>
-  <section class="section">
-    <div class="section-head">
+  <section class="section" id="motions">
+    <div class="section-head" data-index="06">
       <span class="kicker">WASD · third-person control</span>
       <h2>Motions</h2>
       <p class="desc">WASD inputs drive the camera trajectory that moves the third-person subject. Overlay keys reflect the per-frame motion.</p>
@@ -416,8 +679,8 @@ footer{max-width:860px;margin:80px auto 0;text-align:center;color:var(--muted);f
       </div>
     </div>
   </section>
-  <section class="section">
-    <div class="section-head">
+  <section class="section" id="real-world">
+    <div class="section-head" data-index="07">
       <span class="kicker">More results</span>
       <h2>Real-World Scenes</h2>
       <p class="desc">Diverse real captures driven along varied camera paths from a single frame.</p>
@@ -537,8 +800,8 @@ footer{max-width:860px;margin:80px auto 0;text-align:center;color:var(--muted);f
       </div>
     </div>
   </section>
-  <section class="section">
-    <div class="section-head">
+  <section class="section" id="in-the-wild">
+    <div class="section-head" data-index="08">
       <span class="kicker">More results</span>
       <h2>In-the-Wild Videos</h2>
       <p class="desc">Everyday footage re-rendered under controllable camera motion.</p>
@@ -685,8 +948,8 @@ footer{max-width:860px;margin:80px auto 0;text-align:center;color:var(--muted);f
       </div>
     </div>
   </section>
-  <section class="section">
-    <div class="section-head">
+  <section class="section" id="stylized">
+    <div class="section-head" data-index="09">
       <span class="kicker">More results</span>
       <h2>Stylized &amp; Artistic Scenes</h2>
       <p class="desc">Illustrated and painterly inputs animated with 3D-consistent camera control.</p>
@@ -834,8 +1097,12 @@ footer{max-width:860px;margin:80px auto 0;text-align:center;color:var(--muted);f
       </div>
     </div>
   </section>
-  <section class="citation" aria-labelledby="citation-heading">
-    <h2 id="citation-heading">Citation</h2>
+  <section class="citation" id="citation" aria-labelledby="citation-heading">
+    <div class="citation-head">
+      <h2 id="citation-heading">Citation</h2>
+      <span class="citation-rule" aria-hidden="true"></span>
+      <button class="copy-bibtex" type="button">Copy BibTeX</button>
+    </div>
     <pre><code>@article{yin2026scope,
   title   = {SCoPE: Sightline-Coordinate Positional Encoding for Video Diffusion Transformers},
   author  = {Yin, Minghao and Lu, Jiahao and Hu, Wenbo and Zhao, Wang and Shan, Ying and Han, Kai},
@@ -1023,6 +1290,95 @@ footer{max-width:860px;margin:80px auto 0;text-align:center;color:var(--muted);f
     else if(e.key==='ArrowLeft'||e.key==='ArrowUp'){e.preventDefault();hovered.prev();}
   });
   document.querySelectorAll('.gallery').forEach(setup);
+})();
+</script>
+<script>
+(function(){
+  var links=Array.prototype.slice.call(document.querySelectorAll('.rail-link'));
+  var sections=links.map(function(link){return document.getElementById(link.dataset.section);}).filter(Boolean);
+  var rail=document.querySelector('.section-rail');
+  var mobile=document.querySelector('.mobile-section');
+  var active='top';
+  function labelFor(id){
+    var link=links.find(function(item){return item.dataset.section===id;});
+    return link?link.querySelector('.rail-marker').textContent+' · '+link.querySelector('.rail-label').textContent:'01 · Introduction';
+  }
+  function setActive(id){
+    if(!id||id===active)return;
+    active=id;
+    links.forEach(function(link){
+      var on=link.dataset.section===id;
+      link.classList.toggle('is-active',on);
+      if(on)link.setAttribute('aria-current','location');else link.removeAttribute('aria-current');
+    });
+    mobile.textContent=labelFor(id);
+  }
+  function updateProgress(){
+    var root=document.documentElement;
+    var max=Math.max(1,root.scrollHeight-window.innerHeight);
+    var progress=Math.min(100,Math.max(0,window.scrollY/max*100));
+    rail.style.setProperty('--page-progress',progress+'%');
+    mobile.style.setProperty('--page-progress',progress+'%');
+    mobile.classList.toggle('show',window.scrollY>260);
+    var marker=window.innerHeight*.34;
+    var current=sections[0]&&sections[0].id;
+    sections.forEach(function(section){if(section.getBoundingClientRect().top<=marker)current=section.id;});
+    setActive(current);
+  }
+  var scheduled=false;
+  function onScroll(){
+    if(scheduled)return;
+    scheduled=true;
+    requestAnimationFrame(function(){scheduled=false;updateProgress();});
+  }
+  links.forEach(function(link){
+    link.addEventListener('click',function(){setActive(link.dataset.section);});
+  });
+  var overviewVideo=document.querySelector('#video-overview video');
+  if(overviewVideo){
+    new IntersectionObserver(function(entries){
+      if(!entries[0].isIntersecting&&!overviewVideo.paused)overviewVideo.pause();
+    },{threshold:.15}).observe(overviewVideo);
+  }
+  window.addEventListener('scroll',onScroll,{passive:true});
+  window.addEventListener('resize',onScroll);
+  updateProgress();
+})();
+</script>
+<script>
+(function(){
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var revealItems=Array.prototype.slice.call(document.querySelectorAll('.paper-overview,.overview-video,.idea,.section-head,.gallery,.citation'));
+  if(!reduce&&'IntersectionObserver' in window){
+    revealItems.forEach(function(item,index){
+      item.classList.add('reveal');
+      if(item.classList.contains('gallery'))item.style.transitionDelay=((index%2)*70)+'ms';
+    });
+    var revealObserver=new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(!entry.isIntersecting)return;
+        entry.target.classList.add('is-visible');
+        revealObserver.unobserve(entry.target);
+      });
+    },{rootMargin:'0px 0px -8% 0px',threshold:.06});
+    revealItems.forEach(function(item){revealObserver.observe(item);});
+  }
+  var copyButton=document.querySelector('.copy-bibtex');
+  var bibtex=document.querySelector('.citation code');
+  if(copyButton&&bibtex){
+    copyButton.addEventListener('click',function(){
+      var text=bibtex.textContent;
+      var copied=navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(text):Promise.reject();
+      copied.catch(function(){
+        var area=document.createElement('textarea');
+        area.value=text;area.setAttribute('readonly','');area.style.position='fixed';area.style.opacity='0';
+        document.body.appendChild(area);area.select();document.execCommand('copy');area.remove();
+      }).then(function(){
+        copyButton.textContent='Copied';
+        setTimeout(function(){copyButton.textContent='Copy BibTeX';},1600);
+      });
+    });
+  }
 })();
 </script>
 </body>
