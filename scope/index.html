@@ -299,7 +299,7 @@ body::after{content:"";position:fixed;z-index:0;left:54%;top:-22%;width:68vw;hei
 .citation{max-width:960px;margin-top:104px;}
 .citation-head{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
 .citation h2{margin:0;text-align:left;color:#e8edf5;font:520 28px/1 var(--display);letter-spacing:-.035em;text-transform:none;}
-.citation h2::before{content:"10";margin-right:12px;color:var(--accent);font:600 9px/1 var(--mono);letter-spacing:.08em;vertical-align:middle;}
+.citation h2::before{content:"11";margin-right:12px;color:var(--accent);font:600 9px/1 var(--mono);letter-spacing:.08em;vertical-align:middle;}
 .citation-rule{height:1px;flex:1;background:linear-gradient(90deg,#303847,transparent);}
 .copy-bibtex{min-height:36px;padding:0 13px;border:1px solid #303847;border-radius:999px;background:#121720;color:#aeb9c9;font:600 9px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:border-color .2s ease,color .2s ease,transform .15s ease;}
 .copy-bibtex:hover{border-color:var(--accent);color:#eaf8ff;transform:translateY(-1px);}
@@ -367,10 +367,40 @@ body::after{display:none;}
 .overview-video{margin-top:72px;}
 .divider{margin-top:58px;}
 #scenes{margin-top:42px;padding-top:12px;}
+.revisit-divider{width:calc(100% - 80px);max-width:1180px;margin:48px auto 0;border:0;border-top:1px solid #252c38;}
+.revisit-showcase{display:grid;grid-template-columns:minmax(0,1.47fr) minmax(320px,.53fr);align-items:start;gap:22px;width:calc(100% - 80px);max-width:1180px;margin:30px auto 0;}
+.revisit-media,.revisit-copy{min-width:0;}
+.revisit-media{align-self:start;padding:0;}
+.revisit-frame{position:relative;overflow:hidden;border:0;border-radius:14px;background:#05070a;aspect-ratio:1316/510;box-shadow:0 18px 42px rgba(0,0,0,.22);}
+.revisit-frame video{display:block;width:100%;height:100%;object-fit:contain;background:#05070a;}
+.revisit-badge{position:absolute;z-index:2;left:12px;top:12px;padding:6px 9px;border:1px solid rgba(255,255,255,.14);border-radius:999px;background:rgba(7,10,15,.72);backdrop-filter:blur(8px);color:#c9d4e3;font:600 8px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;pointer-events:none;}
+.revisit-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:stretch;gap:8px;margin-top:10px;}
+.revisit-tab{position:relative;min-width:0;min-height:58px;padding:10px 42px 9px 13px;border:1px solid #2a3240;border-radius:11px;background:rgba(15,20,28,.62);color:#8d98aa;font-family:var(--sans);font-size:10px;line-height:1.3;text-align:left;cursor:pointer;transition:border-color .2s ease,background .2s ease,color .2s ease,transform .16s ease;}
+.revisit-tab::before{content:"▶";position:absolute;right:12px;top:50%;display:grid;width:22px;height:22px;place-items:center;border:1px solid #394354;border-radius:50%;color:#9ba7b9;font-size:7px;transform:translateY(-50%);transition:border-color .2s ease,background .2s ease,color .2s ease;}
+.revisit-tab::after{content:"";position:absolute;left:12px;right:12px;bottom:-1px;height:2px;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .2s ease;}
+.revisit-tab span{display:block;margin-bottom:3px;color:#606c7e;font:600 7.5px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;}
+.revisit-tab:hover{border-color:#465267;background:rgba(255,255,255,.035);color:#dbe3ee;transform:translateY(-1px);}
+.revisit-tab:hover::before{border-color:#728096;color:#e1e8f1;}
+.revisit-tab.is-active{border-color:rgba(78,205,255,.5);background:linear-gradient(145deg,rgba(78,205,255,.1),rgba(15,20,28,.72));color:#eff8ff;}
+.revisit-tab.is-active::before{border-color:var(--accent);background:var(--accent);color:#061017;}
+.revisit-tab.is-active::after{transform:scaleX(1);}
+.revisit-tab.is-active span{color:var(--accent);}
+.revisit-copy{display:flex;flex-direction:column;padding:27px 26px;border:1px solid #2d3544;border-radius:18px;background:linear-gradient(145deg,rgba(24,29,40,.84),rgba(14,18,25,.78));box-shadow:0 20px 52px rgba(0,0,0,.26);}
+.revisit-eyebrow{margin:0 0 13px;color:var(--accent);font:600 9px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;}
+.revisit-copy h2{margin:0;color:#edf2f8;font:530 27px/1.05 var(--display);letter-spacing:-.04em;}
+.revisit-copy h2 span{display:block;}
+.revisit-copy h2 span:first-child{white-space:nowrap;}
+.revisit-lead{margin:17px 0 0;color:#c4cddb;font-size:13.2px;line-height:1.66;}
+.revisit-detail{margin:12px 0 0;color:#8792a4;font-size:11.8px;line-height:1.62;}
+.revisit-principle{margin:19px 0 0;padding-top:17px;border-top:1px solid #2b3340;color:#b9c5d5;font:540 9.6px/1.5 var(--mono);}
+.revisit-principle strong{display:block;margin-bottom:6px;color:#e4f8ff;font-family:var(--display);font-size:16px;font-weight:550;letter-spacing:-.02em;}
+#revisit + .section{margin-top:66px;}
 @media(max-width:1050px){
   .hero{padding:88px 52px 42px;}
   .paper-overview{grid-template-columns:1fr;width:calc(100% - 48px);max-width:880px;}
   .paper-overview .abstract{min-height:390px;}
+  .revisit-showcase{grid-template-columns:1fr;width:calc(100% - 48px);max-width:880px;}
+  .revisit-copy{min-height:0;}
 }
 @media(max-width:620px){
   .hero{padding:66px 24px 34px;}
@@ -379,6 +409,14 @@ body::after{display:none;}
   .abstract-stats{grid-template-columns:1fr;}
   .abstract-stats span{display:flex;align-items:center;justify-content:space-between;text-align:left;padding:9px 11px;}
   .abstract-stats strong{display:inline;margin:0;font-size:15px;}
+  .revisit-divider{width:100%;margin-top:34px;}
+  .revisit-showcase{width:100%;gap:14px;margin-top:24px;}
+  .revisit-copy{min-height:0;padding:25px 21px;}
+  .revisit-copy h2{font-size:26px;}
+  .revisit-tabs{grid-template-columns:1fr;gap:7px;}
+  .revisit-tab{min-height:48px;padding:8px 40px 8px 11px;}
+  .revisit-principle{margin-top:22px;}
+  #revisit + .section{margin-top:46px;}
 }
 </style>
 </head>
@@ -392,10 +430,11 @@ body::after{display:none;}
     <a class="rail-link" href="#key-ideas" data-section="key-ideas" title="Key ideas"><span class="rail-marker">04</span><span class="rail-label">Key ideas</span></a>
     <a class="rail-link" href="#scenes" data-section="scenes" title="Scenes"><span class="rail-marker">05</span><span class="rail-label">Scenes</span></a>
     <a class="rail-link" href="#motions" data-section="motions" title="Motions"><span class="rail-marker">06</span><span class="rail-label">Motions</span></a>
-    <a class="rail-link" href="#real-world" data-section="real-world" title="Real-world scenes"><span class="rail-marker">07</span><span class="rail-label">Real-world</span></a>
-    <a class="rail-link" href="#in-the-wild" data-section="in-the-wild" title="In-the-wild videos"><span class="rail-marker">08</span><span class="rail-label">In the wild</span></a>
-    <a class="rail-link" href="#stylized" data-section="stylized" title="Stylized scenes"><span class="rail-marker">09</span><span class="rail-label">Stylized</span></a>
-    <a class="rail-link" href="#citation" data-section="citation" title="BibTeX"><span class="rail-marker">10</span><span class="rail-label">BibTeX</span></a>
+    <a class="rail-link" href="#revisit" data-section="revisit" title="Revisit consistency"><span class="rail-marker">07</span><span class="rail-label">Revisit</span></a>
+    <a class="rail-link" href="#real-world" data-section="real-world" title="Real-world scenes"><span class="rail-marker">08</span><span class="rail-label">Real-world</span></a>
+    <a class="rail-link" href="#in-the-wild" data-section="in-the-wild" title="In-the-wild videos"><span class="rail-marker">09</span><span class="rail-label">In the wild</span></a>
+    <a class="rail-link" href="#stylized" data-section="stylized" title="Stylized scenes"><span class="rail-marker">10</span><span class="rail-label">Stylized</span></a>
+    <a class="rail-link" href="#citation" data-section="citation" title="BibTeX"><span class="rail-marker">11</span><span class="rail-label">BibTeX</span></a>
   </div>
 </nav>
 <div class="mobile-section" aria-live="polite">01 · Introduction</div>
@@ -679,8 +718,31 @@ body::after{display:none;}
       </div>
     </div>
   </section>
+  <hr class="revisit-divider"/>
+  <section class="revisit-showcase" id="revisit" aria-labelledby="revisit-heading">
+    <div class="revisit-media">
+      <div class="revisit-frame">
+        <span class="revisit-badge">Revisit result · 01 / 03</span>
+        <video muted loop playsinline controls preload="metadata" aria-label="Revisit consistency at Tongli Teahouse after a 90-degree turn">
+          <source src="https://huggingface.co/datasets/Michaelqaz/SCoPE-Gallery/resolve/main/revisit/tongli_teahouse_90_degree_turn.mp4" type="video/mp4"/>
+        </video>
+      </div>
+      <div class="revisit-tabs" role="group" aria-label="Choose a revisit consistency result">
+        <button class="revisit-tab is-active" type="button" data-src="https://huggingface.co/datasets/Michaelqaz/SCoPE-Gallery/resolve/main/revisit/tongli_teahouse_90_degree_turn.mp4" data-label="Tongli Teahouse — 90° Turn" data-number="01" aria-pressed="true"><span>01 · 90° turn</span>Tongli Teahouse</button>
+        <button class="revisit-tab" type="button" data-src="https://huggingface.co/datasets/Michaelqaz/SCoPE-Gallery/resolve/main/revisit/panmen_through_city_gate.mp4" data-label="Panmen Gate — Through the City Gate" data-number="02" aria-pressed="false"><span>02 · City gate</span>Panmen Gate</button>
+        <button class="revisit-tab" type="button" data-src="https://huggingface.co/datasets/Michaelqaz/SCoPE-Gallery/resolve/main/revisit/canglang_pavilion_through_moon_gate.mp4" data-label="Canglang Pavilion — Through the Moon Gate" data-number="03" aria-pressed="false"><span>03 · Moon gate</span>Canglang Pavilion</button>
+      </div>
+    </div>
+    <div class="revisit-copy">
+      <p class="revisit-eyebrow">07 / Emergent property</p>
+      <h2 id="revisit-heading"><span>Revisit consistency,</span><span>by construction.</span></h2>
+      <p class="revisit-lead">Turn 90°, pass through a gateway, then return: previously seen regions remain anchored instead of drifting.</p>
+      <p class="revisit-detail">The outbound and return views reuse the same ray coordinates, addressing the scene from the same geometric positions.</p>
+      <p class="revisit-principle"><strong>Encoding, not memorization.</strong>Revisit consistency follows from the coordinate system itself—not from an added memory mechanism.</p>
+    </div>
+  </section>
   <section class="section" id="real-world">
-    <div class="section-head" data-index="07">
+    <div class="section-head" data-index="08">
       <span class="kicker">More results</span>
       <h2>Real-World Scenes</h2>
       <p class="desc">Diverse real captures driven along varied camera paths from a single frame.</p>
@@ -801,7 +863,7 @@ body::after{display:none;}
     </div>
   </section>
   <section class="section" id="in-the-wild">
-    <div class="section-head" data-index="08">
+    <div class="section-head" data-index="09">
       <span class="kicker">More results</span>
       <h2>In-the-Wild Videos</h2>
       <p class="desc">Everyday footage re-rendered under controllable camera motion.</p>
@@ -949,7 +1011,7 @@ body::after{display:none;}
     </div>
   </section>
   <section class="section" id="stylized">
-    <div class="section-head" data-index="09">
+    <div class="section-head" data-index="10">
       <span class="kicker">More results</span>
       <h2>Stylized &amp; Artistic Scenes</h2>
       <p class="desc">Illustrated and painterly inputs animated with 3D-consistent camera control.</p>
@@ -1347,8 +1409,37 @@ body::after{display:none;}
 </script>
 <script>
 (function(){
+  var revisit=document.getElementById('revisit');
+  if(revisit){
+    var revisitVideo=revisit.querySelector('video');
+    var revisitBadge=revisit.querySelector('.revisit-badge');
+    var revisitTabs=Array.prototype.slice.call(revisit.querySelectorAll('.revisit-tab'));
+    var revisitInView=false,revisitUserPaused=false,revisitInternalPause=false;
+    revisitVideo.addEventListener('play',function(){revisitUserPaused=false;});
+    revisitVideo.addEventListener('pause',function(){if(revisitInView&&!revisitInternalPause)revisitUserPaused=true;});
+    revisitTabs.forEach(function(tab){
+      tab.addEventListener('click',function(){
+        if(tab.classList.contains('is-active'))return;
+        var shouldPlay=!revisitVideo.paused||(revisitInView&&!revisitUserPaused);
+        revisitInternalPause=true;revisitVideo.pause();revisitInternalPause=false;
+        revisitVideo.src=tab.dataset.src;
+        revisitVideo.setAttribute('aria-label','Revisit consistency: '+tab.dataset.label);
+        revisitVideo.load();
+        revisitTabs.forEach(function(item){
+          var active=item===tab;item.classList.toggle('is-active',active);item.setAttribute('aria-pressed',String(active));
+        });
+        revisitBadge.textContent='Revisit result · '+tab.dataset.number+' / 03';
+        if(shouldPlay)revisitVideo.play().catch(function(){});
+      });
+    });
+    new IntersectionObserver(function(entries){
+      revisitInView=entries[0].isIntersecting;
+      if(revisitInView){if(!revisitUserPaused)revisitVideo.play().catch(function(){});}
+      else{revisitInternalPause=true;revisitVideo.pause();revisitInternalPause=false;}
+    },{threshold:.35}).observe(revisit);
+  }
   var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var revealItems=Array.prototype.slice.call(document.querySelectorAll('.paper-overview,.overview-video,.idea,.section-head,.gallery,.citation'));
+  var revealItems=Array.prototype.slice.call(document.querySelectorAll('.paper-overview,.overview-video,.idea,.revisit-showcase,.section-head,.gallery,.citation'));
   if(!reduce&&'IntersectionObserver' in window){
     revealItems.forEach(function(item,index){
       item.classList.add('reveal');
