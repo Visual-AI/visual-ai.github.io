@@ -137,6 +137,10 @@ footer{max-width:860px;margin:80px auto 0;text-align:center;color:var(--muted);f
 .lightbox.open{display:flex;}
 .lightbox video{max-width:94vw;max-height:92vh;width:auto;height:auto;border-radius:12px;
   box-shadow:0 20px 60px rgba(0,0,0,.6);background:#000;}
+.lightbox .lb-quality{position:absolute;left:50%;top:14px;z-index:2;transform:translateX(-50%);
+  padding:5px 10px;border:1px solid rgba(255,255,255,.16);border-radius:999px;
+  background:rgba(12,14,19,.72);color:#dfe6f2;font-size:11px;font-weight:650;
+  letter-spacing:.08em;text-transform:uppercase;pointer-events:none;}
 @media(max-width:880px){.grid{grid-template-columns:1fr;gap:24px;}}
 @media(max-width:620px){
   .hero{padding-top:48px;}
@@ -843,16 +847,20 @@ footer{max-width:860px;margin:80px auto 0;text-align:center;color:var(--muted);f
     Generated results gallery &middot; videos shown with picture-in-picture camera visualization.
   </footer>
 </main>
-<div class="lightbox" id="lb"><video loop muted playsinline controls></video></div>
+<div class="lightbox" id="lb"><span class="lb-quality">Original quality</span><video loop muted playsinline controls></video></div>
 <script>
 (function(){
   var VIDEO_BASE='https://huggingface.co/datasets/Michaelqaz/SCoPE-Gallery/resolve/main/';
+  var PREVIEW_DIR='videos_crf22/';
   // Use ?videoSource=local when testing against the retained local videos/ backup.
-  if(new URLSearchParams(window.location.search).get('videoSource')==='local')VIDEO_BASE='';
+  if(location.protocol==='file:'||new URLSearchParams(window.location.search).get('videoSource')==='local')VIDEO_BASE='';
   var OFF=27, SC=0.07, K=3;            // 探头位移 / 缩放 / 可见后排数
   function videoURL(path){
     if(!path||/^https?:\/\//i.test(path))return path||'';
     return VIDEO_BASE+path.split('/').map(encodeURIComponent).join('/');
+  }
+  function previewPath(path){
+    return path&&path.indexOf('videos/')===0?PREVIEW_DIR+path.slice(7):path;
   }
   function setup(g){
     var stack=g.querySelector('.stack');
@@ -871,7 +879,7 @@ footer{max-width:860px;margin:80px auto 0;text-align:center;color:var(--muted);f
       if(v.getAttribute('src'))return;
       v.preload=warm?'metadata':'auto';
       v.dataset.loading='1';
-      v.src=videoURL(v.dataset.src);
+      v.src=videoURL(previewPath(v.dataset.src));
       v.load();
     }
     function retry(i){
@@ -995,8 +1003,18 @@ footer{max-width:860px;margin:80px auto 0;text-align:center;color:var(--muted);f
   }
   var hovered=null;
   var lb=document.getElementById('lb'),lv=lb.querySelector('video');
-  function openLB(v){if(!v)return;lv.src=v.currentSrc||v.getAttribute('src')||videoURL(v.dataset.src);lb.classList.add('open');lv.play().catch(function(){});}
-  function closeLB(){lb.classList.remove('open');lv.pause();lv.removeAttribute('src');lv.load();}
+  function openLB(v){
+    if(!v)return;
+    var start=v.currentTime||0;
+    lb.classList.add('open');lv.src=videoURL(v.dataset.src);lv.load();
+    lv.addEventListener('loadedmetadata',function syncOriginal(){
+      if(Number.isFinite(lv.duration))lv.currentTime=Math.min(start,Math.max(0,lv.duration-.05));
+      lv.play().catch(function(){});
+    },{once:true});
+  }
+  function closeLB(){
+    lb.classList.remove('open');lv.pause();lv.removeAttribute('src');lv.load();
+  }
   lb.addEventListener('click',closeLB);
   document.addEventListener('keydown',function(e){
     if(e.key==='Escape'){closeLB();return;}
