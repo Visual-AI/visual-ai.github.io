@@ -9,7 +9,7 @@
 <meta property="og:title" content="SCoPE: Sightline-Coordinate Positional Encoding for Video Diffusion Transformers"/>
 <meta property="og:description" content="Camera control as a property of the coordinate system for video diffusion transformers."/>
 <meta property="og:url" content="https://visual-ai.github.io/scope/"/>
-<meta property="og:image" content="https://visual-ai.github.io/scope/figs/scope_teaser.png"/>
+<meta property="og:image" content="https://visual-ai.github.io/scope/figs/teaser_part2.jpg"/>
 <style>
 :root{
   --bg:#0c0e13;--fg:#eef1f6;--muted:#9aa3b2;--accent:#4ecdff;--rec:#ff5d5d;
@@ -351,19 +351,22 @@ body::after{display:none;}
 .hero .contrib{margin:7px auto 0;}
 .hero .links{justify-content:center;}
 .hero .tagline{max-width:760px;margin:22px auto 0;}
-.paper-overview{display:grid;grid-template-columns:minmax(0,1.36fr) minmax(330px,.64fr);align-items:stretch;gap:22px;width:calc(100% - 80px);max-width:1180px;margin:44px auto 0;}
-.paper-overview .teaser{max-width:none;height:100%;margin:0;padding:10px;display:flex;flex-direction:column;border-radius:18px;}
-.paper-overview .teaser>a{flex:0 0 auto;}
-.paper-overview .teaser .cap{margin-top:auto;padding-top:12px;font-size:11.5px;line-height:1.55;}
+.paper-overview{display:grid;grid-template-columns:minmax(0,1.34fr) minmax(300px,.66fr);align-items:stretch;gap:22px;width:calc(100% - 80px);max-width:960px;margin:44px auto 0;}
+.paper-overview .teaser-stack{min-width:0;align-self:start;}
+.paper-overview .teaser{max-width:none;height:auto;margin:0;padding:10px;border-radius:18px;}
+.paper-overview .teaser-results{display:block;overflow:hidden;margin-top:10px;border-radius:10px;background:#05070a;box-shadow:0 12px 34px rgba(0,0,0,.34);cursor:zoom-in;}
+.paper-overview .teaser-results:focus-visible{outline:3px solid var(--accent);outline-offset:3px;}
+.paper-overview .teaser-results img{display:block;width:100%;height:auto;}
 .paper-overview .abstract{display:flex;flex-direction:column;gap:0;max-width:none;height:100%;margin:0;padding:31px 29px;border:1px solid #2d3544;border-radius:18px;
   background:linear-gradient(145deg,rgba(24,29,40,.84),rgba(14,18,25,.78));box-shadow:0 20px 52px rgba(0,0,0,.26);}
 .paper-overview .abstract h2{margin:0 0 21px;font-size:30px;}
 .paper-overview .abstract h2::before{content:"02 / ABSTRACT";margin-bottom:13px;}
 .paper-overview .abstract p{margin:0;color:#bac3d1;font-size:13.2px;line-height:1.74;text-align:left;}
-.paper-overview .abstract p+p{margin-top:13px;color:#929daf;}
+.paper-overview .abstract .abstract-lead{color:#dce3ed;}
+.paper-overview .abstract .abstract-detail{margin-top:16px;color:#929daf;font-size:12px;line-height:1.68;}
 .abstract-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:auto;padding-top:24px;}
-.abstract-stats span{min-width:0;padding:10px 8px;border:1px solid #2b3341;border-radius:10px;background:rgba(9,13,19,.52);color:#7f8a9d;font:550 8px/1.35 var(--mono);text-align:center;text-transform:uppercase;letter-spacing:.035em;}
-.abstract-stats strong{display:block;margin-bottom:5px;color:#dff7ff;font:620 16px/1 var(--display);letter-spacing:-.025em;text-transform:none;}
+.abstract-stats span{min-width:0;padding:10px 6px;border:1px solid #2b3341;border-radius:10px;background:rgba(9,13,19,.52);color:#7f8a9d;font:550 7.5px/1.35 var(--mono);text-align:center;text-transform:uppercase;letter-spacing:.025em;}
+.abstract-stats strong{display:block;margin-bottom:5px;color:#dff7ff;font:620 15px/1 var(--display);letter-spacing:-.025em;text-transform:none;}
 .overview-video{margin-top:72px;}
 .divider{margin-top:58px;}
 #scenes{margin-top:42px;padding-top:12px;}
@@ -418,6 +421,70 @@ body::after{display:none;}
   .revisit-principle{margin-top:22px;}
   #revisit + .section{margin-top:46px;}
 }
+@media(min-width:1600px){
+  .wrap{max-width:1760px;}
+  .hero{max-width:1500px;padding-left:80px;padding-right:80px;}
+  .hero-copy,.hero h1{max-width:1340px;}
+  .hero h1{font-size:clamp(64px,4.2vw,82px);}
+  .hero-deck,.hero .tagline{max-width:960px;}
+  .hero .authors{max-width:1180px;}
+  .hero .affiliations{max-width:1260px;}
+  .paper-overview,.overview-video{max-width:1240px;}
+  .paper-overview .abstract{padding:40px 36px;}
+  .paper-overview .abstract h2{font-size:38px;}
+  .paper-overview .abstract h2::before{font-size:10.5px;}
+  .paper-overview .abstract p{font-size:16px;line-height:1.72;}
+  .paper-overview .abstract .abstract-detail{margin-top:20px;font-size:14px;line-height:1.65;}
+  .abstract-stats{padding-top:28px;}
+  .abstract-stats span{padding:14px 8px;font-size:9px;}
+  .abstract-stats strong{font-size:20px;}
+  .idea,.divider{max-width:1240px;}
+  .idea{margin-top:44px;}
+  .idea h2{margin-bottom:20px;font-size:14px;text-align:left;}
+  .idea ul{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;}
+  .idea li{padding:24px 22px 24px 42px;border:1px solid #29313e;border-radius:15px;background:linear-gradient(145deg,rgba(24,29,40,.64),rgba(14,18,25,.54));font-size:16.5px;line-height:1.7;}
+  .idea li::before{left:21px;top:31px;}
+  .idea li strong{display:block;margin-bottom:8px;font-size:18px;line-height:1.3;}
+  .revisit-divider,.revisit-showcase{max-width:1680px;}
+  .section-rail{left:24px;width:62px;max-height:calc(100vh - 48px);padding:16px 8px;border-radius:20px;}
+  .section-rail:hover,.section-rail:focus-within{width:220px;}
+  .rail-track{left:30px;top:26px;bottom:26px;}
+  .rail-link{width:204px;height:42px;gap:13px;border-radius:11px;}
+  .rail-marker{width:44px;flex-basis:44px;font-size:10px;}
+  .rail-marker::before{width:24px;height:24px;}
+  .rail-label{font-size:12px;}
+}
+@media(min-width:2200px){
+  .wrap{max-width:2160px;}
+  .hero{max-width:1920px;}
+  .hero-copy,.hero h1{max-width:1720px;}
+  .hero h1{font-size:clamp(76px,3.6vw,94px);}
+  .hero-deck,.hero .tagline{max-width:1120px;}
+  .paper-overview,.overview-video{max-width:1600px;}
+  .paper-overview .abstract{padding:50px 44px;}
+  .paper-overview .abstract h2{font-size:44px;}
+  .paper-overview .abstract h2::before{font-size:11.5px;}
+  .paper-overview .abstract p{font-size:18px;line-height:1.75;}
+  .paper-overview .abstract .abstract-detail{margin-top:24px;font-size:16.5px;line-height:1.68;}
+  .abstract-stats{padding-top:35px;}
+  .abstract-stats span{padding:17px 10px;font-size:10.5px;}
+  .abstract-stats strong{font-size:24px;}
+  .idea,.divider{max-width:1600px;}
+  .idea{margin-top:52px;}
+  .idea h2{margin-bottom:24px;font-size:16px;}
+  .idea ul{gap:24px;}
+  .idea li{padding:29px 28px 29px 50px;font-size:18.5px;}
+  .idea li::before{left:26px;top:37px;}
+  .idea li strong{margin-bottom:10px;font-size:20.5px;}
+  .revisit-divider,.revisit-showcase{max-width:2080px;}
+  .section-rail{left:32px;width:74px;padding:18px 10px;border-radius:22px;}
+  .section-rail:hover,.section-rail:focus-within{width:250px;}
+  .rail-track{left:36px;top:28px;bottom:28px;}
+  .rail-link{width:230px;height:46px;gap:14px;}
+  .rail-marker{width:52px;flex-basis:52px;font-size:11px;}
+  .rail-marker::before{width:28px;height:28px;}
+  .rail-label{font-size:13px;}
+}
 </style>
 </head>
 <body>
@@ -469,16 +536,20 @@ body::after{display:none;}
 </header>
 <main class="wrap">
   <section class="paper-overview" id="abstract" aria-labelledby="abstract-heading">
-    <figure class="teaser">
-      <a href="figs/scope_teaser.png" target="_blank" rel="noopener" aria-label="Open the SCoPE teaser at full resolution">
-        <img src="figs/scope_teaser.png" alt="SCoPE gives each token its camera ray as a second coordinate, using ray geometry inside attention to resolve appearance ambiguity and follow a target camera trajectory."/>
+    <div class="teaser-stack">
+      <figure class="teaser">
+        <a href="figs/teaser_part2.jpg" target="_blank" rel="noopener" aria-label="Open the SCoPE method teaser at full resolution">
+          <img src="figs/teaser_part2.jpg" alt="SCoPE gives each token its camera ray as a second coordinate, using ray geometry inside attention to resolve appearance ambiguity."/>
+        </a>
+      </figure>
+      <a class="teaser-results" href="figs/teaser_grid.gif" target="_blank" rel="noopener" aria-label="Open the six animated SCoPE results at full resolution">
+        <img src="figs/teaser_grid.gif" alt="Six animated SCoPE results showing camera-controlled generation across game, indoor, skiing, underwater, and outdoor scenes." loading="eager" decoding="async"/>
       </a>
-      <figcaption class="cap"><strong>Camera control as a property of the coordinate system.</strong> SCoPE gives each token its camera ray as a second address. Ray geometry inside attention resolves appearance ambiguity and follows the target trajectory.</figcaption>
-    </figure>
+    </div>
     <div class="abstract">
       <h2 id="abstract-heading">Abstract</h2>
-      <p>Video diffusion transformers address tokens on the pixel-time grid, not by where they look in the world. <strong>SCoPE</strong> adds each token's camera ray as a second positional coordinate. Injecting ray features into pretrained queries and keys introduces a geometric attention term whose canonical form is the reciprocal product of two sightlines. Normalize-Gate-Inject supports both metric and up-to-scale poses while preserving RoPE bit-exactly.</p>
-      <p>Retrofitted to Wan2.2 with under 0.1% new parameters, SCoPE improves camera controllability and video fidelity at both 5B and 14B scale.</p>
+      <p class="abstract-lead"><strong>Camera control as a property of the coordinate system.</strong> SCoPE gives each token its camera ray as a second address. Ray geometry inside attention resolves appearance ambiguity and follows the target trajectory across diverse scenes.</p>
+      <p class="abstract-detail">A lightweight Normalize–Gate–Inject path supports both metric and up-to-scale poses while preserving pretrained RoPE bit-exactly. The same geometry improves controllability and video fidelity at both 5B and 14B scales.</p>
       <div class="abstract-stats" aria-label="Headline results">
         <span><strong>&lt;0.1%</strong>new parameters</span>
         <span><strong>−29%</strong>rotation error</span>
