@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="CloSeR: Closed-Set Relational Knowledge for Generalized Category Discovery">
+  <meta name="keywords" content="CloSeR, Generalized Category Discovery, Closed-Set Transfer Learning, Relational Distillation">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CloSeR:Closed-Set Relational Knowledge for Generalized Category Discovery</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/visailab.jpeg">
+
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/copy.js"></script>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">CloSeR: Unified Relational Distillation from Closed-Set Teachers for Category Discovery</h1>
+
+          <div class="is-size-5 publication-authors mt-4">
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=GHTB15QAAAAJ&hl=zh-CN/">Yuanpei Liu</a>,
+            </span>
+            <span class="author-block">
+              <a href="https://zhenqi-he.github.io//">Zhenqi He</a>,
+            </span>
+            <span class="author-block">Jialu Tang,</span>
+            <span class="author-block">
+              <a href="https://www.kaihan.org">Kai Han</a><sup>†</sup>
+            </span>
+          </div>
+
+          <div class="is-size-6 publication-authors">
+            <span class="footnote"><sup>†</sup>Corresponding author</span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">Visual AI Lab, The University of Hong Kong</span>
+          </div>
+
+          <div class="publication-links">
+            <span class="link-block">
+              <a href="https://arxiv.org/abs/2608.25692" class="external-link button is-normal is-rounded is-dark">
+                <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                <span>Paper</span>
+              </a>
+            </span>
+            <span class="link-block">
+              <a href="https://github.com/Visual-AI/CloSeR" class="external-link button is-normal is-rounded is-dark">
+                <span class="icon"><i class="fab fa-github"></i></span>
+                <span>Code</span>
+              </a>
+            </span>
+            <span class="link-block">
+              <a href="#Bib" class="external-link button is-normal is-rounded is-dark">
+                <span class="icon"><i class="fas fa-quote-right"></i></span>
+                <span>BibTeX</span>
+              </a>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Generalized Category Discovery (GCD) aims to recognize known classes while discovering coherent novel categories from unlabelled samples. Recent methods often jointly optimize supervised classification and unsupervised discovery objectives on mixed labelled-unlabelled data, but this coupled training can entangle closed-set recognition with open-set discovery, causing objective conflict, biased predictions, and disturbance to the semantic geometry of pretrained representations.
+          </p>
+          <p>
+            We propose <b><i>CloSeR</i></b>, a simple plug-and-play framework that injects <b>Clo</b>sed-<b>Se</b>t <b>R</b>elational knowledge into GCD training. CloSeR first builds a domain-adapted closed-set teacher by tuning lightweight block-wise adapters on labelled known-class data while keeping the foundation-model backbone frozen. It then transfers the teacher's knowledge through <b>Unified Relational Distillation</b>, combining global sample-to-prototype relations and local sample-to-sample relations with separate feature pathways.
+          </p>
+          <p>
+            CloSeR is head-agnostic and integrates with both parametric and non-parametric GCD methods. Across six benchmarks with DINO and DINOv2 backbones, it consistently improves strong baselines and achieves state-of-the-art performance.
+          </p>
+          <div class="figure-panel teaser-panel">
+            <img src="./static/images/teaser.png" alt="Old-class versus new-class accuracy comparison for CloSeR">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Framework</h2>
+        <div class="method-card">
+          <div class="figure-panel">
+            <img src="./static/images/method.png" alt="Overall pipeline of CloSeR">
+          </div>
+        </div>
+        <div class="content has-text-justified mt-4">
+          <p>
+            CloSeR follows a staged design. In <b>Closed-Set Transfer Learning</b>, lightweight block-wise adapters adapt a frozen foundation model using labelled known-class data, producing a closed-set teacher and class prototypes. During GCD training, <b>Unified Relational Distillation</b> transfers global sample-to-prototype relations and local sample-to-sample relations from this teacher into the student model, stabilizing category discovery without tying CloSeR to a specific prediction head.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Performance</h2>
+        <div class="content has-text-justified">
+          <p>
+            CloSeR is evaluated on CIFAR-10, CIFAR-100, ImageNet-100, CUB, Stanford-Cars, and FGVC-Aircraft with DINO and DINOv2 backbones. It improves both parametric and non-parametric baselines, showing that closed-set relational knowledge is broadly useful for transfer clustering.
+          </p>
+          <div class="performance-grid">
+            <div class="performance-item">
+              <h3 class="figure-title">Generic Datasets</h3>
+              <img src="./static/images/generic_datasets.png" alt="Performance of CloSeR on generic datasets">
+            </div>
+            <div class="performance-item">
+              <h3 class="figure-title">Fine-Grained Datasets</h3>
+              <img src="./static/images/fine-grained_datasets.png" alt="Performance of CloSeR on fine-grained datasets">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Visualization</h2>
+        <div class="content has-text-justified">
+          <p>
+            The t-SNE visualization compares SimGCD with SimGCD+CloSeR. CloSeR yields cleaner clustering structure, improving intra-class compactness and inter-class separation.
+          </p>
+          <div class="figure-panel">
+            <img src="./static/images/tsne.png" alt="t-SNE comparison between SimGCD and CloSeR" style="width:72%;">
+          </div>
+          <p>
+            Attention maps further show that CloSeR focuses on category-discriminative object parts across Stanford-Cars, CUB, and FGVC-Aircraft, including both old and new classes. This supports stronger fine-grained recognition and more reliable novel-category discovery.
+          </p>
+          <div class="figure-panel">
+            <img src="./static/images/attmap.png" alt="Attention map comparison between SimGCD and CloSeR">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="Bib">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+<pre><code id="BibTeX">@inproceedings{
+  title     = {CloSeR: Unified Relational Distillation from Closed-Set Teachers for Category Discovery},
+  author    = {Liu, Yuanpei and He, Zhenqi and Tang, Jialu and Han, Kai},
+  booktitle = {ECCV},
+  year      = {2026}
+}
+</code><button class="copy-button" onclick="copyToClipboard('BibTeX','BibTeX_cop')"><i class="fa fa-copy"></i></button><p id="BibTeX_cop" style="display:none;color:#647386">Copied!</p></pre>
+  </div>
+</section>
+
+<section class="section" id="footer">
+  <div class="columns is-centered">
+    <div class="column is-8">
+      <div class="content has-text-centered">
+        <p>This website is based on <a href="https://nerfies.github.io/">Nerfies</a>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
