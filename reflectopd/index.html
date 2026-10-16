@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ReflectOPD — Reflect, Verify, Distill</title>
+  <meta name="description" content="ReflectOPD uses history-grounded reflection, reusable skills, and on-policy distillation to improve prompt following in diffusion models.">
+  <meta name="theme-color" content="#071c2e">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="stylesheet" href="style.css?v=diversity-align-20261016">
+  <script defer src="data.js?v=3"></script>
+  <script defer src="app.js?v=paper-sync-20261016"></script>
+  <script defer src="hero-video.js?v=2"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <a class="brand" href="#top"><img src="assets/favicon.svg" width="26" height="26" alt=""><span>ReflectOPD</span></a>
+  <nav aria-label="Sections">
+    <a href="#overview">Overview</a><a href="#finding">Finding</a><a href="#method">Method</a><a href="#results">Benchmarks</a><a href="#examples">Examples</a><a href="#compare">Compare</a><a href="#task-extension">Extension</a><a href="#rl">RL</a>
+  </nav>
+</header>
+
+<main id="main">
+  <section class="hero" id="top">
+    <div class="hero-stars" aria-hidden="true"></div>
+    <div class="hero-inner">
+      <p class="hero-kicker">Reflection · verification · on-policy distillation</p>
+      <h1>Reflect<span>OPD</span></h1>
+      <p class="paper-title">Reflect, Verify, Distill:<br>Reflective On-Policy Distillation for Diffusion Models</p>
+      <aside class="hero-tldr"><strong>TL;DR</strong><p>An MLLM inspects failed generations, revises the prompt, and verifies the result. Reflection skills make this process reliable; ReflectOPD distills the verified correction into the generator.</p></aside>
+      <div class="hero-actions"><a href="#method">Method</a><a href="#examples">Explore examples</a><a href="#results">Results</a></div>
+
+      <div class="hero-pipeline hero-film" id="idea-film">
+        <video id="reflectopd-overview-video" tabindex="0" width="1920" height="1080" controls muted loop playsinline preload="metadata" poster="assets/reflectopd-overview-poster.jpg?v=reflectopd-20261015" aria-label="Animated overview of ReflectOPD: reflect, verify, optimize skills, and distill" aria-describedby="film-description">
+          <source src="assets/reflectopd-overview.mp4?v=reflectopd-20261015" type="video/mp4">
+          <track kind="captions" src="assets/reflectopd-overview.vtt?v=reflectopd-20261015" srclang="en" label="English">
+          <p><a href="assets/reflectopd-overview.mp4?v=reflectopd-20261015">Watch the ReflectOPD overview video</a></p>
+        </video>
+        <div class="film-chapters" role="group" aria-label="Video chapters">
+          <button type="button" data-film-time="0" aria-current="step">Reflect &amp; verify</button>
+          <button type="button" data-film-time="18">Optimize skill</button>
+          <button type="button" data-film-time="25">Distill</button>
+          <button type="button" data-film-time="35">Generate</button>
+        </div>
+        <p id="film-description" class="film-accessible-description">A real couch-and-cup example improves across two reflection rounds. Reflection Skill Optimization learns when to intervene and how to revise, pairing failure conditions with reusable corrections, such as raising the upper object with physical support. A skill-augmented reflector revises failed on-policy rollouts. At the same rollout state, an EMA teacher evaluates both the original and verified revised prompts; their velocity difference is extrapolated to form the distillation target. The student matches this target while conditioned on the original prompt. The final scene follows the original request “a photo of a cat below a backpack” through the ReflectOPD-trained model (v27, step 1800) to its output. It requires one generation and no external reflection loop. No hook is specified in the prompt; the model adds one. A small gray inset shows the base model’s incorrect relation. These are existing qualitative evaluation samples, with different random seeds.</p>
+      </div>
+      <p class="hero-note"><strong>From test-time correction to one-pass generation.</strong> ReflectOPD first discovers how to fix a failure, then internalizes that correction in the student.</p>
+      <div class="headline-metrics">
+        <article><strong>66.9 → 96.9</strong><span>GenEval macro pass rate (%)<br>training-free · oracle verifier</span></article>
+        <article><strong>0.67 → 0.92</strong><span>GenEval overall score<br>after ReflectOPD</span></article>
+        <article><strong>0</strong><span>External reflection calls<br>after distillation</span></article>
+        <article><strong>+6.1</strong><span>TIIF average points<br>on unseen aspects</span></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="repair-reel" aria-label="Reflection examples">
+    <div class="reel-track" id="repair-reel"></div>
+  </section>
+
+  <section class="section wrap" id="overview">
+    <div class="section-title"><span>Overview</span><h2>Reflection reveals the correction</h2></div>
+    <article class="abstract-card">
+      <p>Diffusion models often miss a requested count, relation, attribute, or exact text even when the underlying visual concept is within their capability. At test time, a user naturally inspects the failed image, reasons about what went wrong, and rewrites the prompt. We turn this behavior into a systematic reflective loop: a multimodal reflector reads the image and verifier feedback, preserves useful changes from earlier attempts, and proposes the next prompt.</p>
+      <p>Reflection Skill Optimization consolidates successful and failed trajectories into reusable rules that improve the stability of this loop. ReflectOPD then removes its inference overhead. The evolving student rolls out its own samples; an EMA teacher follows verified reflective revisions, and the student matches the resulting corrective velocity while still conditioning on the original prompt.</p>
+    </article>
+  </section>
+
+  <section class="section wrap" id="finding">
+    <div class="section-title"><span>Key finding</span><h2>The gain comes from targeted revision</h2><p>Better prompt following does not require blind resampling. The important signal is what to change, what to keep, and whether the revision actually works.</p><p>Training-free results use frozen FLUX.1-dev on 553 GenEval prompts, with Gemini-3.6-Flash as the reflector and the official GenEval detector as both the oracle verifier and evaluator. Pass rates are cumulative across up to three reflection rounds.</p></div>
+    <div class="finding-grid">
+      <article><span>History-grounded</span><h3>Preserve partial success</h3><p>A failed image can still contain a useful correction. History lets the next round keep the good change while fixing the remaining failure.</p><strong>95.6%</strong><small>Round-3 macro pass rate with history</small></article>
+      <article><span>Reusable skill</span><h3>Make reflection stable</h3><p>The summarizer converts recurring successful strategies into explicit rules and validates each updated skill before adoption.</p><strong>96.9%</strong><small>Round-3 macro pass rate with history + skill</small></article>
+      <article class="featured"><span>Internalized</span><h3>Remove the loop at inference</h3><p>ReflectOPD trains the student on its own evolving failures and transfers verified corrections back to the original prompt condition.</p><strong>0.92</strong><small>GenEval overall · one sample</small></article>
+    </div>
+    <div class="trajectory-callout">
+      <div><span class="label">Same request, different outcome</span><h3>“a photo of a couch below a cup”</h3><p>The first revision successfully raises the cup onto a shelf but loses the couch. The second keeps the shelf and makes the couch visually explicit.</p></div>
+      <div id="featured-trajectory" class="featured-trajectory"></div>
+    </div>
+  </section>
+
+  <section class="section method-band" id="method"><div class="wrap">
+    <div class="section-title"><span>Method</span><h2>Reflect, consolidate, distill</h2><p>The test-time loop discovers verified semantic corrections. The training-time loop turns them into a stronger generator.</p></div>
+    <div class="method-carousel" id="method-carousel" aria-label="Method overview" aria-roledescription="carousel">
+      <div class="method-switcher">
+        <div class="method-tabs" role="tablist" aria-label="Method stage">
+          <button id="method-tab-reflection" role="tab" aria-selected="true" aria-controls="method-panel" data-method="reflection">1 · Reflect & verify</button>
+          <button id="method-tab-skill" role="tab" aria-selected="false" aria-controls="method-panel" data-method="skill">2 · Optimize skill</button>
+          <button id="method-tab-distill" role="tab" aria-selected="false" aria-controls="method-panel" data-method="distill">3 · ReflectOPD</button>
+        </div>
+        <button class="method-autoplay" id="method-autoplay" type="button" aria-label="Pause automatic stage switching" title="Pause automatic switching" aria-pressed="false"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3v10M11 3v10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg></button>
+      </div>
+      <article class="method-panel" id="method-panel" role="tabpanel" aria-labelledby="method-tab-reflection" aria-live="off"></article>
+    </div>
+    <div class="skill-evidence">
+      <article><div class="card-head"><h3>Effect of history and skill</h3><span>GenEval macro · 553 prompts</span></div><button class="zoom" data-zoom="assets/reflectopd-history-skill-cvpr-v1.svg" data-title="Effect of history and reflection skill"><img class="skill-real-figure" src="assets/reflectopd-history-skill-cvpr-v1.svg" alt="Reflection performance across three rounds for latest-only, history-grounded, and history-plus-skill settings, with incremental gains from history and skill."></button></article>
+      <article><div class="card-head"><h3>Transfer across reflectors</h3><span>Same frozen skill</span></div><div class="executor-results" id="executor-results"></div></article>
+    </div>
+  </div></section>
+
+  <section class="section wrap" id="results">
+    <div class="section-title"><span>Benchmarks</span><h2>One checkpoint, broader gains</h2><p>The GenEval-trained model improves related compositional benchmarks and transfers to unseen TIIF aspects without benchmark-specific training.</p></div>
+    <div class="benchmark-tiles">
+      <article><span>GenEval</span><strong>0.92</strong><p>FLUX.1-dev · one sample</p></article>
+      <article><span>T2I-CompBench++</span><strong>0.5219</strong><p>0.4817 base</p></article>
+      <article><span>GenEval 2</span><strong>30.43</strong><p>Soft-TIFA GM × 100</p></article>
+      <article><span>TIIF</span><strong>76.7</strong><p>Six unseen aspects</p></article>
+    </div>
+    <figure class="training-figure"><button class="zoom" data-zoom="assets/training-dynamics.png" data-title="ReflectOPD training dynamics"><img src="assets/training-dynamics.png" alt="Student pass rate, teacher rewrite win rate, and distillation loss over training."></button><figcaption>As the student improves, verified reflective corrections remain useful while the distillation loss decreases.</figcaption></figure>
+    <div class="results-head"><div><h3>Main results on GenEval</h3><p>Official detector evaluation across six prompt families. Baseline and inference-time scaling results are taken from the published ReflectionFlow comparison. The candidate budget counts generated candidates per output, not denoising steps or the number of evaluation seeds.</p></div></div>
+    <div class="result-tables">
+      <article class="result-model-group">
+        <h4>FLUX.1-dev</h4>
+        <div class="table-wrap"><table id="main-results-flux"><thead><tr><th>Method</th><th>Candidate budget</th><th>Single</th><th>Two</th><th>Count</th><th>Color</th><th>Position</th><th>Binding</th><th>Overall</th></tr></thead><tbody></tbody></table></div>
+      </article>
+      <article class="result-model-group">
+        <h4>SANA-1.0-1.6B</h4>
+        <div class="table-wrap"><table id="main-results-sana"><thead><tr><th>Method</th><th>Candidate budget</th><th>Single</th><th>Two</th><th>Count</th><th>Color</th><th>Position</th><th>Binding</th><th>Overall</th></tr></thead><tbody></tbody></table></div>
+      </article>
+    </div>
+  </section>
+
+  <section class="section examples-band" id="examples"><div class="wrap">
+    <div class="section-title"><span>Qualitative examples</span><h2>Reflective Prompt Revise</h2><p>Every trajectory begins with a failed generation and ends with a verifier-approved result. Select an image or reflection round to read the problem, strategy, and revised prompt below.</p></div>
+    <div class="filter-row" id="case-filters" aria-label="Filter examples by task"></div>
+    <div class="case-study-grid" id="case-study-grid"></div>
+  </div></section>
+
+  <section class="section wrap" id="compare">
+    <div class="section-title"><span>Qualitative comparison</span><h2>Same prompt, every method</h2><p>All four prompts are shown together. Each row compares the final output of the base model, ReflectionFlow, Flow-GRPO, and ReflectOPD.</p></div>
+    <div class="ocr-extension-cases geneval-comparisons" id="comparison-matrix"></div>
+  </section>
+
+  <section class="section wrap ocr-extension" id="task-extension" aria-labelledby="ocr-extension-title">
+    <div class="section-title"><span>Task extension</span><h2 id="ocr-extension-title">Extend to visual text rendering</h2><p>We extend ReflectOPD to visual text rendering, where the generator must reproduce the requested words while preserving the scene. The Spring Collection 2024 example uses our OCR-trained v26 model at step 2,000 (1024 × 1024); the remaining examples use v30 at step 1,200.</p></div>
+    <div class="ocr-extension-cases">
+      <article class="ocr-extension-case" id="extension-ocr_test_00000">
+        <div class="ocr-extension-case-head"><h3>“Spring Collection 2024”</h3><span>#00000</span></div>
+        <p class="ocr-extension-prompt">A high-fashion runway with a sleek, modern backdrop displaying &quot;Spring Collection 2024&quot;. Models walk confidently on the catwalk, showcasing vibrant, floral prints and pastel tones, under soft, ambient lighting that enhances the fresh, spring vibe.</p>
+        <div class="ocr-extension-images">
+          <figure class="ocr-extension-method baseline">
+            <figcaption>Baseline</figcaption>
+            <img src="assets/ocr-task-extension/spring-collection-2024/baseline_flux_512.png" width="512" height="512" alt="Baseline: Spring Collection 2024" loading="lazy" decoding="async">
+          </figure>
+          <figure class="ocr-extension-method reflectionflow">
+            <figcaption>ReflectionFlow</figcaption>
+            <img src="assets/ocr-task-extension/spring-collection-2024/reflectionflow_corrected_1024.png" width="1024" height="1024" alt="ReflectionFlow: Spring Collection 2024" loading="lazy" decoding="async">
+          </figure>
+          <figure class="ocr-extension-method flowgrpo">
+            <figcaption>FlowGRPO</figcaption>
+            <img src="assets/ocr-task-extension/spring-collection-2024/flowgrpo_no_kl_ckpt180_1024.png" width="1024" height="1024" alt="FlowGRPO: Spring Collection 2024" loading="lazy" decoding="async">
+          </figure>
+          <figure class="ocr-extension-method ours">
+            <figcaption>Ours · v26 s2000</figcaption>
+            <img src="assets/ocr-task-extension/spring-collection-2024/ours_v26_s2000_1024.png" width="1024" height="1024" alt="Ours · v26 s2000: Spring Collection 2024" loading="lazy" decoding="async">
+          </figure>
+        </div>
+      </article>
+      <article class="ocr-extension-case" id="extension-ocr_test_00260">
+        <div class="ocr-extension-case-head"><h3>“Hope Sold Here 10 Miles Ahead”</h3><span>#00260</span></div>
+        <p class="ocr-extension-prompt">In a desolate, post-apocalyptic landscape, a weathered gas station sign stands tall, reading &quot;Hope Sold Here 10 Miles Ahead&quot;. The sign is partially rusted, with a faint glow from a single, flickering light, set against a backdrop of barren, overgrown terrain.</p>
+        <div class="ocr-extension-images">
+          <figure class="ocr-extension-method baseline">
+            <figcaption>Baseline</figcaption>
+            <img src="assets/ocr-task-extension/ocr_test_00260-baseline.webp" width="512" height="512" alt="Baseline: Hope Sold Here 10 Miles Ahead" loading="lazy" decoding="async">
+          </figure>
+          <figure class="ocr-extension-method reflectionflow">
+            <figcaption>ReflectionFlow</figcaption>
+            <img src="assets/ocr-task-extension/ocr_test_00260-reflectionflow.webp" width="1024" height="1024" alt="ReflectionFlow: Hope Sold Here 10 Miles Ahead" loading="lazy" decoding="async">
+          </figure>
+          <figure class="ocr-extension-method flowgrpo">
+            <figcaption>FlowGRPO</figcaption>
+            <img src="assets/ocr-task-extension/ocr_test_00260-flowgrpo.webp" width="1024" height="1024" alt="FlowGRPO: Hope Sold Here 10 Miles Ahead" loading="lazy" decoding="async">
+          </figure>
+          <figure class="ocr-extension-method ours">
+            <figcaption>Ours</figcaption>
+            <img src="assets/ocr-task-extension/ocr_test_00260-ours.webp" width="512" height="512" alt="Ours: Hope Sold Here 10 Miles Ahead" loading="lazy" decoding="async">
+          </figure>
+        </div>
+      </article>
+      <article class="ocr-extension-case" id="extension-ocr_test_00228">
+        <div class="ocr-extension-case-head"><h3>“Magic Show Tonight”</h3><span>#00228</span></div>
+        <p class="ocr-extension-prompt">A vintage theater marquee, illuminated by soft neon lights, prominently displays the text &quot;Magic Show Tonight&quot;. The marquee is set against a dusk sky, with a few early stars beginning to twinkle. A cobblestone street leads up to the theater, adding to the nostalgic atmosphere.</p>
+        <div class="ocr-extension-images">
+          <figure class="ocr-extension-method baseline">
+            <figcaption>Baseline</figcaption>
+            <img src="assets/ocr-task-extension/ocr_test_00228-baseline.webp" width="512" height="512" alt="Baseline: Magic Show Tonight" loading="lazy" decoding="async">
+          </figure>
+          <figure class="ocr-extension-method reflectionflow">
+            <figcaption>ReflectionFlow</figcaption>
+            <img src="assets/ocr-task-extension/ocr_test_00228-reflectionflow.webp" width="1024" height="1024" alt="ReflectionFlow: Magic Show Tonight" loading="lazy" decoding="async">
+          </figure>
+          <figure class="ocr-extension-method flowgrpo">
+            <figcaption>FlowGRPO</figcaption>
+            <img src="assets/ocr-task-extension/ocr_test_00228-flowgrpo.webp" width="1024" height="1024" alt="FlowGRPO: Magic Show Tonight" loading="lazy" decoding="async">
+          </figure>
+          <figure class="ocr-extension-method ours">
+            <figcaption>Ours</figcaption>
+            <img src="assets/ocr-task-extension/ocr_test_00228-ours.webp" width="512" height="512" alt="Ours: Magic Show Tonight" loading="lazy" decoding="async">
+          </figure>
+        </div>
+      </article>
+      <article class="ocr-extension-case" id="extension-ocr_test_00271">
+        <div class="ocr-extension-case-head"><h3>“Insert Coin”</h3><span>#00271</span></div>
+        <p class="ocr-extension-prompt">Retro arcade hall, dimly lit, vintage arcade machine glowing, screen blinking &quot;Insert Coin&quot;, surrounded by nostalgic game posters, soft ambient light, 80s atmosphere.</p>
+        <div class="ocr-extension-images">
+          <figure class="ocr-extension-method baseline">
+            <figcaption>Baseline</figcaption>
+            <img src="assets/ocr-task-extension/ocr_test_00271-baseline.webp" width="512" height="512" alt="Baseline: Insert Coin" loading="lazy" decoding="async">
+          </figure>
+          <figure class="ocr-extension-method reflectionflow">
+            <figcaption>ReflectionFlow</figcaption>
+            <img src="assets/ocr-task-extension/ocr_test_00271-reflectionflow.webp" width="1024" height="1024" alt="ReflectionFlow: Insert Coin" loading="lazy" decoding="async">
+          </figure>
+          <figure class="ocr-extension-method flowgrpo">
+            <figcaption>FlowGRPO</figcaption>
+            <img src="assets/ocr-task-extension/ocr_test_00271-flowgrpo.webp" width="1024" height="1024" alt="FlowGRPO: Insert Coin" loading="lazy" decoding="async">
+          </figure>
+          <figure class="ocr-extension-method ours">
+            <figcaption>Ours</figcaption>
+            <img src="assets/ocr-task-extension/ocr_test_00271-ours.webp" width="512" height="512" alt="Ours: Insert Coin" loading="lazy" decoding="async">
+          </figure>
+        </div>
+      </article>
+      <article class="ocr-extension-case" id="extension-ocr_test_00300">
+        <div class="ocr-extension-case-head"><h3>“Play Me 10 Grooves”</h3><span>#00300</span></div>
+        <p class="ocr-extension-prompt">A vintage 1950s diner with a retro jukebox labeled &quot;Play Me 10 Grooves&quot; sitting on a polished wooden counter, surrounded by red leather stools and neon signs, capturing the essence of a classic American hangout.</p>
+        <div class="ocr-extension-images">
+          <figure class="ocr-extension-method baseline">
+            <figcaption>Baseline</figcaption>
+            <img src="assets/ocr-task-extension/ocr_test_00300-baseline.webp" width="512" height="512" alt="Baseline: Play Me 10 Grooves" loading="lazy" decoding="async">
+          </figure>
+          <figure class="ocr-extension-method reflectionflow">
+            <figcaption>ReflectionFlow</figcaption>
+            <img src="assets/ocr-task-extension/ocr_test_00300-reflectionflow.webp" width="1024" height="1024" alt="ReflectionFlow: Play Me 10 Grooves" loading="lazy" decoding="async">
+          </figure>
+          <figure class="ocr-extension-method flowgrpo">
+            <figcaption>FlowGRPO</figcaption>
+            <img src="assets/ocr-task-extension/ocr_test_00300-flowgrpo.webp" width="1024" height="1024" alt="FlowGRPO: Play Me 10 Grooves" loading="lazy" decoding="async">
+          </figure>
+          <figure class="ocr-extension-method ours">
+            <figcaption>Ours</figcaption>
+            <img src="assets/ocr-task-extension/ocr_test_00300-ours.webp" width="512" height="512" alt="Ours: Play Me 10 Grooves" loading="lazy" decoding="async">
+          </figure>
+        </div>
+      </article>
+      <article class="ocr-extension-case" id="extension-ocr_test_00777">
+        <div class="ocr-extension-case-head"><h3>“Sea Legend II”</h3><span>#00777</span></div>
+        <p class="ocr-extension-prompt">A serene coastal scene with a fisherman&#x27;s boat named &quot;Sea Legend II&quot; gently bobbing on the calm waters at sunrise, the golden light casting a warm glow over the wooden hull and the rippling waves.</p>
+        <div class="ocr-extension-images">
+          <figure class="ocr-extension-method baseline">
+            <figcaption>Baseline</figcaption>
+            <img src="assets/ocr-task-extension/ocr_test_00777-baseline.webp" width="512" height="512" alt="Baseline: Sea Legend II" loading="lazy" decoding="async">
+          </figure>
+          <figure class="ocr-extension-method reflectionflow">
+            <figcaption>ReflectionFlow</figcaption>
+            <img src="assets/ocr-task-extension/ocr_test_00777-reflectionflow.webp" width="1024" height="1024" alt="ReflectionFlow: Sea Legend II" loading="lazy" decoding="async">
+          </figure>
+          <figure class="ocr-extension-method flowgrpo">
+            <figcaption>FlowGRPO</figcaption>
+            <img src="assets/ocr-task-extension/ocr_test_00777-flowgrpo.webp" width="1024" height="1024" alt="FlowGRPO: Sea Legend II" loading="lazy" decoding="async">
+          </figure>
+          <figure class="ocr-extension-method ours">
+            <figcaption>Ours</figcaption>
+            <img src="assets/ocr-task-extension/ocr_test_00777-ours.webp" width="512" height="512" alt="Ours: Sea Legend II" loading="lazy" decoding="async">
+          </figure>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="section rl-band" id="rl"><div class="wrap">
+    <div class="section-title"><span>Discussion with RL</span><h2>Semantic correction and generation diversity</h2><div class="rl-highlight" role="note"><p>While RL methods such as Flow-GRPO explore noise space through parallel stochastic rollouts, ReflectOPD refines prompts in text space through sequential reflection and verification.</p></div></div>
+    <div class="rl-grid">
+      <figure><button class="zoom" data-zoom="assets/rl-exploration-paper-20261016.png" data-title="Exploration strategies"><img src="assets/rl-exploration-paper-20261016.png" alt="Schematic comparison from the paper: Flow-GRPO noise-space exploration and ReflectOPD text-prompt-space reflection, with the observed diversity trade-off."></button></figure>
+      <figure><button class="zoom" data-zoom="assets/rl-curves-web-v3.svg?v=reflectopd-20261015" data-title="Training efficiency"><img src="assets/rl-curves-web-v3.svg?v=reflectopd-20261015" alt="ReflectOPD and Flow-GRPO reward against GPU-hours."></button></figure>
+    </div>
+    <div class="diversity-section">
+      <div class="results-head"><div><h3>Alignment and diversity on OneIG-Bench</h3><p>Four seeds per prompt; diversity is the mean pairwise DreamSim distance. ReflectOPD improves overall alignment and diversity over the base model. Flow-GRPO has higher alignment (0.811 vs. 0.795), while ReflectOPD retains higher diversity (0.265 vs. 0.213) in this evaluation.</p></div></div>
+      <div class="oneig-tables" id="oneig-tables"></div>
+      <div class="diversity-examples" id="diversity-examples"></div>
+    </div>
+  </div></section>
+
+</main>
+
+<footer class="wrap"><strong>ReflectOPD</strong><span>Reflect, Verify, Distill: Reflective On-Policy Distillation for Diffusion Models</span><a href="#top">Back to top</a></footer>
+
+<dialog id="image-dialog"><div><p id="dialog-title"></p><button id="close-dialog" aria-label="Close">×</button></div><img id="dialog-image" src="assets/couch-2.webp" alt=""></dialog>
+</body>
+</html>

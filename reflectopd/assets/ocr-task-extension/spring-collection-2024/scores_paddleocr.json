@@ -1,0 +1,30 @@
+{
+  "prompt_id": "ocr_test_00000",
+  "target_text": "Spring Collection 2024",
+  "baseline_flux_512.png": {
+    "reward": 0.0909,
+    "passed": false,
+    "text": "NGSPERELRSPRACOLLECCOLLECA1222"
+  },
+  "reflectionflow_baseline_1024.png": {
+    "reward": 0.0,
+    "passed": false,
+    "text": "LAMPIRSPRING20124CrABISFIUW-LVAISFIUT"
+  },
+  "reflectionflow_corrected_1024.png": {
+    "reward": 0.4545,
+    "passed": false,
+    "text": "SPPINGCRELRNA"
+  },
+  "ours_v26_s2000_1024.png": {
+    "reward": 1.0,
+    "passed": true,
+    "text": "Spring Collection2024"
+  },
+  "flowgrpo_no_kl_ckpt180_1024.png": {
+    "reward": 0.9545,
+    "passed": false,
+    "text": "SPRINGCOLLECTION2034",
+    "source": "Existing full OCR comparison scores"
+  }
+}

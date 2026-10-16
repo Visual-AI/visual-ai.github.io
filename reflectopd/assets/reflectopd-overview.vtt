@@ -1,0 +1,33 @@
+WEBVTT
+
+00:00.000 --> 00:06.000
+The original request asks for a couch below a cup.
+The first image puts the cup on the couch.
+
+00:06.000 --> 00:12.000
+Reflection raises the cup onto a shelf,
+but the verifier no longer detects the couch.
+
+00:12.000 --> 00:18.000
+The next revision keeps the shelf and makes the couch explicit.
+The resulting image passes verification.
+
+00:18.000 --> 00:25.000
+Reflection Skill Optimization learns when to intervene and how to revise.
+For an unmet “below” relation, raise the upper object with physical support.
+The skill guides the reflector with reusable conditions and actions.
+
+00:25.000 --> 00:29.200
+A skill-augmented reflector revises an on-policy failed rollout.
+The verified revised prompt conditions the EMA teacher.
+
+00:29.200 --> 00:35.000
+At the same rollout state, the teacher evaluates original and revised prompts.
+We extrapolate their velocity difference and match the student to this target,
+while the student remains conditioned on the original prompt.
+
+00:35.000 --> 00:42.000
+After ReflectOPD training, the original prompt goes directly into the trained generator.
+It hangs the backpack above the cat in one generation, with no external reflection loop.
+No hook is specified in the prompt: the model adds one.
+The small gray image shows the base model’s incorrect relation.

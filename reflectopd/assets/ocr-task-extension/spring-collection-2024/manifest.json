@@ -1,0 +1,39 @@
+{
+  "case_id": "ocr_test_00000",
+  "target": "Spring Collection 2024",
+  "prompt": "A high-fashion runway with a sleek, modern backdrop displaying \"Spring Collection 2024\". Models walk confidently on the catwalk, showcasing vibrant, floral prints and pastel tones, under soft, ambient lighting that enhances the fresh, spring vibe.",
+  "images": [
+    {
+      "method": "baseline",
+      "label": "Baseline",
+      "file": "baseline_flux_512.png",
+      "width": 512,
+      "height": 512,
+      "sha256": "88f1c3927589683d9d657f4f10ca4caef36670e78bbf30c80dd78c796a912a17"
+    },
+    {
+      "method": "reflectionflow",
+      "label": "ReflectionFlow",
+      "file": "reflectionflow_corrected_1024.png",
+      "width": 1024,
+      "height": 1024,
+      "sha256": "1967322843321eb8f580a84c026887c54fab929e5bf1093b7a74250342a616f8"
+    },
+    {
+      "method": "flowgrpo",
+      "label": "FlowGRPO",
+      "file": "flowgrpo_no_kl_ckpt180_1024.png",
+      "width": 1024,
+      "height": 1024,
+      "sha256": "e8448e2a1ac600e45490eaa80a9478563a6ed56e5bc17cec29fe25e2c5449b58"
+    },
+    {
+      "method": "ours",
+      "label": "Ours · v26 s2000",
+      "file": "ours_v26_s2000_1024.png",
+      "width": 1024,
+      "height": 1024,
+      "sha256": "c7028241ab1ed069f02c978169423693f4492b4b213cab5e6f476efebe2ddafe"
+    }
+  ]
+}
